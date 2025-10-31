@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {# NAVBAR full-width mobile #}
+    <nav class="navbar navbar-expand-lg bg-body-tertiary full-bleed">
+        <div class="container-fluid px-3 px-md-4">
+            <a class="navbar-brand fw-bold" href="/">RECYCLUM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="navMain" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto gap-2">
+                    <li class="nav-item"><a class="nav-link" href="/reparation">Réparation</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/rachat">Rachat</a></li>
+                    <li class="nav-item"><a class="btn btn-primary" href="/contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {# HERO bord à bord #}
+    <section class="hero full-bleed">
+        <div class="container-fluid p-0">
+            <div class="row g-0">
+                <div class="col">
+                    <div class="hero-inner py-5 py-md-6 px-3 px-md-5">
+                        <h1 class="display-5 fw-bold">Électroménager reconditionné</h1>
+                        <p class="lead mb-4">Vente, réparation, rachat — Paris 12e. Intervention express.</p>
+                        <a href="/rachat" class="btn btn-primary btn-lg">Vendre mon appareil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# BLOC CONTENU avec container classique (pas full-bleed) #}
+    <main class="container py-4">
+        <div class="card p-3">
+            <h2 class="h5">Widget React</h2>
+            <div {{ react_component('Hello', { name: 'Recyclum' }) }}></div>
+        </div>
+    </main>
+
+{% endblock %}

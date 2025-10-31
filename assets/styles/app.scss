@@ -1,0 +1,49 @@
+/* =========================
+   OVERRIDES AVANT BOOTSTRAP
+   ========================= */
+@use "sass:color";
+
+// Couleurs marque (ex: vert Recyclum)
+$primary: #00E86F !default;
+
+// Typo / couleurs globales
+$body-color: #111 !default;
+
+/* ===============
+   IMPORT BOOTSTRAP
+   =============== */
+@import "bootstrap/scss/bootstrap";
+
+/* =========================
+   STYLES APP (APRES BS)
+   ========================= */
+:root { --brand-green: #00E86F; }
+
+/* Sections bord à bord (mobile friendly) */
+.full-bleed {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+}
+
+/* Option : containers sans padding en mobile */
+@media (max-width: 575.98px) {
+    .container.mobile-edge,
+    .container-fluid.mobile-edge {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+
+/* Hero responsive */
+.hero {
+    background: var(--bs-body-bg);
+}
+.hero .hero-inner {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+@media (max-width: 575.98px) {
+    .hero .hero-inner { min-height: 50vh; }
+}
