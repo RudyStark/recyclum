@@ -1,45 +1,417 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Recyclum — Électroménager reconditionné, Réparation & Rachat à Paris 12{% endblock %}
+{% block meta_description %}Boutique d’électroménager reconditionné à Paris 12 (Daumesnil). Réparation 7j/7, rachat & enlèvement à domicile. Adresse : 146 Av. Daumesnil, 75012 Paris. Tél : 01 43 07 63 63.{% endblock %}
+
 {% block body %}
 
-    {# NAVBAR full-width mobile #}
-    <nav class="navbar navbar-expand-lg bg-body-tertiary full-bleed">
-        <div class="container-fluid px-3 px-md-4">
-            <a class="navbar-brand fw-bold" href="/">RECYCLUM</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div id="navMain" class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto gap-2">
-                    <li class="nav-item"><a class="nav-link" href="/reparation">Réparation</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/rachat">Rachat</a></li>
-                    <li class="nav-item"><a class="btn btn-primary" href="/contact">Contact</a></li>
-                </ul>
+    {# === COOKIE CONSENT (toast bas droite) === #}
+    <div id="cookieConsent"
+         class="cookie-consent"
+         role="dialog"
+         aria-modal="true"
+         aria-label="Préférences de cookies"
+         aria-live="polite"
+         hidden>
+        <div class="cookie-consent__body">
+            <div class="cookie-consent__title">Cookies</div>
+            <p class="cookie-consent__text mb-3">
+                Nous utilisons des cookies techniques et de mesure d’audience anonymisée pour améliorer l’expérience.
+            </p>
+            <div class="d-flex gap-2 flex-wrap">
+                <button type="button" class="btn btn-primary" id="cookieAcceptAll">Tout accepter</button>
+                <button type="button" class="btn btn-outline-secondary" id="cookieRefuse">Tout refuser</button>
+                <a href="/cookies" class="btn btn-outline-light ms-auto">Gérer</a>
             </div>
         </div>
-    </nav>
+        <button type="button" class="cookie-consent__close" id="cookieClose" aria-label="Fermer">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
 
-    {# HERO bord à bord #}
-    <section class="hero full-bleed">
+    <script>
+        (function () {
+            const KEY = 'rcy_cookie_consent_v1';
+            const box = document.getElementById('cookieConsent');
+            const accept = document.getElementById('cookieAcceptAll');
+            const refuse = document.getElementById('cookieRefuse');
+            const closeBtn = document.getElementById('cookieClose');
+
+            function hide() {
+                box.classList.remove('is-visible');
+                setTimeout(() => box.hidden = true, 180);
+            }
+            function show() {
+                box.hidden = false;
+                requestAnimationFrame(() => box.classList.add('is-visible'));
+            }
+            function save(value) {
+                localStorage.setItem(KEY, JSON.stringify({ value, ts: Date.now() }));
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                try {
+                    const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+                    if (!saved) show();
+                } catch (e) {
+                    show();
+                }
+            });
+
+            accept.addEventListener('click', () => { save('accept_all'); hide(); });
+            refuse.addEventListener('click', () => { save('refuse_all'); hide(); });
+            closeBtn.addEventListener('click', hide);
+        })();
+    </script>
+
+    {# === HERO (Surface-1 + léger dégradé vert) === #}
+    <section class="hero full-bleed surface-1">
         <div class="container-fluid p-0">
             <div class="row g-0">
                 <div class="col">
                     <div class="hero-inner py-5 py-md-6 px-3 px-md-5">
-                        <h1 class="display-5 fw-bold">Électroménager reconditionné</h1>
-                        <p class="lead mb-4">Vente, réparation, rachat — Paris 12e. Intervention express.</p>
-                        <a href="/rachat" class="btn btn-primary btn-lg">Vendre mon appareil</a>
+                        <h1 class="display-5 fw-bold">Électroménager reconditionné & réparation à Paris 12</h1>
+                        <p class="lead mb-4 text-soft">Achats • Réparations 7j/7 • Rachat & Enlèvement à domicile</p>
+
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+                            <a href="/produits" class="btn btn-primary btn-lg">Voir les produits</a>
+                            <a href="/reparation" class="btn btn-outline-light btn-lg">Demander une réparation</a>
+                            <a href="/rachat" class="btn btn-outline-secondary btn-lg">Vendre mon appareil</a>
+                        </div>
+
+                        <div class="mt-3 small text-soft">
+                            146 Av. Daumesnil, 75012 Paris • <a href="tel:+33143076363" class="link-body-emphasis">01 43 07 63 63</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    {# BLOC CONTENU avec container classique (pas full-bleed) #}
-    <main class="container py-4">
-        <div class="card p-3">
-            <h2 class="h5">Widget React</h2>
-            <div {{ react_component('Hello', { name: 'Recyclum' }) }}></div>
+    {# === TRUST BAR (Surface-2 bandée) === #}
+    <section class="full-bleed trust-bar">
+        <div class="container-fluid p-0">
+            <div class="row g-0">
+                <div class="col-12">
+                    <div class="band-block px-3 px-md-5">
+                        <div class="d-flex flex-wrap justify-content-between gap-3 text-center">
+                            <div class="flex-fill">
+                                <div class="fw-semibold">4,2/5 — 4 210 avis</div>
+                                <div class="text-body-secondary small">Satisfaction clients</div>
+                            </div>
+                            <div class="flex-fill">
+                                <div class="fw-semibold">Réparation 7j/7</div>
+                                <div class="text-body-secondary small">Atelier & domicile</div>
+                            </div>
+                            <div class="flex-fill">
+                                <div class="fw-semibold">Garantie incluse</div>
+                                <div class="text-body-secondary small">Pièces testées</div>
+                            </div>
+                            <div class="flex-fill">
+                                <div class="fw-semibold">Paris 12 — Daumesnil</div>
+                                <div class="text-body-secondary small">Accès facile</div>
+                            </div>
+                            <div class="flex-fill">
+                                <div class="fw-semibold">Téléphone</div>
+                                <div class="text-body-secondary small">
+                                    <a href="tel:+33143076363" class="link-body-emphasis">01 43 07 63 63</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </main>
+    </section>
+
+    {# === SERVICES (Surface-1, cartes section-block) === #}
+    <section class="container py-5 surface-1">
+        <div class="row g-4">
+            <div class="col-12 col-md-4">
+                <div class="section-block h-100">
+                    <h2 class="h4 section-title">Vente reconditionné</h2>
+                    <p class="text-soft mb-3">Lave-linge, frigos, fours… Garantis, testés, prêts à l’emploi.</p>
+                    <a href="/produits" class="btn btn-outline-light">Voir les arrivages</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="section-block h-100">
+                    <h2 class="h4 section-title">Réparation 7j/7</h2>
+                    <p class="text-soft mb-3">Diagnostic rapide, atelier & intervention à domicile sur Paris et proches.</p>
+                    <a href="/reparation" class="btn btn-outline-light">Demander une réparation</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="section-block h-100">
+                    <h2 class="h4 section-title">Rachat & Enlèvement</h2>
+                    <p class="text-soft mb-3">Estimation sous 24h, enlèvement à domicile, paiement immédiat.</p>
+                    <a href="/rachat" class="btn btn-outline-light">Vendre mon appareil</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === PRODUITS VEDETTES (Surface-2) === #}
+    <section class="container pb-5 surface-2 section-block">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h4 mb-0">Arrivages récents</h2>
+            <a class="btn btn-sm btn-outline-secondary" href="/produits">Tout voir</a>
+        </div>
+
+        <div class="row g-3 g-md-4">
+            {% for i in 1..4 %}
+                <div class="col-6 col-md-3">
+                    <div class="card h-100 border-0">
+                        <div class="ratio ratio-4x3 bg-thumb rounded-top"></div>
+                        <div class="card-body">
+                            <div class="fw-semibold">Produit {{ i }}</div>
+                            <div class="small text-body-secondary">Garantie 6 mois • A+</div>
+                            <div class="mt-2 fw-bold">299 €</div>
+                            <a href="/produits" class="stretched-link" aria-label="Voir le produit {{ i }}"></a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {# === PROCESS (Surface-3, deux colonnes en section-block) === #}
+    <section class="container pb-5 surface-3 section-block">
+        <div class="row g-4">
+            <div class="col-12 col-lg-6">
+                <div class="section-block h-100">
+                    <h2 class="h5 mb-3">Comment ça marche — Réparation</h2>
+                    <ol class="mb-3">
+                        <li>Décrivez la panne</li>
+                        <li>Diagnostic & devis</li>
+                        <li>Réparation & garantie</li>
+                    </ol>
+                    <a href="/reparation" class="btn btn-primary">Demander une réparation</a>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="section-block h-100">
+                    <h2 class="h5 mb-3">Comment ça marche — Rachat</h2>
+                    <ol class="mb-3">
+                        <li>Photos + infos modèle</li>
+                        <li>Estimation sous 24h</li>
+                        <li>Enlèvement & paiement</li>
+                    </ol>
+                    <a href="/rachat" class="btn btn-outline-primary">Vendre mon appareil</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === BANNIÈRE EXPRESS + WIDGET REACT (Surface-2 bandée) === #}
+    <section class="full-bleed banner-express">
+        <div class="container-fluid p-0">
+            <div class="row g-0">
+                <div class="col-12">
+                    <div class="band-block px-3 px-md-5 d-flex flex-column gap-3">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
+                            <div>
+                                <div class="h4 mb-0">Dépannage Express 7j/7</div>
+                                <div class="small text-body-secondary">Créneaux disponibles aujourd’hui</div>
+                            </div>
+                            <div class="text-body-secondary">
+                                Tél : <a href="tel:+33143076363" class="link-body-emphasis fw-semibold">01 43 07 63 63</a>
+                            </div>
+                        </div>
+
+                        <div class="section-block p-3 mb-1">
+                            <div {{ react_component('QuickBooking', { defaultZip: '75012', phone: '01 43 07 63 63' }) }}></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === AVIS (Surface-1, carousel sobre) === #}
+    <section class="container py-5 surface-1 section-block">
+        <h2 class="h4 mb-3">Avis clients</h2>
+        <div id="carouselAvis" class="carousel slide" data-bs-ride="carousel" aria-label="Témoignages clients">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <figure class="mb-0">
+                        <blockquote class="blockquote">Service rapide et pro. Lave-linge réparé dans la journée !</blockquote>
+                        <figcaption class="blockquote-footer">Nadia — ★★★★★</figcaption>
+                    </figure>
+                </div>
+                <div class="carousel-item">
+                    <figure class="mb-0">
+                        <blockquote class="blockquote">Frigo reconditionné impeccable, économie et écologie au rendez-vous.</blockquote>
+                        <figcaption class="blockquote-footer">Marc — ★★★★☆</figcaption>
+                    </figure>
+                </div>
+                <div class="carousel-item">
+                    <figure class="mb-0">
+                        <blockquote class="blockquote">Enlèvement à domicile nickel, estimation respectée.</blockquote>
+                        <figcaption class="blockquote-footer">Sophie — ★★★★★</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselAvis" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Précédent</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselAvis" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Suivant</span>
+            </button>
+        </div>
+    </section>
+
+    {# === FAQ (Surface-2, accordéons en deux colonnes) === #}
+    <section class="container pb-5 surface-2 section-block">
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <h2 class="h5">FAQ — Réparation</h2>
+                <div class="accordion" id="faqRep">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="q1">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a1">Quels appareils réparez-vous ?</button>
+                        </h2>
+                        <div id="a1" class="accordion-collapse collapse" data-bs-parent="#faqRep">
+                            <div class="accordion-body small">Lave-linge, sèche-linge, réfrigérateurs, fours, micro-ondes, etc.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="q2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a2">Combien de temps prend une réparation ?</button>
+                        </h2>
+                        <div id="a2" class="accordion-collapse collapse" data-bs-parent="#faqRep">
+                            <div class="accordion-body small">Selon la panne et la pièce. Diagnostic rapide, délai communiqué après devis.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6 mt-4 mt-lg-0">
+                <h2 class="h5">FAQ — Rachat</h2>
+                <div class="accordion" id="faqRachat">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="q3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a3">Comment envoyer les photos ?</button>
+                        </h2>
+                        <div id="a3" class="accordion-collapse collapse" data-bs-parent="#faqRachat">
+                            <div class="accordion-body small">Sur la page Rachat via le formulaire (upload multiple + infos modèle).</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="q4">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a4">Quel est le délai d’enlèvement ?</button>
+                        </h2>
+                        <div id="a4" class="accordion-collapse collapse" data-bs-parent="#faqRachat">
+                            <div class="accordion-body small">Sous 24–48h selon disponibilité et créneaux.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === MAP & CONTACT (Surface mixte : carte claire / panneau surface-2) === #}
+    <section class="full-bleed">
+        <div class="container-fluid p-0">
+            <div class="row g-0">
+                <div class="col-12 col-lg-6 map-side">
+                    <iframe title="Google Map Recyclum" class="w-100" style="min-height: 320px; border:0;" loading="lazy" allowfullscreen
+                            referrerpolicy="no-referrer-when-downgrade"
+                            src="https://www.google.com/maps?q=146%20Av.%20Daumesnil%2C%2075012%20Paris&output=embed"></iframe>
+                </div>
+                <div class="col-12 col-lg-6 contact-side">
+                    <div class="h-100 p-4 p-md-5 d-flex flex-column justify-content-center">
+                        <h2 class="h4">Contact & Itinéraire</h2>
+                        <div class="mb-2"><i class="bi bi-geo-alt"></i> 146 Av. Daumesnil, 75012 Paris</div>
+                        <div class="mb-2"><i class="bi bi-telephone"></i> <a href="tel:+33143076363" class="link-body-emphasis">01 43 07 63 63</a></div>
+                        <div class="mb-2"><i class="bi bi-clock"></i> Lun–Dim : 9h–19h (exemple)</div>
+                        <div class="d-flex gap-2 mt-2">
+                            <a class="btn btn-outline-primary" href="https://www.google.com/maps/dir/?api=1&destination=146+Av.+Daumesnil,+75012+Paris" target="_blank" rel="noopener">Itinéraire</a>
+                            <a class="btn btn-primary" href="/contact">Formulaire de contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === NEWSLETTER (Surface-1, encart section-block centré) === #}
+    <section class="container py-5 surface-1">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="section-block p-4 p-md-5">
+                    <h2 class="h5 mb-3">Recevoir nos arrivages & offres</h2>
+                    <form class="row gy-2 gx-2" action="/newsletter" method="post">
+                        <div class="col-12 col-md-8">
+                            <label for="nl-email" class="visually-hidden">Email</label>
+                            <input id="nl-email" name="email" type="email" required class="form-control form-control-lg" placeholder="Votre email">
+                        </div>
+                        <div class="col-12 col-md-4 d-grid">
+                            <button class="btn btn-primary btn-lg" type="submit">S’inscrire</button>
+                        </div>
+                        <div class="col-12 small text-body-secondary mt-1">
+                            En vous inscrivant, vous acceptez notre <a href="/confidentialite">Politique de confidentialité</a>.
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === FOOTER (Surface-2) === #}
+    <footer class="full-bleed footer">
+        <div class="container-fluid px-3 px-md-5 py-4">
+            <div class="row g-4">
+                <div class="col-12 col-md">
+                    <div class="fw-bold">RECYCLUM</div>
+                    <div class="small text-body-secondary">Électroménager reconditionné pour une nouvelle vie.</div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="fw-semibold mb-2">Services</div>
+                    <ul class="list-unstyled small mb-0">
+                        <li><a href="/produits">Vente</a></li>
+                        <li><a href="/reparation">Réparation</a></li>
+                        <li><a href="/rachat">Rachat</a></li>
+                        <li><a href="/express">Express</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="fw-semibold mb-2">Infos</div>
+                    <ul class="list-unstyled small mb-0">
+                        <li><a href="/a-propos">À propos</a></li>
+                        <li><a href="/avis">Avis</a></li>
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-md-3">
+                    <div class="fw-semibold mb-2">Légal</div>
+                    <ul class="list-unstyled small mb-0">
+                        <li><a href="/mentions-legales">Mentions légales</a></li>
+                        <li><a href="/confidentialite">Confidentialité (RGPD)</a></li>
+                        <li><a href="/cookies">Cookies</a></li>
+                        <li><a href="/cgv">CGV</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="small text-body-secondary mt-3">© {{ "now"|date("Y") }} Recyclum — 146 Av. Daumesnil, 75012 Paris — Tél : 01 43 07 63 63</div>
+        </div>
+    </footer>
+
+    {# === SEO LocalBusiness (JSON-LD) === #}
+    <script type="application/ld+json">
+        {
+          "@context":"https://schema.org",
+          "@type":"Store",
+          "name":"Recyclum",
+          "image":[],
+          "address":{"@type":"PostalAddress","streetAddress":"146 Av. Daumesnil","addressLocality":"Paris","postalCode":"75012","addressCountry":"FR"},
+          "telephone":"+33143076363",
+          "url":"{{ app.request.schemeAndHttpHost|default('https://example.com') }}",
+    "priceRange":"€€",
+    "openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"09:00","closes":"19:00"}],
+    "department":"Électroménager reconditionné, réparation & rachat"
+  }
+    </script>
 
 {% endblock %}
