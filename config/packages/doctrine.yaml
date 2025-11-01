@@ -1,22 +1,45 @@
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
+        schema_filter: '/^(?!auth\.|storage\.|realtime\.|graphql|vault\.|pgbouncer\.|extensions\.|pgsodium)/'
 
-        # IMPORTANT: You MUST configure your server version,
-        # either here or in the DATABASE_URL env var (see .env file)
-        server_version: '15'
-        schema_filter: ~
+        mapping_types:
+            # Supabase Auth types
+            factor_type: string
+            factor_status: string
+            code_challenge_method: string
+            aal_level: string
+            oauth_response_type: string
+            oauth_authorization_status: string
+            oauth_registration_type: string
+            oauth_client_type: string
+            one_time_token_type: string
+
+            # Supabase Storage
+            buckettype: string
+
+            # pg_graphql
+            user_defined_filter: string
+            _user_defined_filter: string
+
+            # PostgreSQL standard types
+            _text: string
+            regclass: string
+            regrole: string
+            regtype: string
+            tsvector: string
+            oid: integer
+            citext: string
 
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
+
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
         report_fields_where_declared: true
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-        identity_generation_preferences:
-            Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
         auto_mapping: true
         mappings:
             App:
@@ -27,11 +50,9 @@ doctrine:
                 alias: App
         controller_resolver:
             auto_mapping: false
-
 when@test:
     doctrine:
         dbal:
-            # "TEST_TOKEN" is typically set by ParaTest
             dbname_suffix: '_test%env(default::TEST_TOKEN)%'
 
 when@prod:
