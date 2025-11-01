@@ -26,7 +26,9 @@ Encore
         includeNodeModules: ['@symfony/ux-react'],
     })
 
-    .enableSassLoader()
+    .enableSassLoader((options) => {
+        options.sassOptions = { quietDeps: true }; // ⬅️ coupe les warnings de bootstrap
+    })
 
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
