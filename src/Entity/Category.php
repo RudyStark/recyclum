@@ -6,8 +6,11 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'category')]
 #[ORM\UniqueConstraint(name: 'uniq_category_slug', columns: ['slug'])]
 class Category
@@ -17,10 +20,11 @@ class Category
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(type: 'string', length: 120)]
     private string $name;
 
-    #[ORM\Column(type: 'string', length: 160)]
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
     private string $slug;
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -30,7 +34,7 @@ class Category
     private ?\DateTimeImmutable $updatedAt = null;
 
     /** Inverse side de Product#category */
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class)]
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category')]
     private Collection $products;
 
     public function __construct()
@@ -51,6 +55,21 @@ class Category
 
     public function getSlug(): string { return $this->slug; }
     public function setSlug(string $slug): self { $this->slug = $slug; return $this; }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function updateSlug(): void
+    {
+        // Si un slug est déjà saisi à la main, on ne touche pas
+        if ($this->slug) {
+            return;
+        }
+        // On génère depuis le name s’il existe
+        if (method_exists($this, 'getName') && $this->getName()) {
+            $slugger = new AsciiSlugger();
+            $this->slug = (string) $slugger->slug($this->getName())->lower();
+        }
+    }
 
     public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
     public function setCreatedAt(\DateTimeImmutable $createdAt): self { $this->createdAt = $createdAt; return $this; }

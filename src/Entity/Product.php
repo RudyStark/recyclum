@@ -7,7 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
 {
@@ -16,25 +19,33 @@ class Product
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $shortDescription = null;
 
+    #[Assert\Positive]
     #[ORM\Column]
     private ?int $price = null;
 
     #[ORM\Column(length: 5, nullable: true)]
     private ?string $energyLabel = null;
 
+
+    #[Assert\Range(min: 0, max: 6)] // Correspond a 6 mois max.
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $warrantyMonths = null;
 
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    private ?string $slug = null;
+
+    #[Assert\Range(min: 0)]
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $stock = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ['default' => false])]
     private ?bool $isPublished = null;
 
     #[ORM\Column]
@@ -61,6 +72,20 @@ class Product
         $this->images = new ArrayCollection();
     }
 
+    #[ORM\PrePersist]
+    public function onPrePersist(): void
+    {
+        $now = new \DateTimeImmutable();
+        $this->createdAt ??= $now;
+        $this->updatedAt ??= $now;
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +101,30 @@ class Product
         $this->title = $title;
 
         return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): self
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function updateSlug(): void
+    {
+        if ($this->slug) {
+            return;
+        }
+        if (method_exists($this, 'getTitle') && $this->getTitle()) {
+            $slugger = new AsciiSlugger();
+            $this->slug = (string) $slugger->slug($this->getTitle())->lower();
+        }
     }
 
     public function getShortDescription(): ?string
