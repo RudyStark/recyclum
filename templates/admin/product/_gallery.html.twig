@@ -1,0 +1,16 @@
+{# templates/admin/product/_gallery.html.twig #}
+{% set basePath = '/uploads/products' %}
+<div class="ea-prod-gallery" data-controller="product-gallery" data-gallery-id="product-{{ entity.instance.id }}">
+    {% for image in field.value %}
+        {% if image.filename %}
+            <a class="ea-g-item"
+               href="{{ basePath ~ '/' ~ image.filename }}"
+               data-gallery="{{ 'product-' ~ entity.instance.id }}"
+               data-title="{{ image.alt ?? entity.instance.title }}">
+                <img src="{{ basePath ~ '/' ~ image.filename }}" alt="{{ image.alt ?? entity.instance.title }}">
+            </a>
+        {% endif %}
+    {% else %}
+        <div class="text-muted small">Aucune image pour ce produit.</div>
+    {% endfor %}
+</div>

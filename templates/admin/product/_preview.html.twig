@@ -1,0 +1,13 @@
+{# templates/admin/product/_preview.html.twig #}
+{% set basePath = '/uploads/products' %}
+{% set first = entity.instance.images|first %}
+
+<div class="ea-prod-preview">
+    {% if first and first.filename %}
+        <div class="ea-thumb">
+            <img src="{{ basePath ~ '/' ~ first.filename }}" alt="{{ first.alt ?? entity.instance.title }}">
+        </div>
+    {% else %}
+        <div class="ea-thumb ea-thumb--empty">—</div>
+    {% endif %}
+</div>

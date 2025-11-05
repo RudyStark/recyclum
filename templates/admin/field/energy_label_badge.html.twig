@@ -1,0 +1,13 @@
+{# templates/admin/field/energy_label_badge.html.twig #}
+{# field.value is a STRING like "A","B",...,"NA" #}
+
+{% set val = field.value ?? '' %}
+{% set map = {
+    'A':'success',  'B':'success',
+    'C':'info',     'D':'primary',
+    'E':'warning',  'F':'danger',
+    'G':'danger',   'NA':'secondary'
+} %}
+{% set label = (val == 'NA') ? 'Non classé' : val %}
+
+<span class="badge text-bg-{{ map[val]|default('secondary') }}">{{ label }}</span>

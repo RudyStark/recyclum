@@ -1,30 +1,20 @@
 <?php
 
+// src/Controller/Admin/ProductCrudController.php
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
-use App\Entity\ProductImage;
+use App\Enum\EnergyLabel;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\{Crud, Filters};
+use EasyCorp\Bundle\EasyAdminBundle\Filter\{BooleanFilter, ChoiceFilter, EntityFilter, NumericFilter, TextFilter};
+use EasyCorp\Bundle\EasyAdminBundle\Field\{
+    AssociationField, BooleanField, DateTimeField, Field, IntegerField, MoneyField, TextEditorField, TextField, ChoiceField
+};
 
-class ProductCrudController extends AbstractCrudController
+final class ProductCrudController extends AbstractCrudController
 {
-    public static function getEntityFqcn(): string
-    {
-        return Product::class;
-    }
+    public static function getEntityFqcn(): string { return Product::class; }
 
     public function configureCrud(Crud $crud): Crud
     {
@@ -32,118 +22,83 @@ class ProductCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Produit')
             ->setEntityLabelInPlural('Produits')
             ->setPageTitle(Crud::PAGE_INDEX, 'Catalogue — Produits')
-            ->setPageTitle(Crud::PAGE_NEW, 'Créer un produit')
-            ->setPageTitle(Crud::PAGE_EDIT, fn(Product $p) => sprintf('Modifier “%s”', $p->getTitle() ?? 'Produit'))
-            ->setSearchFields(['id', 'title', 'slug', 'shortDescription'])
+            ->setPageTitle(Crud::PAGE_NEW, 'Nouveau produit')
+            ->setPageTitle(Crud::PAGE_EDIT, 'Éditer le produit')
+            ->setPageTitle(Crud::PAGE_DETAIL, 'Détail du produit')
+            ->setSearchFields(['title', 'shortDescription']) // <-- pas energyLabel (Enum)
             ->setDefaultSort(['createdAt' => 'DESC'])
-            ->showEntityActionsInlined()
-            ->setPaginatorPageSize(25);
+            ->setPaginatorPageSize(20)
+            ->showEntityActionsInlined();
+    }
+
+    public function configureFields(string $pageName): iterable
+    {
+        // Templates custom
+        $preview = Field::new('preview', 'Aperçu')
+            ->setTemplatePath('admin/product/_preview.html.twig')
+            ->onlyOnIndex();
+
+        $gallery = Field::new('gallery', 'Galerie')
+            ->setTemplatePath('admin/product/_gallery.html.twig')
+            ->onlyOnDetail();
+
+        // Métier
+        $title = TextField::new('title', 'Titre')->setColumns(8);
+        $slug  = TextField::new('slug')->hideOnForm()->onlyOnDetail();
+        $desc  = TextEditorField::new('shortDescription', 'Description')->hideOnIndex()->setNumOfRows(8);
+
+        $price = MoneyField::new('price', 'Prix')->setCurrency('EUR')->setStoredAsCents()->setColumns(4);
+
+        // === Étiquette énergie ===
+        // INDEX/DETAIL -> on lit *energyLabelValue* (string), et on affiche un badge via template
+        $energyIndex = TextField::new('energyLabelValue', 'Étiquette énergie')
+            ->setTemplatePath('admin/field/energy_label_badge.html.twig')
+            ->setSortable(false) // champ virtuel (getter), pas sortable en DQL
+            ->onlyOnIndex();
+
+        $energyDetail = TextField::new('energyLabelValue', 'Étiquette énergie')
+            ->setTemplatePath('admin/field/energy_label_badge.html.twig')
+            ->setSortable(false)
+            ->onlyOnDetail();
+
+        // FORM -> vrai ChoiceField sur l’Enum mappé (persisté en DB via Doctrine)
+        $energyForm = ChoiceField::new('energyLabel', 'Étiquette énergie')
+            ->setChoices(EnergyLabel::formChoices()) // 'A' => EnergyLabel::A (objet Enum)
+            ->renderAsBadges()
+            ->setColumns(4);
+
+        $warr  = IntegerField::new('warrantyMonths', 'Garantie (mois)')->setColumns(4);
+        $stock = IntegerField::new('stock', 'Stock')->setColumns(4);
+        $pub   = BooleanField::new('isPublished', 'Publié')->setColumns(4);
+
+        $cat   = AssociationField::new('category', 'Catégorie')->setColumns(6);
+        $brand = AssociationField::new('brand', 'Marque')->setColumns(6);
+
+        $created = DateTimeField::new('createdAt', 'Créé le')->onlyOnDetail();
+        $updated = DateTimeField::new('updatedAt', 'Modifié le')->onlyOnDetail();
+
+        if (Crud::PAGE_INDEX === $pageName) {
+            return [$preview, $title, $price, $energyIndex, $stock, $pub, $cat, $brand];
+        }
+
+        if (Crud::PAGE_DETAIL === $pageName) {
+            return [$title, $slug, $price, $energyDetail, $warr, $stock, $pub, $cat, $brand, $desc, $gallery, $created, $updated];
+        }
+
+        // NEW / EDIT
+        return [$title, $slug, $cat, $brand, $price, $energyForm, $warr, $stock, $pub, $desc];
     }
 
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
-            ->add('category')
-            ->add('brand')
-            ->add('isPublished')
-            ->add('energyLabel')
-            ->add('createdAt');
-    }
-
-    public function configureFields(string $pageName): iterable
-    {
-        /* --------- SECTION: Infos générales --------- */
-        yield FormField::addPanel('Infos générales')
-            ->setIcon('fa fa-box')
-            ->collapsible();
-
-        yield TextField::new('title', 'Titre')
-            ->setHelp('Nom commercial court, clair et unique.')
-            ->setColumns(8);
-
-        yield SlugField::new('slug', 'Slug')
-            ->setTargetFieldName('title')
-            ->setHelp('Généré automatiquement depuis le titre. Ne pas modifier.')
-            ->setUnlockConfirmationMessage('Modifier le slug peut casser des liens publics.')
-            ->setColumns(4);
-
-        yield TextareaField::new('shortDescription', 'Description courte')
-            ->setHelp('Résumé marketing/technique concis (affiché sur les cartes).')
-            ->setNumOfRows(4)
-            ->hideOnIndex();
-
-        /* --------- SECTION: Catalogue --------- */
-        yield FormField::addPanel('Catalogue')
-            ->setIcon('fa fa-tags')
-            ->collapsible();
-
-        yield AssociationField::new('category', 'Catégorie')
-            ->setRequired(true)
-            ->setColumns(6);
-
-        yield AssociationField::new('brand', 'Marque')
-            ->setRequired(false)
-            ->setColumns(6);
-
-        yield MoneyField::new('price', 'Prix')
-            ->setCurrency('EUR')
-            // ton entité stocke un int "euros". Si tu passes en centimes plus tard, mets ->setStoredAsCents(true)
-            ->setStoredAsCents(false)
-            ->setHelp('Prix TTC affiché en boutique.')
-            ->setColumns(4);
-
-        yield ChoiceField::new('energyLabel', 'Étiquette énergie')
-            ->setChoices([
-                'A+++' => 'A+++',
-                'A++'  => 'A++',
-                'A+'   => 'A+',
-                'A'    => 'A',
-                'B'    => 'B',
-                'C'    => 'C',
-                'D'    => 'D',
-                'E'    => 'E',
-                'F'    => 'F',
-                'G'    => 'G',
-            ])
-            ->allowMultipleChoices(false)
-            ->renderAsBadges()
-            ->setColumns(4);
-
-        yield IntegerField::new('warrantyMonths', 'Garantie (mois)')
-            ->setHelp('Durée de garantie contractuelle du produit.')
-            ->setColumns(4);
-
-        yield IntegerField::new('stock', 'Stock')
-            ->setColumns(4)
-            ->setHelp('Quantité disponible.');
-
-        /* --------- SECTION: Médias --------- */
-        yield FormField::addPanel('Médias')
-            ->setIcon('fa fa-image')
-            ->collapsible();
-
-        // OneToMany Product->images (ProductImage) en formulaire imbriqué
-        yield CollectionField::new('images', 'Images du produit')
-            ->useEntryCrudForm()               // ouvre le form du ProductImage
-            ->setFormTypeOption('by_reference', false)
-            ->setHelp('Ajoute plusieurs visuels. L’ordre dépendra de l’index.')
-            ->onlyOnForms();
-
-        /* --------- SECTION: Publication --------- */
-        yield FormField::addPanel('Publication & Métadonnées')
-            ->setIcon('fa fa-rocket')
-            ->collapsible();
-
-        yield BooleanField::new('isPublished', 'Publié')
-            ->renderAsSwitch(true)
-            ->setHelp('Si activé, le produit est visible sur le site.');
-
-        yield DateTimeField::new('createdAt', 'Créé le')
-            ->setFormTypeOption('html5', true)
-            ->hideOnForm();
-
-        yield DateTimeField::new('updatedAt', 'Modifié le')
-            ->setFormTypeOption('html5', true)
-            ->hideOnForm();
+            ->add(TextFilter::new('title', 'Titre'))
+            ->add(EntityFilter::new('category', 'Catégorie'))
+            ->add(EntityFilter::new('brand', 'Marque'))
+            ->add(BooleanFilter::new('isPublished', 'Publié'))
+            ->add(NumericFilter::new('price', 'Prix'))
+            ->add(NumericFilter::new('stock', 'Stock'))
+            // filtre basé sur la valeur string persistée
+            ->add(ChoiceFilter::new('energyLabel', 'Étiquette énergie')->setChoices(EnergyLabel::filterChoices()));
     }
 }

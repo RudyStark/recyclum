@@ -1,0 +1,26 @@
+/* =========================================================
+   Badges Énergie (A–G + NA) — EasyAdmin
+   Pro, lisible, accessible (contrastes OK)
+   ========================================================= */
+.ea-badge-energy{
+    display: inline-block;
+    font-weight: 700;
+    line-height: 1;
+    padding: .35rem .55rem;
+    border-radius: .5rem;
+    font-size: .775rem;
+    letter-spacing: .3px;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+/* Palette : A → vert fort, G → rouge, NA → neutre */
+.ea-badge-energy.is-A{ background:#E7F7EE; color:#0F6B3E; border-color:#BDEAD2; }
+.ea-badge-energy.is-B{ background:#ECF9E7; color:#246B1E; border-color:#C9EDBD; }
+.ea-badge-energy.is-C{ background:#F3FAE2; color:#4E6B12; border-color:#DDECA9; }
+.ea-badge-energy.is-D{ background:#FFF7D9; color:#775F0B; border-color:#F2E4A1; }
+.ea-badge-energy.is-E{ background:#FFEEDD; color:#7A4A13; border-color:#F5D1B2; }
+.ea-badge-energy.is-F{ background:#FFE4E0; color:#7F2F1E; border-color:#F3B7AE; }
+.ea-badge-energy.is-G{ background:#FFE1E1; color:#7F1F1F; border-color:#F0A8A8; }
+
+.ea-badge-energy.is-NA{ background:#F2F4F7; color:#4B5563; border-color:#E5E7EB; }
