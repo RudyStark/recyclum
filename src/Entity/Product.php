@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\EnergyLabel;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -30,8 +31,8 @@ class Product
     #[ORM\Column]
     private ?int $price = null;
 
-    #[ORM\Column(length: 5, nullable: true)]
-    private ?string $energyLabel = null;
+    #[ORM\Column(nullable: true, enumType: EnergyLabel::class)]
+    private ?EnergyLabel $energyLabel = null;
 
 
     #[Assert\Range(min: 0, max: 6)] // Correspond a 6 mois max.
@@ -70,6 +71,15 @@ class Product
     public function __construct()
     {
         $this->images = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        $parts = [];
+        if ($this->title)   { $parts[] = $this->title; }
+        if ($this->brand)   { $parts[] = $this->brand->getName(); }
+        if ($this->category){ $parts[] = $this->category->getName(); }
+        return $parts ? implode(' — ', $parts) : ('Produit #'.$this->id);
     }
 
     #[ORM\PrePersist]
@@ -118,12 +128,12 @@ class Product
     #[ORM\PreUpdate]
     public function updateSlug(): void
     {
-        if ($this->slug) {
-            return;
-        }
-        if (method_exists($this, 'getTitle') && $this->getTitle()) {
-            $slugger = new AsciiSlugger();
-            $this->slug = (string) $slugger->slug($this->getTitle())->lower();
+        // Ne génère que si VRAIMENT vide
+        if ($this->slug === null || trim($this->slug) === '') {
+            if ($this->title ?? null) {
+                $slugger = new AsciiSlugger('fr');
+                $this->slug = strtolower($slugger->slug($this->title)->toString());
+            }
         }
     }
 
@@ -151,16 +161,21 @@ class Product
         return $this;
     }
 
-    public function getEnergyLabel(): ?string
+    public function getEnergyLabel(): ?EnergyLabel
     {
         return $this->energyLabel;
     }
 
-    public function setEnergyLabel(?string $energyLabel): static
+    public function setEnergyLabel(?EnergyLabel $energyLabel): self
     {
         $this->energyLabel = $energyLabel;
 
         return $this;
+    }
+
+    public function getEnergyLabelValue(): ?string
+    {
+        return $this->energyLabel?->value; // retourne 'A', 'B', ... ou null
     }
 
     public function getWarrantyMonths(): ?int
@@ -275,5 +290,35 @@ class Product
         }
 
         return $this;
+    }
+
+    /**
+     * @return ProductImage|null
+     * Retourne l'image principale si définie, sinon la première
+     */
+    public function getMainImage(): ?ProductImage
+    {
+        foreach ($this->getImages() as $img) {
+            if ($img->isMain()) {
+                return $img;
+            }
+        }
+        return $this->images->first() ?: null;
+    }
+
+    public function getMainImageFilename(): ?string
+    {
+        $img = $this->getMainImage();
+        return $img ? $img->getFilename() : null;
+    }
+
+    public function getFirstImageFilename(): ?string
+    {
+        if ($this->images instanceof \Doctrine\Common\Collections\Collection && !$this->images->isEmpty()) {
+            /** @var \App\Entity\ProductImage $img */
+            $img = $this->images->first();
+            return $img?->getFilename();
+        }
+        return null;
     }
 }

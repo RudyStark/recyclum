@@ -1,0 +1,65 @@
+/* assets/styles/admin/_product.scss */
+
+/* INDEX — cellule d’aperçu */
+.ea-prod-preview {
+    .ea-thumb {
+        width: 72px;
+        height: 72px;
+        border-radius: 8px;
+        border: 1px solid #e6edf2;
+        background: #f6f8fa;
+        overflow: hidden;
+        display: block;
+
+        &--empty {
+            display: grid;
+            place-items: center;
+            color: #9aa6b2;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+    }
+}
+
+/* DETAIL — grille “pro” */
+.ea-prod-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+    gap: .75rem;
+
+    .ea-g-item {
+        display: block;
+        border-radius: 10px;
+        border: 1px solid #e6edf2;
+        background: #f6f8fa;
+        overflow: hidden;
+        transition: transform .12s ease-in-out, box-shadow .12s ease-in-out;
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(16, 20, 24, .08);
+        }
+
+        img {
+            display: block;
+            width: 100%;
+            height: 118px;
+            object-fit: cover;
+        }
+    }
+}
+
+@media (max-width: 575.98px) {
+    .ea-prod-gallery {
+        grid-template-columns: repeat(3, 1fr);
+
+        .ea-g-item img { height: 96px; }
+    }
+}

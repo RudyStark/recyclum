@@ -60,14 +60,12 @@ class Category
     #[ORM\PreUpdate]
     public function updateSlug(): void
     {
-        // Si un slug est déjà saisi à la main, on ne touche pas
-        if ($this->slug) {
-            return;
-        }
-        // On génère depuis le name s’il existe
-        if (method_exists($this, 'getName') && $this->getName()) {
-            $slugger = new AsciiSlugger();
-            $this->slug = (string) $slugger->slug($this->getName())->lower();
+        // Générer UNIQUEMENT si vide
+        if ($this->slug === null || $this->slug === '') {
+            if ($this->name ?? null) {
+                $slugger = new AsciiSlugger('fr');
+                $this->slug = strtolower($slugger->slug($this->name)->toString());
+            }
         }
     }
 

@@ -1,0 +1,48 @@
+{% extends '@EasyAdmin/crud/form_theme.html.twig' %}
+
+{% block vich_image_widget %}
+    <div class="ea-image-upload">
+
+        {# Aperçu de l'image déjà enregistrée (edit) #}
+        {% if image_uri is defined and image_uri %}
+            <div class="ea-upload-current mb-2">
+                <img src="{{ image_uri }}" alt="" class="ea-upload-thumb">
+                <div class="small text-muted mt-1">Image actuelle</div>
+            </div>
+        {% endif %}
+
+        {# Wrapper contrôlé par Stimulus #}
+        <div data-controller="image-preview" class="ea-upload-input">
+            {{ form_widget(form.file, {
+                attr: {
+                    accept: 'image/*',
+                    'data-image-preview-target': 'input',
+                    'data-action': 'change->image-preview#pick'
+                }
+            }) }}
+
+            {# Bloc d’aperçu live (targets Stimulus). Le contrôleur le créera si absent. #}
+            <div class="mt-2" data-image-preview-target="previewWrapper" style="display:none">
+                <div class="small text-muted">Aperçu sélection :</div>
+                <img class="ea-upload-thumb" data-image-preview-target="preview" alt="">
+            </div>
+        </div>
+
+        {# Case à cocher "supprimer" (si fournie par Vich) #}
+        {% if form.delete is defined %}
+            <div class="form-check mt-2">
+                {{ form_widget(form.delete) }}
+                <label class="form-check-label" for="{{ form.delete.vars.id }}">Supprimer l’image</label>
+            </div>
+        {% endif %}
+
+        {# Lien de téléchargement (si fourni) #}
+        {% if download_uri is defined and download_uri %}
+            <div class="mt-2">
+                <a href="{{ download_uri }}" class="btn btn-sm btn-outline-secondary">Télécharger</a>
+            </div>
+        {% endif %}
+
+        {{ form_help(form) }}
+    </div>
+{% endblock %}
