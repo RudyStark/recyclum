@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+{% block title %}Catalogue — Recyclum{% endblock %}
+
+{% block body %}
+
+    {# Bandeau compact d’intro #}
+    <section class="catalog-hero full-bleed">
+        <div class="container py-3 py-md-4">
+            <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2">
+                <div>
+                    <h1 class="h3 fw-bold mb-1">Catalogue</h1>
+                    <p class="text-soft mb-0">Électroménager reconditionné, garanti et vérifié — livrable rapidement.</p>
+                </div>
+
+                {# Tri #}
+                <form method="get" class="d-inline-flex align-items-center gap-2">
+                    {# conserver les filtres existants à chaque tri #}
+                    {% for k, v in app.request.query.all %}
+                        {% if k != 'sort' %}
+                            <input type="hidden" name="{{ k }}" value="{{ v }}">
+                        {% endif %}
+                    {% endfor %}
+                    <label class="small text-soft mb-0">Trier</label>
+                    <select class="form-select form-select-sm" name="sort" onchange="this.form.submit()">
+                        {% set s = app.request.get('sort', 'date_desc') %}
+                        <option value="date_desc" {{ s=='date_desc'?'selected':'' }}>Plus récents</option>
+                        <option value="price_asc" {{ s=='price_asc'?'selected':'' }}>Prix croissant</option>
+                        <option value="price_desc" {{ s=='price_desc'?'selected':'' }}>Prix décroissant</option>
+                        <option value="alpha_asc" {{ s=='alpha_asc'?'selected':'' }}>A → Z</option>
+                        <option value="alpha_desc" {{ s=='alpha_desc'?'selected':'' }}>Z → A</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="container py-4">
+        <div class="row g-4">
+            {# === SIDEBAR FILTRES (sticky) === #}
+            <aside class="col-12 col-lg-3">
+                <form method="get" class="filters-card section-block sticky-lg-top">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="fw-bold">Filtrer</div>
+                        <a href="{{ path('catalog_index') }}" class="small link-secondary">Réinitialiser</a>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Recherche</label>
+                        <input type="search" class="form-control" name="q" value="{{ criteria.q }}" placeholder="Mot-clé…">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Catégorie</label>
+                        <select name="category" class="form-select">
+                            <option value="">Toutes</option>
+                            {% for cat in categories %}
+                                <option value="{{ cat.id }}" {{ criteria.category == cat.id ? 'selected':'' }}>{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Marque</label>
+                        <select name="brand" class="form-select">
+                            <option value="">Toutes</option>
+                            {% for b in brands %}
+                                <option value="{{ b.id }}" {{ criteria.brand == b.id ? 'selected':'' }}>{{ b.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Étiquette énergie</label>
+                        <select name="label" class="form-select">
+                            <option value="">Toutes</option>
+                            {% for lbl in labels %}
+                                <option value="{{ lbl.value }}" {{ criteria.label == lbl.value ? 'selected':'' }}>
+                                    {{ lbl.value }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label">Min €</label>
+                            <input type="number" name="min" class="form-control" value="{{ criteria.min }}" min="0" step="10" placeholder="0">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Max €</label>
+                            <input type="number" name="max" class="form-control" value="{{ criteria.max }}" min="0" step="10" placeholder="1000">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary w-100">Appliquer</button>
+
+                    {# Pills des filtres actifs #}
+                    {% set active = [] %}
+                    {% if criteria.q %}{% set active = active|merge([{k:'q',v:criteria.q,label:'Recherche'}]) %}{% endif %}
+                    {% if criteria.category %}{% set active = active|merge([{k:'category',v:criteria.category,label:'Catégorie'}]) %}{% endif %}
+                    {% if criteria.brand %}{% set active = active|merge([{k:'brand',v:criteria.brand,label:'Marque'}]) %}{% endif %}
+                    {% if criteria.label %}{% set active = active|merge([{k:'label',v:criteria.label,label:'Étiquette'}]) %}{% endif %}
+                    {% if criteria.min is not null %}{% set active = active|merge([{k:'min',v:criteria.min,label:'Min'}]) %}{% endif %}
+                    {% if criteria.max is not null %}{% set active = active|merge([{k:'max',v:criteria.max,label:'Max'}]) %}{% endif %}
+
+                    {% if active|length %}
+                        <hr class="hr-soft my-3">
+                        <div class="small text-soft mb-1">Filtres actifs</div>
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for f in active %}
+                                {% set qs = app.request.query.all %}
+                                {% do qs.remove(f.k) %}
+                                <a class="badge rounded-pill catalog-pill" href="{{ path('catalog_index') ~ (qs ? '?' ~ qs|url_encode : '') }}">
+                                    {{ f.label }}: <span class="fw-semibold ms-1">{{ f.v }}</span> ×
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </form>
+            </aside>
+
+            {# === LISTE PRODUITS === #}
+            <div class="col-12 col-lg-9">
+                <div class="row g-3 g-md-4">
+                    {% for p in items %}
+                        <div class="col-6 col-md-4">
+                            <article class="product-card h-100">
+                                <a href="{{ path('product_show', { slug: product.slug }) }}" class="product-thumb ratio ratio-4x3">
+                                    {% set src = p.getMainImageFilename() ? '/uploads/products/' ~ p.getMainImageFilename() : null %}
+                                    {% if src %}
+                                        <img src="{{ src }}" alt="{{ p.title }}" class="product-thumb-img">
+                                    {% endif %}
+                                    <span class="product-badge">
+                  {% include 'admin/field/energy_label_badge.html.twig' with { value: p.energyLabel } only %}
+                </span>
+                                </a>
+
+                                <div class="product-body">
+                                    <div class="small text-soft mb-1">
+                                        {% if p.brand %}{{ p.brand.name }}{% endif %}
+                                        {% if p.category %} • {{ p.category.name }}{% endif %}
+                                    </div>
+                                    <h2 class="product-title h6 mb-1">
+                                        <a href="{{ path('product_show', { slug: product.slug }) }}" class="stretched-link">{{ p.title }}</a>
+                                    </h2>
+                                    <div class="product-meta d-flex align-items-center justify-content-between">
+                                        <div class="product-price">{{ (p.price / 100)|number_format(0, ',', ' ') }} €</div>
+                                        <div class="small {{ p.stock > 0 ? 'text-success' : 'text-danger' }}">
+                                            {{ p.stock > 0 ? 'En stock' : 'Rupture' }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    {% else %}
+                        <div class="col-12">
+                            <div class="alert alert-secondary">Aucun produit trouvé.</div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {# Pagination alignée #}
+                {% set pages = (total / perPage)|round(0, 'ceil') %}
+                {% if pages > 1 %}
+                    <nav class="mt-4 d-flex justify-content-center">
+                        <ul class="pagination catalog-pagination">
+                            {% for i in 1..pages %}
+                                {% set qs = app.request.query.all|merge({'page': i}) %}
+                                <li class="page-item {{ i == page ? 'active' : '' }}">
+                                    <a class="page-link" href="{{ path('catalog_index') ~ '?' ~ qs|url_encode }}">{{ i }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
