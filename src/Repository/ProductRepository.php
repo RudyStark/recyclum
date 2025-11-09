@@ -12,65 +12,128 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProductRepository extends ServiceEntityRepository
 {
+    private const PRODUCTS_PER_PAGE = 12;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);
     }
 
-    public function searchPaginated(array $criteria, int $page, int $perPage = 12): array
+    /**
+     * Recherche paginée avec filtres multiples
+     *
+     * @return array{0: array<Product>, 1: int} [items, total]
+     */
+    public function searchPaginated(array $criteria, int $page = 1, int $perPage = self::PRODUCTS_PER_PAGE): array
     {
         $qb = $this->createQueryBuilder('p')
-            ->leftJoin('p.category', 'c')->addSelect('c')
-            ->leftJoin('p.brand', 'b')->addSelect('b')
-            ->andWhere('p.isPublished = :pub')->setParameter('pub', true)
-            ->orderBy('p.createdAt', 'DESC');
+            ->where('p.isPublished = :published')
+            ->setParameter('published', true);
 
+        // Filtre recherche textuelle
         if (!empty($criteria['q'])) {
-            $qb->andWhere('p.title LIKE :q OR p.shortDescription LIKE :q')
-                ->setParameter('q', '%'.$criteria['q'].'%');
+            $qb->andWhere('p.title LIKE :search OR p.shortDescription LIKE :search')
+                ->setParameter('search', '%' . $criteria['q'] . '%');
         }
+
+        // Filtre catégorie
         if (!empty($criteria['category'])) {
-            $qb->andWhere('c.id = :cid')->setParameter('cid', (int) $criteria['category']);
+            $qb->innerJoin('p.category', 'c')
+                ->andWhere('c.slug = :categorySlug')
+                ->setParameter('categorySlug', $criteria['category']);
         }
+
+        // Filtre marque
         if (!empty($criteria['brand'])) {
-            $qb->andWhere('b.id = :bid')->setParameter('bid', (int) $criteria['brand']);
+            $qb->innerJoin('p.brand', 'b')
+                ->andWhere('b.slug = :brandSlug')
+                ->setParameter('brandSlug', $criteria['brand']);
         }
+
+        // Filtre prix minimum (vérification stricte)
+        if (isset($criteria['min']) && is_numeric($criteria['min']) && $criteria['min'] > 0) {
+            $qb->andWhere('p.price >= :minPrice')
+                ->setParameter('minPrice', (int)$criteria['min'] * 100);
+        }
+
+        // Filtre prix maximum (vérification stricte)
+        if (isset($criteria['max']) && is_numeric($criteria['max']) && $criteria['max'] > 0) {
+            $qb->andWhere('p.price <= :maxPrice')
+                ->setParameter('maxPrice', (int)$criteria['max'] * 100);
+        }
+
+        // Filtre étiquette énergie
         if (!empty($criteria['label'])) {
-            // energyLabel est un backed enum en DB → on filtre par sa valeur
-            $qb->andWhere('p.energyLabel = :lbl')->setParameter('lbl', $criteria['label']);
-        }
-        if (isset($criteria['min'])) {
-            $qb->andWhere('p.price >= :pmin')->setParameter('pmin', (int) $criteria['min'] * 100);
-        }
-        if (isset($criteria['max'])) {
-            $qb->andWhere('p.price <= :pmax')->setParameter('pmax', (int) $criteria['max'] * 100);
+            $qb->andWhere('p.energyLabel = :energyLabel')
+                ->setParameter('energyLabel', $criteria['label']);
         }
 
-        // tri
-        $sort = $criteria['sort'] ?? null;
-        switch ($sort) {
-            case 'price_asc':
-                $qb->orderBy('p.price', 'ASC');
-                break;
-            case 'price_desc':
-                $qb->orderBy('p.price', 'DESC');
-                break;
-            case 'alpha_asc':
-                $qb->orderBy('p.title', 'ASC');
-                break;
-            case 'alpha_desc':
-                $qb->orderBy('p.title', 'DESC');
-                break;
-            default:
-                $qb->orderBy('p.createdAt', 'DESC');
-        }
+        // Tri
+        $this->applySorting($qb, $criteria['sort'] ?? 'date_desc');
 
-        $first = ($page - 1) * $perPage;
-        $qb->setFirstResult($first)->setMaxResults($perPage);
+        // Pagination
+        $query = $qb
+            ->setFirstResult(($page - 1) * $perPage)
+            ->setMaxResults($perPage)
+            ->getQuery();
 
-        $paginator = new Paginator($qb);
-        $total = count($paginator);
+        $paginator = new Paginator($query, fetchJoinCollection: true);
 
-        return [iterator_to_array($paginator), $total];
+        return [
+            iterator_to_array($paginator),
+            count($paginator)
+        ];
+    }
+
+    /**
+     * Produits similaires (même catégorie, excluant le produit actuel)
+     */
+    public function findSimilar(Product $product, int $limit = 4): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.category = :category')
+            ->andWhere('p.id != :currentId')
+            ->andWhere('p.isPublished = :published')
+            ->setParameter('category', $product->getCategory())
+            ->setParameter('currentId', $product->getId())
+            ->setParameter('published', true)
+            ->orderBy('p.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Statistiques pour filtres (min/max prix, compteurs)
+     */
+    public function getFilterStats(): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('MIN(p.price) as minPrice', 'MAX(p.price) as maxPrice', 'COUNT(p.id) as totalProducts')
+            ->where('p.isPublished = :published')
+            ->setParameter('published', true);
+
+        $result = $qb->getQuery()->getSingleResult();
+
+        return [
+            'minPrice' => (int) ceil(($result['minPrice'] ?? 0) / 100),
+            'maxPrice' => (int) floor(($result['maxPrice'] ?? 0) / 100),
+            'totalProducts' => (int) $result['totalProducts'],
+        ];
+    }
+
+    /**
+     * Applique le tri selon le critère
+     */
+    private function applySorting($qb, string $sort): void
+    {
+        match ($sort) {
+            'price_asc' => $qb->orderBy('p.price', 'ASC'),
+            'price_desc' => $qb->orderBy('p.price', 'DESC'),
+            'name_asc' => $qb->orderBy('p.title', 'ASC'),
+            'name_desc' => $qb->orderBy('p.title', 'DESC'),
+            'date_asc' => $qb->orderBy('p.createdAt', 'ASC'),
+            default => $qb->orderBy('p.createdAt', 'DESC'), // date_desc
+        };
     }
 }

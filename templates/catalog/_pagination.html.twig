@@ -1,0 +1,58 @@
+<nav class="pagination" aria-label="Navigation de pagination">
+    <ul class="pagination-list">
+        {# Bouton précédent #}
+        {% if currentPage > 1 %}
+            <li>
+                <a
+                    href="{{ path('catalog_index', criteria|merge({page: currentPage - 1})) }}"
+                    class="pagination-btn"
+                    rel="prev"
+                    aria-label="Page précédente"
+                >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </a>
+            </li>
+        {% endif %}
+
+        {# Numéros de pages #}
+        {% for page in 1..totalPages %}
+            {% if page == currentPage %}
+                <li>
+                    <span class="pagination-link is-current" aria-current="page">
+                        {{ page }}
+                    </span>
+                </li>
+            {% elseif page == 1 or page == totalPages or (page >= currentPage - 2 and page <= currentPage + 2) %}
+                <li>
+                    <a
+                        href="{{ path('catalog_index', criteria|merge({page: page})) }}"
+                        class="pagination-link"
+                        aria-label="Page {{ page }}"
+                    >
+                        {{ page }}
+                    </a>
+                </li>
+            {% elseif page == currentPage - 3 or page == currentPage + 3 %}
+                <li><span class="pagination-ellipsis">…</span></li>
+            {% endif %}
+        {% endfor %}
+
+        {# Bouton suivant #}
+        {% if currentPage < totalPages %}
+            <li>
+                <a
+                    href="{{ path('catalog_index', criteria|merge({page: currentPage + 1})) }}"
+                    class="pagination-btn"
+                    rel="next"
+                    aria-label="Page suivante"
+                >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>

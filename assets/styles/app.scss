@@ -2,8 +2,9 @@
    Recyclum UI — Thème clair pro + Header sombre élégant
    (logo agrandi + étiré horizontalement + vertical ajusté)
    — Logo & menu alignés sur une seule ligne
-   — Séparatrice “curve” sobre entre les deux
+   — Séparatrice "curve" sobre entre les deux
    — Surfaces (1/2/3) pour hiérarchie visuelle propre
+   — MEGA MENU moderne pour électroménager
    ========================================================= */
 
 /* ---------- PALETTE (SASS) ---------- */
@@ -23,6 +24,9 @@ $primary-300:  #6FDEA7;
 $anthracite-1: #0F1317;
 $anthracite-2: #13181D;
 
+/* Transitions */
+$transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
 /* ---------- BOOTSTRAP OVERRIDES ---------- */
 $enable-dark-mode: false;
 
@@ -41,29 +45,39 @@ $btn-font-weight: 600;
 
 /* ---------- IMPORTS ---------- */
 @import "bootstrap/scss/bootstrap";
-/* Icônes optionnelles : npm i bootstrap-icons */
 @import "bootstrap-icons/font/bootstrap-icons";
 
-/* ---------- VARIABLES CSS UTILISABLES DANS L’APP ---------- */
+/* ---------- VARIABLES CSS UTILISABLES DANS L'APP ---------- */
 :root{
+    // Surfaces
     --app-bg:      #F6F8FA;
     --surface:     #FFFFFF;
+    --surface-1:   #FFFFFF;
     --surface-2:   #F2F5F7;
     --surface-3:   #ECEFF2;
-    --border:      #E6EDF2;
-    --text:        #0F1418;
-    --muted:       #6C7783;
 
-    --primary:     #16C669;
-    --primary-600: #12A85A;
-    --primary-300: #6FDEA7;
+    // Bordures
+    --border:       #E6EDF2;
+    --border-color: #E6EDF2;
+
+    // Texte
+    --text:           #0F1418;
+    --text-primary:   #0F1418;
+    --text-secondary: #6C7783;
+    --text-tertiary:  #9CA3AF;
+    --muted:          #6C7783;
+
+    // Couleurs primaires
+    --primary:        #16C669;
+    --green-primary:  #16C669;
+    --primary-600:    #12A85A;
+    --primary-300:    #6FDEA7;
 
     --container-x: max(0px, env(safe-area-inset-left));
 
-    /* Étirement du logo (scaleX / scaleY) */
-    --logo-stretch-x: 1.12;  /* mobile : horizontal */
-    --logo-stretch-y: 1.55;  /* mobile : vertical (ajusté) */
-    /* Légère translation visuelle (mobile) */
+    /* Étirement du logo */
+    --logo-stretch-x: 1.12;
+    --logo-stretch-y: 1.55;
     --logo-translate-y: 0.5px;
 }
 
@@ -150,11 +164,16 @@ body{ background: var(--app-bg); color: var(--text); }
 .brand-slot{
     display: flex;
     align-items: center;
+
+    a {
+        display: inline-block;
+        line-height: 0;
+    }
 }
 
 /* Logo AGRANDI + ÉTIRÉ (X & Y) */
 .brand-logo{
-    height: 70px;                   /* mobile */
+    height: 70px;
     width: auto;
     display: inline-block;
     transform-origin: left center;
@@ -167,7 +186,7 @@ body{ background: var(--app-bg); color: var(--text); }
     image-rendering: auto;
 }
 
-/* Séparatrice “curve” sobre entre logo et menu */
+/* Séparatrice "curve" sobre entre logo et menu */
 .splitter-curve{
     width: 22px;
     height: 64px;
@@ -195,214 +214,6 @@ body{ background: var(--app-bg); color: var(--text); }
     margin-left: auto;
     display: flex;
     align-items: center;
-}
-
-/* =========================================================
-   NAVBAR — PRO & SOBRE (rectangulaire, sans effets gadgets)
-   ========================================================= */
-.menu-rail{
-    background: $surface;
-    border: 1px solid $border;
-    border-radius: 8px;
-    padding: .5rem .6rem;
-    display: inline-flex;
-    align-items: center;
-    gap: .25rem;
-}
-
-.nav-rail{
-    display:flex;
-    align-items:center;
-    gap: .25rem;
-}
-
-/* Liens : soulignement net au hover/actif */
-.nav-rail .nav-link{
-    position: relative;
-    font-weight: 700;
-    color: var(--text);
-    padding: .6rem 1rem;
-    border-radius: 6px;
-    text-decoration: none;
-}
-.nav-rail .nav-link::after{
-    content: "";
-    position: absolute;
-    left: 10px; right: 10px; bottom: .35rem;
-    height: 2px;
-    background: var(--primary);
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform .18s ease-in-out;
-    border-radius: 2px;
-}
-.nav-rail .nav-link:hover::after,
-.nav-rail .nav-link.active::after{
-    transform: scaleX(1);
-}
-
-/* CTA (ex: Contact) — plein vert */
-.btn-rail-cta{
-    padding: .6rem 1rem;
-    font-weight: 800;
-    border-radius: 6px;
-    background: var(--primary);
-    border: 1px solid #11B864;
-    color: #07130C;
-}
-
-/* =========================================================
-   HERO & SECTIONS
-   ========================================================= */
-.hero{
-    background:
-        linear-gradient(180deg, rgba(22,198,105,.06), rgba(22,198,105,0) 55%),
-        var(--surface);
-    border-bottom: 1px solid var(--border);
-}
-.hero .hero-inner{
-    min-height: 48vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-}
-
-/* Section simple (si tu ne veux pas utiliser .section-block) */
-.section{
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 1rem;
-    padding: 1.25rem;
-}
-@media (min-width: 992px){
-    .section { padding: 1.75rem; }
-}
-
-/* TRUST BAR / BANNIÈRE EXPRESS / MAP & CONTACT / FOOTER */
-.trust-bar{ background: var(--surface-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.banner-express{ background: var(--surface-3); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.map-side{ background: var(--surface); }
-.contact-side{ background: var(--surface-2); border-left: 1px solid var(--border); }
-.footer{ background: var(--surface-2); border-top: 1px solid var(--border); }
-
-/* =========================================================
-   BOUTONS OUTLINE (lisibles sur fond clair)
-   ========================================================= */
-.btn-outline-light{
-    --bs-btn-color: var(--text);
-    --bs-btn-border-color: var(--border);
-    --bs-btn-hover-bg: #F1F5F2;
-    --bs-btn-hover-border-color: var(--primary);
-}
-
-/* =========================================================
-   DRAWER MOBILE (optionnel si collapse)
-   ========================================================= */
-.rail-drawer{ position: relative; }
-/* panneau */
-.rail-drawer-panel{
-    position: fixed;
-    top: 0; right: 0;
-    height: 100vh;
-    width: min(88vw, 360px);
-    background: var(--surface);
-    border-left: 1px solid var(--border);
-    box-shadow: -10px 0 24px rgba(16,20,24,.18);
-    transform: translateX(100%);
-    transition: transform .25s ease;
-    z-index: 1051;
-    display:flex; flex-direction:column;
-    padding: 1rem 1rem 1.25rem;
-}
-.rail-drawer.show .rail-drawer-panel{ transform: translateX(0%); }
-
-/* backdrop */
-.rail-drawer-backdrop{
-    content:"";
-    position: fixed;
-    inset: 0;
-    background: rgba(10,14,18,.38);
-    opacity: 0;
-    transition: opacity .2s ease;
-    pointer-events: none;
-    z-index: 1050;
-}
-.rail-drawer.show .rail-drawer-backdrop{
-    opacity: 1;
-    pointer-events: auto;
-}
-
-/* tête du drawer */
-.drawer-head{
-    padding-bottom: .35rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: .5rem;
-}
-.drawer-title{ font-weight: 700; color: var(--text); }
-.btn-rail-close{
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: .65rem;
-    width: 38px; height: 38px;
-    display:inline-flex; align-items:center; justify-content:center;
-    color: var(--text);
-}
-
-/* liens drawer */
-.drawer-links{ padding: .5rem 0 0; margin: 0; }
-.drawer-link{
-    display:block;
-    padding: .8rem .35rem;
-    font-weight: 600;
-    color: var(--text);
-    border-radius: .6rem;
-    transition: background-color .15s ease, padding-left .15s ease;
-    text-decoration: none;
-}
-.drawer-link:hover{
-    background: #EFF6F1;
-    padding-left: .55rem;
-}
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-@media (min-width: 768px){
-    :root{
-        --logo-stretch-x: 1.18;  /* tablette : plus large */
-        --logo-stretch-y: 1.04;  /* tablette : léger étirement vertical */
-        --logo-translate-y: 0px;
-    }
-    .brand-logo{ height: 62px; }
-    .splitter-curve{ height: 66px; }
-}
-
-@media (min-width: 1200px){
-    :root{
-        --logo-stretch-x: 1.24;  /* desktop : large */
-        --logo-stretch-y: 1.00;  /* desktop : pas d’étirement vertical */
-        --logo-translate-y: 0px;
-    }
-    .brand-logo{ height: 106px; }
-    .splitter-curve{ height: 74px; }
-}
-
-@media (max-width: 575.98px){
-    .header-row{ min-height: 92px; gap: 10px; }
-    .brand-logo{ height: 64px; }
-    .splitter-curve{ height: 58px; width: 18px; flex-basis: 18px; }
-    .splitter-curve::before{
-        inset: 6px 8px;
-        -webkit-mask: linear-gradient(90deg, transparent 0 7px, #000 7px 9px, transparent 9px 100%);
-        mask: linear-gradient(90deg, transparent 0 7px, #000 7px 9px, transparent 9px 100%);
-    }
-
-    /* Conteneurs bord à bord en mobile si besoin */
-    .container.mobile-edge,
-    .container-fluid.mobile-edge{
-        padding-left:0 !important;
-        padding-right:0 !important;
-    }
 }
 
 /* =========================================================
@@ -464,7 +275,6 @@ body{ background: var(--app-bg); color: var(--text); }
     color: var(--text);
 }
 
-/* Responsive : en mobile, on élargit et on remonte légèrement */
 @media (max-width: 575.98px){
     .cookie-consent{
         left: 12px;
@@ -476,74 +286,27 @@ body{ background: var(--app-bg); color: var(--text); }
     }
 }
 
-/* === CATALOG === */
-.catalog-hero{
-    background:
-        linear-gradient(180deg, rgba(22,198,105,.06), rgba(22,198,105,0) 60%),
-        var(--surface);
-    border-bottom: 1px solid var(--border);
-}
+// Fix overflow mobile
+@media (max-width: 768px) {
+    .container,
+    .container-fluid {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        max-width: 100%;
+    }
 
-/* Sidebar filtres */
-.filters-card{
-    top: 24px; /* sticky */
-    .catalog-pill{
-        background: #EFF6F1;
-        color: #0B1711;
-        border: 1px solid #D7EADF;
-        text-decoration: none;
-        padding: .35rem .6rem;
+    body, html {
+        overflow-x: hidden;
+        max-width: 100vw;
     }
 }
 
-/* Cards produits pro */
-.product-card{
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    box-shadow: 0 6px 18px rgba(16,20,24,.06);
-    overflow: hidden;
-    transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+/* =========================================================
+   IMPORT NAVBAR & MEGA MENU
+   ========================================================= */
+@import "nav_mega_menu";
 
-    &:hover{
-        transform: translateY(-2px);
-        box-shadow: 0 10px 26px rgba(16,20,24,.10);
-        border-color: #DDE6EC;
-    }
-}
-
-.product-thumb{
-    display:block;
-    background: var(--surface-2, #F2F5F7);
-    position: relative;
-}
-.product-thumb-img{
-    width:100%; height:100%; object-fit:cover;
-    border-top-left-radius: 16px; border-top-right-radius: 16px;
-}
-.product-badge{
-    position: absolute; left: 10px; top: 10px;
-    display:inline-flex; align-items:center;
-    gap: .25rem;
-}
-
-.product-body{ padding: .85rem .9rem 1rem; }
-.product-title a{ color: var(--text); text-decoration: none; }
-.product-title a:hover{ text-decoration: underline; }
-
-.product-price{
-    font-weight: 800;
-    color: var(--text);
-}
-
-/* Pagination propre */
-.catalog-pagination .page-link{
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    color: var(--text);
-}
-.catalog-pagination .page-item.active .page-link{
-    background: var(--primary);
-    border-color: #11B864;
-    color: #07130C;
-}
+/* =========================================================
+   IMPORT CATALOGUE
+   ========================================================= */
+@import "catalog";
