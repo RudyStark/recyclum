@@ -1,6 +1,8 @@
 import './bootstrap.js';
 import './styles/app.scss';
 
+import 'glightbox/dist/css/glightbox.css';
+
 import { registerReactControllerComponents } from '@symfony/ux-react';
 
 // Enregistre automatiquement tous les composants React dans assets/react/**.

@@ -74,7 +74,7 @@
                         <p class="lead mb-4 text-soft">Achats • Réparations 7j/7 • Rachat & Enlèvement à domicile</p>
 
                         <div class="d-flex flex-column flex-sm-row gap-2">
-                            <a href="/produits" class="btn btn-primary btn-lg">Voir les produits</a>
+                            <a href="{{ path('catalog_index') }}" class="btn btn-primary btn-lg">Voir les produits</a>
                             <a href="/reparation" class="btn btn-outline-light btn-lg">Demander une réparation</a>
                             <a href="/rachat" class="btn btn-outline-secondary btn-lg">Vendre mon appareil</a>
                         </div>
@@ -131,7 +131,7 @@
                 <div class="section-block h-100">
                     <h2 class="h4 section-title">Vente reconditionné</h2>
                     <p class="text-soft mb-3">Lave-linge, frigos, fours… Garantis, testés, prêts à l’emploi.</p>
-                    <a href="/produits" class="btn btn-outline-light">Voir les arrivages</a>
+                    <a href="{{ path('catalog_index') }}" class="btn btn-outline-light">Voir les arrivages</a>
                 </div>
             </div>
             <div class="col-12 col-md-4">
@@ -155,7 +155,7 @@
     <section class="container pb-5 surface-2 section-block">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="h4 mb-0">Arrivages récents</h2>
-            <a class="btn btn-sm btn-outline-secondary" href="/produits">Tout voir</a>
+            <a class="btn btn-sm btn-outline-secondary" href="{{ path('catalog_index') }}">Tout voir</a>
         </div>
 
         <div class="row g-3 g-md-4">
