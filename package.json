@@ -35,6 +35,7 @@
     "author": "",
     "description": "",
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^7.1.0",
         "@hotwired/turbo": "^8.0.18",
         "@popperjs/core": "^2.11.8",
         "@supabase/supabase-js": "^2.76.1",

@@ -1,10 +1,5 @@
 /* =========================================================
-   Recyclum UI — Thème clair pro + Header sombre élégant
-   (logo agrandi + étiré horizontalement + vertical ajusté)
-   — Logo & menu alignés sur une seule ligne
-   — Séparatrice "curve" sobre entre les deux
-   — Surfaces (1/2/3) pour hiérarchie visuelle propre
-   — MEGA MENU moderne pour électroménager
+   Recyclum UI — Thème clair pro + Design moderne 2025
    ========================================================= */
 
 /* ---------- PALETTE (SASS) ---------- */
@@ -74,19 +69,20 @@ $btn-font-weight: 600;
     --primary-300:    #6FDEA7;
 
     --container-x: max(0px, env(safe-area-inset-left));
-
-    /* Étirement du logo */
-    --logo-stretch-x: 1.12;
-    --logo-stretch-y: 1.55;
-    --logo-translate-y: 0.5px;
 }
 
 /* =========================================================
    STYLES GLOBAUX
    ========================================================= */
-body{ background: var(--app-bg); color: var(--text); }
+body{
+    background: var(--app-bg);
+    color: var(--text);
+}
 
-.full-bleed { padding-left: var(--container-x); padding-right: var(--container-x); }
+.full-bleed {
+    padding-left: var(--container-x);
+    padding-right: var(--container-x);
+}
 
 .text-soft  { color: var(--muted) !important; }
 .hr-soft    { border-color: var(--border); opacity: 1; }
@@ -140,80 +136,13 @@ body{ background: var(--app-bg); color: var(--text); }
 }
 
 /* =========================================================
-   HEADER — 1 seule ligne : logo | séparatrice courbe | menu
+   BOUTONS OUTLINE (lisibles sur fond clair)
    ========================================================= */
-.site-header{ background: transparent; }
-
-/* Bandeau sombre */
-.nav-top{
-    background: linear-gradient(180deg, $anthracite-1 0%, $anthracite-2 100%);
-    border-bottom-left-radius: 16px;
-    border-bottom-right-radius: 16px;
-    box-shadow: 0 10px 24px rgba(0,0,0,.16);
-}
-
-/* Ligne unique */
-.header-row{
-    min-height: 104px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-/* Slot logo à gauche */
-.brand-slot{
-    display: flex;
-    align-items: center;
-
-    a {
-        display: inline-block;
-        line-height: 0;
-    }
-}
-
-/* Logo AGRANDI + ÉTIRÉ (X & Y) */
-.brand-logo{
-    height: 70px;
-    width: auto;
-    display: inline-block;
-    transform-origin: left center;
-    transform:
-        translateY(var(--logo-translate-y))
-        scale(var(--logo-stretch-x), var(--logo-stretch-y));
-    -webkit-transform:
-        translateY(var(--logo-translate-y))
-        scale(var(--logo-stretch-x), var(--logo-stretch-y));
-    image-rendering: auto;
-}
-
-/* Séparatrice "curve" sobre entre logo et menu */
-.splitter-curve{
-    width: 22px;
-    height: 64px;
-    position: relative;
-    flex: 0 0 22px;
-}
-.splitter-curve::before{
-    content: "";
-    position: absolute;
-    inset: 6px 10px;
-    border-radius: 32px;
-    background:
-        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0) 30%),
-        linear-gradient(180deg, rgba(255,255,255,0) 70%, rgba(0,0,0,.18)),
-        linear-gradient(180deg, #DCE6E0, #BFD9CC);
-    -webkit-mask:
-        linear-gradient(90deg, transparent 0 9px, #000 9px 11px, transparent 11px 100%);
-    mask:
-        linear-gradient(90deg, transparent 0 9px, #000 9px 11px, transparent 11px 100%);
-    opacity: .9;
-}
-
-/* Slot menu à droite (prend la place restante) */
-.menu-slot{
-    margin-left: auto;
-    display: flex;
-    align-items: center;
+.btn-outline-light{
+    --bs-btn-color: var(--text);
+    --bs-btn-border-color: var(--border);
+    --bs-btn-hover-bg: #F1F5F2;
+    --bs-btn-hover-border-color: var(--primary);
 }
 
 /* =========================================================
@@ -223,7 +152,9 @@ body{ background: var(--app-bg); color: var(--text); }
     * { transition: none !important; animation: none !important; }
 }
 
-/* === COOKIE CONSENT (toast pro, sobre) === */
+/* =========================================================
+   COOKIE CONSENT (toast pro, sobre)
+   ========================================================= */
 .cookie-consent{
     position: fixed;
     right: 18px;
@@ -267,12 +198,22 @@ body{ background: var(--app-bg); color: var(--text); }
 .cookie-consent__close{
     position: absolute;
     inset: 6px 6px auto auto;
-    width: 34px; height: 34px;
+    width: 34px;
+    height: 34px;
     border: 1px solid var(--border);
     background: transparent;
     border-radius: .6rem;
-    display: inline-flex; align-items: center; justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     color: var(--text);
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: var(--surface-2);
+        border-color: var(--primary);
+    }
 }
 
 @media (max-width: 575.98px){
@@ -286,7 +227,9 @@ body{ background: var(--app-bg); color: var(--text); }
     }
 }
 
-// Fix overflow mobile
+/* =========================================================
+   FIX OVERFLOW MOBILE
+   ========================================================= */
 @media (max-width: 768px) {
     .container,
     .container-fluid {
@@ -302,11 +245,53 @@ body{ background: var(--app-bg); color: var(--text); }
 }
 
 /* =========================================================
-   IMPORT NAVBAR & MEGA MENU
+   HELPERS UTILES
    ========================================================= */
-@import "nav_mega_menu";
+
+// Min-height helpers
+.min-vh-75 {
+    min-height: 75vh;
+}
+
+.min-vh-50 {
+    min-height: 50vh;
+}
+
+// Spacing helpers
+.py-6 {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+.my-6 {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+}
+
+// Text helpers
+.text-balance {
+    text-wrap: balance;
+}
+
+.text-pretty {
+    text-wrap: pretty;
+}
 
 /* =========================================================
-   IMPORT CATALOGUE
+   IMPORTS MODULES
    ========================================================= */
+
+/* Navbar & Mega Menu */
+@import "nav_mega_menu";
+
+/* Homepage */
+@import "home";
+
+/* Catalogue */
 @import "catalog";
+
+/*Font Awesome*/
+@import "@fortawesome/fontawesome-free/scss/fontawesome";
+@import "@fortawesome/fontawesome-free/scss/solid";
+@import "@fortawesome/fontawesome-free/scss/regular";
+@import "@fortawesome/fontawesome-free/scss/brands";
