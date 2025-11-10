@@ -1,498 +1,346 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos produits reconditionnés - Recyclum{% endblock %}
-
-{% block meta_description %}
-    Découvrez notre sélection de {{ totalProducts }} produit{{ totalProducts > 1 ? 's' : '' }} électroniques reconditionnés et garantis. Qualité professionnelle, prix accessibles.
-{% endblock %}
+{% block title %}Catalogue — Électroménager reconditionné{% endblock %}
+{% block meta_description %}Découvrez notre large sélection d'électroménagers reconditionnés : réfrigérateurs, lave-linge, fours... Garantis jusqu'à 24 mois.{% endblock %}
 
 {% block body %}
-<div class="catalog">
 
-    {# ========================================
-       BREADCRUMB - NAVIGATION CLAIRE
-       ======================================== #}
-    <nav class="breadcrumb-nav" aria-label="Fil d'Ariane">
+    {# === HERO CATALOGUE MODERNE === #}
+    <section class="catalog-hero-modern">
+        <div class="catalog-hero-gradient"></div>
         <div class="container">
-            <ol class="breadcrumb-list">
-                <li class="breadcrumb-item">
-                    <a href="{{ path('app_home') }}" class="breadcrumb-link">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                        </svg>
-                        Accueil
-                    </a>
-                </li>
-                <li class="breadcrumb-separator">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                </li>
-                <li class="breadcrumb-item breadcrumb-current" aria-current="page">
-                    <span>Nos produits</span>
-                </li>
-            </ol>
-        </div>
-    </nav>
-
-    {# ========================================
-       HEADER COMPACT - TITRE + STATS
-       ======================================== #}
-    <header class="catalog-header">
-        <div class="container">
-            <div class="header-content">
-                <div class="header-main">
-                    <h1 class="catalog-title">
-                        Nos produits <span class="text-gradient">reconditionnés</span>
-                    </h1>
-                    <p class="catalog-subtitle">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 7h-9"></path>
-                            <path d="M14 17H5"></path>
-                            <circle cx="17" cy="17" r="3"></circle>
-                            <circle cx="7" cy="7" r="3"></circle>
-                        </svg>
-                        {{ totalProducts }} produit{{ totalProducts > 1 ? 's' : '' }} disponible{{ totalProducts > 1 ? 's' : '' }}
+            <div class="catalog-hero-inner">
+                <div>
+                    <h1 class="catalog-hero-title">Catalogue</h1>
+                    <p class="catalog-hero-description">
+                        {{ totalProducts }} produit{{ totalProducts > 1 ? 's' : '' }} reconditionné{{ totalProducts > 1 ? 's' : '' }}, testé{{ totalProducts > 1 ? 's' : '' }} et garanti{{ totalProducts > 1 ? 's' : '' }}
                     </p>
                 </div>
 
-                {# Stats rapides (optionnel) #}
-                <div class="header-stats">
-                    <div class="stat-badge">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                            <path d="M9 12l2 2 4-4"></path>
+                {# Tri rapide #}
+                <form method="get" class="catalog-sort-form">
+                    {% for k, v in app.request.query.all %}
+                        {% if k != 'sort' %}
+                            <input type="hidden" name="{{ k }}" value="{{ v }}">
+                        {% endif %}
+                    {% endfor %}
+                    <label class="sort-label">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="21" y1="10" x2="3" y2="10"></line>
+                            <line x1="21" y1="6" x2="3" y2="6"></line>
+                            <line x1="21" y1="14" x2="3" y2="14"></line>
+                            <line x1="21" y1="18" x2="3" y2="18"></line>
                         </svg>
-                        <span>Garantie jusqu'à 6 mois</span>
-                    </div>
-                    <div class="stat-badge">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        <span>Livraison rapide</span>
-                    </div>
-                </div>
+                        Trier par
+                    </label>
+                    <select class="sort-select" name="sort" onchange="this.form.submit()">
+                        {% set s = criteria.sort|default('date_desc') %}
+                        <option value="date_desc" {{ s == 'date_desc' ? 'selected' : '' }}>Plus récents</option>
+                        <option value="price_asc" {{ s == 'price_asc' ? 'selected' : '' }}>Prix croissant</option>
+                        <option value="price_desc" {{ s == 'price_desc' ? 'selected' : '' }}>Prix décroissant</option>
+                        <option value="name_asc" {{ s == 'name_asc' ? 'selected' : '' }}>Nom A-Z</option>
+                    </select>
+                </form>
             </div>
         </div>
-    </header>
+    </section>
 
+    {# === CATALOGUE PRINCIPAL === #}
+    <section class="catalog-main-modern">
         <div class="container">
             <div class="catalog-grid">
 
-                {# ========================================
-               SIDEBAR FILTRES - MODERNE & INTERACTIF
-               ======================================== #}
-                <aside class="catalog-sidebar">
-                    <div class="sidebar-sticky">
-                        <form
-                            method="get"
-                            action="{{ path('catalog_index') }}"
-                            data-controller="filter"
-                            class="filters-form"
-                            id="filters-form"
-                        >
-                            {# En-tête des filtres #}
-                            <div class="filters-header">
-                                <div class="filters-title-wrapper">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <line x1="4" y1="21" x2="4" y2="14"></line>
-                                        <line x1="4" y1="10" x2="4" y2="3"></line>
-                                        <line x1="12" y1="21" x2="12" y2="12"></line>
-                                        <line x1="12" y1="8" x2="12" y2="3"></line>
-                                        <line x1="20" y1="21" x2="20" y2="16"></line>
-                                        <line x1="20" y1="12" x2="20" y2="3"></line>
-                                        <circle cx="4" cy="14" r="2"></circle>
-                                        <circle cx="12" cy="8" r="2"></circle>
-                                        <circle cx="20" cy="16" r="2"></circle>
-                                    </svg>
-                                    <h2 class="filters-title">Filtres</h2>
-                                </div>
-
-                                {% if criteria.category or criteria.brand or criteria.min or criteria.max or criteria.label or criteria.q %}
-                                    <button
-                                        type="button"
-                                        class="btn-reset-filters"
-                                        data-action="filter#reset"
-                                        title="Réinitialiser tous les filtres"
-                                    >
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="1 4 1 10 7 10"></polyline>
-                                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
-                                        </svg>
-                                        Réinitialiser
-                                    </button>
-                                {% endif %}
-                            </div>
-
-                            {# Compteur de filtres actifs #}
-                            {% set activeFiltersCount = 0 %}
-                            {% if criteria.category %}{% set activeFiltersCount = activeFiltersCount + 1 %}{% endif %}
-                            {% if criteria.brand %}{% set activeFiltersCount = activeFiltersCount + 1 %}{% endif %}
-                            {% if criteria.min or criteria.max %}{% set activeFiltersCount = activeFiltersCount + 1 %}{% endif %}
-                            {% if criteria.label %}{% set activeFiltersCount = activeFiltersCount + 1 %}{% endif %}
-                            {% if criteria.q %}{% set activeFiltersCount = activeFiltersCount + 1 %}{% endif %}
-
-                            {% if activeFiltersCount > 0 %}
-                                <div class="active-filters-badge">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                    {{ activeFiltersCount }} filtre{{ activeFiltersCount > 1 ? 's' : '' }} actif{{ activeFiltersCount > 1 ? 's' : '' }}
-                                </div>
-                            {% endif %}
-
-                            {# Recherche avec icône #}
-                            <div class="filter-group">
-                                <label class="filter-label" for="search">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="11" cy="11" r="8"></circle>
-                                        <path d="m21 21-4.35-4.35"></path>
-                                    </svg>
-                                    Recherche
-                                </label>
-                                <div class="search-input-wrapper">
-                                    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="11" cy="11" r="8"></circle>
-                                        <path d="m21 21-4.35-4.35"></path>
-                                    </svg>
-                                    <input
-                                        type="search"
-                                        name="q"
-                                        id="search"
-                                        value="{{ criteria.q }}"
-                                        placeholder="Rechercher..."
-                                        class="input-search"
-                                    >
-                                    {% if criteria.q %}
-                                        <button type="button" class="search-clear" onclick="document.getElementById('search').value=''; this.closest('form').requestSubmit();">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                                            </svg>
-                                        </button>
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            {# Catégories avec compteur #}
-                            <div class="filter-group">
-                                <h3 class="filter-label">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M4 4h7l3 3h10v12H4z"></path>
-                                    </svg>
-                                    Catégories
-                                    <span class="filter-count">({{ categories|length }})</span>
-                                </h3>
-                                <div class="filter-options">
-                                    {% for category in categories %}
-                                        <label class="filter-option">
-                                            <input
-                                                type="radio"
-                                                name="category"
-                                                value="{{ category.slug }}"
-                                                {{ criteria.category == category.slug ? 'checked' }}
-                                            >
-                                            <span class="filter-option-label">{{ category.name }}</span>
-                                            <span class="filter-check">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                            </svg>
-                                        </span>
-                                        </label>
-                                    {% endfor %}
-                                </div>
-                            </div>
-
-                            {# Marques avec compteur #}
-                            <div class="filter-group">
-                                <h3 class="filter-label">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                                        <path d="M2 17l10 5 10-5"></path>
-                                        <path d="M2 12l10 5 10-5"></path>
-                                    </svg>
-                                    Marques
-                                    <span class="filter-count">({{ brands|length }})</span>
-                                </h3>
-                                <div class="filter-options">
-                                    {% for brand in brands %}
-                                        <label class="filter-option">
-                                            <input
-                                                type="radio"
-                                                name="brand"
-                                                value="{{ brand.slug }}"
-                                                {{ criteria.brand == brand.slug ? 'checked' }}
-                                            >
-                                            <span class="filter-option-label">{{ brand.name }}</span>
-                                            <span class="filter-check">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                            </svg>
-                                        </span>
-                                        </label>
-                                    {% endfor %}
-                                </div>
-                            </div>
-
-                            {# Prix avec inputs compacts #}
-                            <div
-                                class="filter-group"
-                                data-controller="price-range"
-                                data-price-range-min-value="{{ stats.minPrice }}"
-                                data-price-range-max-value="{{ stats.maxPrice }}"
-                            >
-                                <h3 class="filter-label">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <line x1="12" y1="1" x2="12" y2="23"></line>
-                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                                    </svg>
-                                    Budget
-                                </h3>
-                                <div class="price-range">
-                                    <div class="price-inputs">
-                                        {# Input MIN #}
-                                        <div class="price-input-wrapper">
-                                            <label class="price-label-mini" for="price-min">Minimum</label>
-                                            <div class="price-input-container">
-                                                <input
-                                                    type="number"
-                                                    name="min"
-                                                    id="price-min"
-                                                    placeholder="{{ stats.minPrice }}"
-                                                    value="{{ criteria.min ?: '' }}"
-                                                    min="{{ stats.minPrice }}"
-                                                    max="{{ stats.maxPrice }}"
-                                                    class="price-input"
-                                                    data-price-range-target="minInput"
-                                                    data-action="input->price-range#updateMin"
-                                                >
-                                                <span class="price-currency">€</span>
-                                            </div>
-                                        </div>
-
-                                        <span class="price-separator">—</span>
-
-                                        {# Input MAX #}
-                                        <div class="price-input-wrapper">
-                                            <label class="price-label-mini" for="price-max">Maximum</label>
-                                            <div class="price-input-container">
-                                                <input
-                                                    type="number"
-                                                    name="max"
-                                                    id="price-max"
-                                                    placeholder="{{ stats.maxPrice }}"
-                                                    value="{{ criteria.max ?: '' }}"
-                                                    min="{{ stats.minPrice }}"
-                                                    max="{{ stats.maxPrice }}"
-                                                    class="price-input"
-                                                    data-price-range-target="maxInput"
-                                                    data-action="input->price-range#updateMax"
-                                                >
-                                                <span class="price-currency">€</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="price-display">
-                                        <span data-price-range-target="minDisplay">{{ criteria.min ?: stats.minPrice }} €</span>
-                                        <span data-price-range-target="maxDisplay">{{ criteria.max ?: stats.maxPrice }} €</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {# Classe énergie avec icône #}
-                            <div class="filter-group">
-                                <h3 class="filter-label">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
-                                    </svg>
-                                    Classe énergie
-                                </h3>
-                                <div class="filter-options filter-energy">
-                                    {% for label in energyLabels %}
-                                        <label class="filter-option">
-                                            <input
-                                                type="radio"
-                                                name="label"
-                                                value="{{ label.value }}"
-                                                {{ criteria.label == label.value ? 'checked' }}
-                                            >
-                                            <span class="energy-badge energy-{{ label.value|lower }}">
-                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
-                                            </svg>
-                                            {{ label.value }}
-                                        </span>
-                                        </label>
-                                    {% endfor %}
-                                </div>
-                            </div>
-
-                            {# Hidden field pour pagination #}
-                            <input type="hidden" name="page" value="{{ currentPage }}">
-                        </form>
-                    </div>
-                </aside>
-
-                {# ========================================
-               CONTENU PRINCIPAL - PRODUITS
-               ======================================== #}
-                <main class="catalog-main">
-
-                    {# Toolbar élégante #}
-                    <div class="catalog-toolbar">
-                        <div class="toolbar-info">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="3" width="7" height="7"></rect>
-                                <rect x="14" y="3" width="7" height="7"></rect>
-                                <rect x="14" y="14" width="7" height="7"></rect>
-                                <rect x="3" y="14" width="7" height="7"></rect>
-                            </svg>
-                            <span class="results-count">
-                            <strong>{{ totalProducts }}</strong> résultat{{ totalProducts > 1 ? 's' : '' }}
-                        </span>
-                        </div>
-
-                        <div class="toolbar-sort" data-controller="sort-select">
-                            <label for="sort">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 5v14M5 12l7 7 7-7"></path>
+                {# === SIDEBAR FILTRES AMÉLIORÉE === #}
+                <aside class="catalog-sidebar-modern">
+                    <form method="get" class="filters-panel">
+                        <div class="filters-header">
+                            <h2 class="filters-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                                    <line x1="17" y1="16" x2="23" y2="16"></line>
                                 </svg>
-                                Trier par
-                            </label>
-                            <select
-                                name="sort"
-                                id="sort"
-                                class="select-sort"
-                                form="filters-form"
-                                data-action="change->sort-select#submit"
-                            >
-                                <option value="date_desc" {{ criteria.sort == 'date_desc' ? 'selected' }}>Plus récents</option>
-                                <option value="date_asc" {{ criteria.sort == 'date_asc' ? 'selected' }}>Plus anciens</option>
-                                <option value="price_asc" {{ criteria.sort == 'price_asc' ? 'selected' }}>Prix croissant</option>
-                                <option value="price_desc" {{ criteria.sort == 'price_desc' ? 'selected' }}>Prix décroissant</option>
-                                <option value="name_asc" {{ criteria.sort == 'name_asc' ? 'selected' }}>Nom A-Z</option>
-                                <option value="name_desc" {{ criteria.sort == 'name_desc' ? 'selected' }}>Nom Z-A</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    {# Grille produits ou état vide #}
-                    {% if products|length > 0 %}
-                        <div class="products-grid">
-                            {% for product in products %}
-                                <article class="product-card">
-                                    <a href="{{ path('catalog_show', {slug: product.slug}) }}" class="card-link">
-
-                                        {# Image produit #}
-                                        <div class="card-image">
-                                            {% if product.mainImageFilename %}
-                                                <img
-                                                    src="{{ asset('uploads/products/' ~ product.mainImageFilename) }}"
-                                                    alt="{{ product.title }}"
-                                                    loading="lazy"
-                                                >
-                                            {% else %}
-                                                <div class="card-placeholder">
-                                                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                                        <polyline points="21 15 16 10 5 21"></polyline>
-                                                    </svg>
-                                                    <span>Aucune image</span>
-                                                </div>
-                                            {% endif %}
-
-                                            {# Badges overlay #}
-                                            <div class="card-badges">
-                                                {% if product.energyLabel %}
-                                                    <span class="badge energy-badge energy-{{ product.energyLabel.value|lower }}" title="Classe énergie {{ product.energyLabel.value }}">
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                                                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
-                                                    </svg>
-                                                    {{ product.energyLabel.value }}
-                                                </span>
-                                                {% endif %}
-
-                                                {% if product.stock < 5 and product.stock > 0 %}
-                                                    <span class="badge badge-warning" title="Il ne reste que {{ product.stock }} unité(s)">
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                                        <line x1="12" y1="9" x2="12" y2="13"></line>
-                                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                                                    </svg>
-                                                    Stock limité
-                                                </span>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-
-                                        {# Contenu card #}
-                                        <div class="card-content">
-                                            <h3 class="card-title">{{ product.title }}</h3>
-
-                                            {% if product.brand %}
-                                                <p class="card-brand">
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                                                    </svg>
-                                                    {{ product.brand.name }}
-                                                </p>
-                                            {% endif %}
-
-                                            <div class="card-footer">
-                                            <span class="card-price">
-                                                {{ (product.price / 100)|number_format(2, ',', ' ') }} €
-                                            </span>
-
-                                                {% if product.warrantyMonths %}
-                                                    <span class="card-warranty" title="Garantie {{ product.warrantyMonths }} mois">
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                                    </svg>
-                                                    {{ product.warrantyMonths }}m
-                                                </span>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </a>
-                                </article>
-                            {% endfor %}
-                        </div>
-
-                        {# Pagination #}
-                        {% if totalPages > 1 %}
-                            {% include 'catalog/_pagination.html.twig' %}
-                        {% endif %}
-
-                    {% else %}
-                        {# État vide élégant #}
-                        <div class="empty-state">
-                            <div class="empty-icon-wrapper">
-                                <svg class="empty-icon" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <path d="m21 21-4.35-4.35"></path>
-                                </svg>
-                            </div>
-                            <h2 class="empty-title">Aucun produit trouvé</h2>
-                            <p class="empty-text">
-                                Nous n'avons trouvé aucun produit correspondant à vos critères.<br>
-                                Essayez de modifier ou réinitialiser vos filtres.
-                            </p>
-                            <a href="{{ path('catalog_index') }}" class="btn btn-primary">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                Filtres
+                            </h2>
+                            <a href="{{ path('catalog_index') }}" class="btn-reset">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="1 4 1 10 7 10"></polyline>
                                     <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
                                 </svg>
-                                Réinitialiser les filtres
+                                Réinitialiser
                             </a>
                         </div>
-                    {% endif %}
 
-                </main>
+                        {# Recherche #}
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                Recherche
+                            </label>
+                            <input type="search"
+                                   class="filter-input"
+                                   name="q"
+                                   value="{{ criteria.q }}"
+                                   placeholder="Réfrigérateur, lave-linge...">
+                        </div>
+
+                        {# Catégorie #}
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                </svg>
+                                Catégorie
+                            </label>
+                            <select name="category" class="filter-select">
+                                <option value="">Toutes les catégories</option>
+                                {% for cat in categories %}
+                                    <option value="{{ cat.id }}" {{ criteria.category == cat.id ? 'selected' : '' }}>
+                                        {{ cat.name }} ({{ cat.products|length }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        {# Marque #}
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                                Marque
+                            </label>
+                            <select name="brand" class="filter-select">
+                                <option value="">Toutes les marques</option>
+                                {% for b in brands %}
+                                    <option value="{{ b.id }}" {{ criteria.brand == b.id ? 'selected' : '' }}>
+                                        {{ b.name }} ({{ b.products|length }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        {# Étiquette énergie avec couleurs #}
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                                </svg>
+                                Efficacité énergétique
+                            </label>
+                            <div class="energy-grid">
+                                <input type="radio" name="label" value="" id="energy-all"
+                                    {{ not criteria.label ? 'checked' : '' }}>
+                                <label for="energy-all" class="energy-option energy-all">Toutes</label>
+
+                                {% for lbl in energyLabels %}
+                                    <input type="radio"
+                                           name="label"
+                                           value="{{ lbl.value }}"
+                                           id="energy-{{ lbl.value }}"
+                                        {{ criteria.label == lbl.value ? 'checked' : '' }}>
+                                    <label for="energy-{{ lbl.value }}"
+                                           class="energy-option energy-{{ lbl.value|lower }}">
+                                        {{ lbl.value == 'NA' ? 'Non classé' : lbl.value }}
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        {# Prix #}
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                                Fourchette de prix
+                            </label>
+                            <div class="price-inputs">
+                                <div class="price-input-group">
+                                    <span class="price-currency">€</span>
+                                    <input type="number"
+                                           name="min"
+                                           class="filter-input-price"
+                                           value="{{ criteria.min }}"
+                                           min="0"
+                                           step="50"
+                                           placeholder="Min">
+                                </div>
+                                <span class="price-separator">—</span>
+                                <div class="price-input-group">
+                                    <span class="price-currency">€</span>
+                                    <input type="number"
+                                           name="max"
+                                           class="filter-input-price"
+                                           value="{{ criteria.max }}"
+                                           min="0"
+                                           step="50"
+                                           placeholder="Max">
+                                </div>
+                            </div>
+                        </div>
+
+                        {# Bouton appliquer #}
+                        <button type="submit" class="btn-apply-filters">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Appliquer les filtres
+                        </button>
+
+                        {# Filtres actifs #}
+                        {% set active = [] %}
+                        {% if criteria.q %}{% set active = active|merge([{k:'q', v:criteria.q, label:'Recherche'}]) %}{% endif %}
+                        {% if criteria.category %}
+                            {% set catName = categories|filter(c => c.id == criteria.category)|first %}
+                            {% if catName %}
+                                {% set active = active|merge([{k:'category', v:catName.name, label:'Catégorie'}]) %}
+                            {% endif %}
+                        {% endif %}
+                        {% if criteria.brand %}
+                            {% set brandName = brands|filter(b => b.id == criteria.brand)|first %}
+                            {% if brandName %}
+                                {% set active = active|merge([{k:'brand', v:brandName.name, label:'Marque'}]) %}
+                            {% endif %}
+                        {% endif %}
+                        {% if criteria.label %}{% set active = active|merge([{k:'label', v:criteria.label, label:'Étiquette'}]) %}{% endif %}
+                        {% if criteria.min %}{% set active = active|merge([{k:'min', v:criteria.min ~ '€', label:'Prix min'}]) %}{% endif %}
+                        {% if criteria.max %}{% set active = active|merge([{k:'max', v:criteria.max ~ '€', label:'Prix max'}]) %}{% endif %}
+
+                        {% if active|length %}
+                            <div class="active-filters">
+                                <div class="active-filters-title">Filtres actifs</div>
+                                <div class="active-filters-list">
+                                    {% for f in active %}
+                                        {% set qs = app.request.query.all|filter((v, k) => k != f.k) %}
+                                        <a href="{{ path('catalog_index') ~ (qs ? '?' ~ qs|url_encode : '') }}"
+                                           class="filter-pill">
+                                            <span>{{ f.label }}: {{ f.v }}</span>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                                            </svg>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </form>
+                </aside>
+
+                {# === GRILLE PRODUITS === #}
+                <div class="catalog-products">
+                    <div class="products-grid-modern">
+                        {% for p in products %}
+                            <article class="product-card-modern">
+                                <a href="{{ path('catalog_show', {slug: p.slug}) }}" class="product-link">
+                                    <div class="product-image-modern">
+                                        {% if p.images|length > 0 %}
+                                            <img src="{{ asset('uploads/products/' ~ p.images.first.filename) }}"
+                                                 alt="{{ p.title }}"
+                                                 loading="lazy">
+                                        {% else %}
+                                            <div class="product-placeholder">
+                                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                                </svg>
+                                            </div>
+                                        {% endif %}
+
+                                        {# Badges #}
+                                        <div class="product-badges-modern">
+                                            {% if p.energyLabel %}
+                                                <span class="badge-energy badge-energy-{{ p.energyLabel.value|lower }}">
+                                                {{ p.energyLabel.value == 'NA' ? 'N/A' : p.energyLabel.value }}
+                                            </span>
+                                            {% endif %}
+                                            {% if p.stock > 0 %}
+                                                <span class="badge-stock">En stock</span>
+                                            {% else %}
+                                                <span class="badge-out">Rupture</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="product-content-modern">
+                                        <div class="product-meta-modern">
+                                            {{ p.category.name }}
+                                            {% if p.brand %} • {{ p.brand.name }}{% endif %}
+                                        </div>
+
+                                        <h3 class="product-title-modern">{{ p.title }}</h3>
+
+                                        {% if p.shortDescription %}
+                                            <p class="product-description-modern">{{ p.shortDescription }}</p>
+                                        {% endif %}
+
+                                        <div class="product-footer-modern">
+                                            <div class="product-price-modern">
+                                                {{ (p.price / 100)|format_currency('EUR') }}
+                                            </div>
+
+                                            {% if p.warrantyMonths %}
+                                                <div class="product-warranty-modern">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                                    </svg>
+                                                    {{ p.warrantyMonths }} mois
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        {% else %}
+                            <div class="empty-state-modern">
+                                <div class="empty-icon">
+                                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                </div>
+                                <h3 class="empty-title">Aucun produit trouvé</h3>
+                                <p class="empty-description">Essayez de modifier vos critères de recherche</p>
+                                <a href="{{ path('catalog_index') }}" class="btn-empty">
+                                    Réinitialiser les filtres
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {# Pagination #}
+                    {% if totalPages > 1 %}
+                        <nav class="pagination-modern">
+                            <ul class="pagination-list-modern">
+                                {% for i in 1..totalPages %}
+                                    {% set qs = app.request.query.all|merge({'page': i}) %}
+                                    <li class="pagination-item-modern {{ i == currentPage ? 'active' : '' }}">
+                                        <a href="{{ path('catalog_index') ~ '?' ~ qs|url_encode }}"
+                                           class="pagination-link-modern">
+                                            {{ i }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+
 {% endblock %}
