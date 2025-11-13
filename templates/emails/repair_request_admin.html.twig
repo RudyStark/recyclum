@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouvelle demande de réparation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #0F1418;
+            background-color: #F6F8FA;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #FFFFFF;
+        }
+        .header {
+            background: #0F1418;
+            color: #FFFFFF;
+            padding: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+        .urgent-alert {
+            background: #FF6B6B;
+            color: #FFFFFF;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .info-grid {
+            display: table;
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .info-row {
+            display: table-row;
+        }
+        .info-label {
+            display: table-cell;
+            padding: 10px;
+            background: #F6F8FA;
+            font-weight: 600;
+            width: 35%;
+            border-bottom: 1px solid #E6EDF2;
+        }
+        .info-value {
+            display: table-cell;
+            padding: 10px;
+            border-bottom: 1px solid #E6EDF2;
+        }
+        .section {
+            margin: 30px 0;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #16C669;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #16C669;
+            padding-bottom: 5px;
+        }
+        .issue-details {
+            background: #F6F8FA;
+            padding: 15px;
+            border-left: 4px solid #16C669;
+            margin: 15px 0;
+        }
+        .button {
+            display: inline-block;
+            background: #16C669;
+            color: #FFFFFF !important;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 10px 5px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-urgent {
+            background: #FF6B6B;
+            color: #FFFFFF;
+        }
+        .badge-atelier {
+            background: #6FDEA7;
+            color: #0B1711;
+        }
+        .badge-domicile {
+            background: #FFD93D;
+            color: #0F1418;
+        }
+        .action-box {
+            background: #EFF6F1;
+            border: 2px solid #16C669;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    {% if repairRequest.urgency %}
+        <div class="urgent-alert">
+            🚨 DEMANDE URGENTE - Réponse requise sous 24h
+        </div>
+    {% endif %}
+
+    <div class="header">
+        <h1>🔧 Nouvelle demande de réparation</h1>
+        <p style="margin: 5px 0 0 0; font-size: 14px; opacity: 0.8;">
+            Reçue le {{ repairRequest.createdAt|date('d/m/Y à H:i') }}
+        </p>
+    </div>
+
+    <div class="content">
+        <div class="section">
+            <div class="section-title">👤 Informations client</div>
+            <div class="info-grid">
+                <div class="info-row">
+                    <div class="info-label">Nom complet</div>
+                    <div class="info-value"><strong>{{ repairRequest.fullName }}</strong></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">
+                        <a href="mailto:{{ repairRequest.email }}">{{ repairRequest.email }}</a>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Téléphone</div>
+                    <div class="info-value">
+                        <a href="tel:{{ repairRequest.phone }}">{{ repairRequest.phone }}</a>
+                    </div>
+                </div>
+                {% if repairRequest.repairLocation == 'domicile' and repairRequest.address %}
+                    <div class="info-row">
+                        <div class="info-label">Adresse</div>
+                        <div class="info-value">{{ repairRequest.fullAddress }}</div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">🔧 Détails de l'appareil</div>
+            <div class="info-grid">
+                <div class="info-row">
+                    <div class="info-label">Catégorie</div>
+                    <div class="info-value"><strong>{{ repairRequest.categoryLabel }}</strong></div>
+                </div>
+                {% if repairRequest.brand %}
+                    <div class="info-row">
+                        <div class="info-label">Marque</div>
+                        <div class="info-value">{{ repairRequest.brand }}</div>
+                    </div>
+                {% endif %}
+                {% if repairRequest.model %}
+                    <div class="info-row">
+                        <div class="info-label">Modèle</div>
+                        <div class="info-value">{{ repairRequest.model }}</div>
+                    </div>
+                {% endif %}
+                <div class="info-row">
+                    <div class="info-label">Problème</div>
+                    <div class="info-value"><strong>{{ repairRequest.issue }}</strong></div>
+                </div>
+            </div>
+
+            <div class="issue-details">
+                <strong>Description détaillée :</strong><br>
+                {{ repairRequest.issueDetails }}
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">📅 Préférences d'intervention</div>
+            <div class="info-grid">
+                <div class="info-row">
+                    <div class="info-label">Lieu</div>
+                    <div class="info-value">
+                        {% if repairRequest.repairLocation == 'atelier' %}
+                            <span class="badge badge-atelier">🏢 EN ATELIER</span>
+                        {% else %}
+                            <span class="badge badge-domicile">🏠 À DOMICILE</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if repairRequest.preferredDate %}
+                    <div class="info-row">
+                        <div class="info-label">Date souhaitée</div>
+                        <div class="info-value">{{ repairRequest.preferredDate|date('d/m/Y') }}</div>
+                    </div>
+                {% endif %}
+                <div class="info-row">
+                    <div class="info-label">Urgence</div>
+                    <div class="info-value">
+                        {% if repairRequest.urgency %}
+                            <span class="badge badge-urgent">🚨 URGENT</span>
+                        {% else %}
+                            Normal
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-box">
+            <p style="margin: 0 0 15px 0;"><strong>⏱️ Action requise : Contacter le client sous 2 heures</strong></p>
+            <a href="tel:{{ repairRequest.phone }}" class="button">📞 Appeler maintenant</a>
+            <a href="mailto:{{ repairRequest.email }}" class="button">📧 Envoyer un email</a>
+        </div>
+
+        <p style="font-size: 12px; color: #6C7783; margin-top: 30px;">
+            <strong>Numéro de demande :</strong> #{{ repairRequest.id }}<br>
+            <strong>Statut :</strong> {{ repairRequest.statusLabel }}<br>
+            <strong>Date de création :</strong> {{ repairRequest.createdAt|date('d/m/Y à H:i:s') }}
+        </p>
+    </div>
+</div>
+</body>
+</html>

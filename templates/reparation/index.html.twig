@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ pageTitle }} • Recyclum{% endblock %}
+{% block metaDescription %}{{ metaDescription }}{% endblock %}
+
+{% block body %}
+    {# === HERO RÉPARATION (style compact comme catalog) === #}
+    <section class="catalog-hero-modern">
+        <div class="catalog-hero-gradient"></div>
+
+        <div class="container">
+            <div class="catalog-hero-inner">
+                <div>
+                    <h1 class="catalog-hero-title">Réparation d'électroménager</h1>
+                    <p class="catalog-hero-description">
+                        Diagnostic gratuit • Intervention rapide 7j/7 • Garantie pièces & main d'œuvre
+                    </p>
+                </div>
+
+                {# Badges de confiance #}
+                <div class="d-flex flex-wrap gap-3">
+                    <div class="trust-badge">
+                        <i class="bi bi-clock-history"></i>
+                        <span>7j/7 • 9h-19h</span>
+                    </div>
+                    <div class="trust-badge">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>Paris & proche banlieue</span>
+                    </div>
+                    <div class="trust-badge">
+                        <i class="bi bi-shield-check"></i>
+                        <span>Garantie 6 mois</span>
+                    </div>
+                    <div class="trust-badge">
+                        <i class="bi bi-wrench"></i>
+                        <span>Toutes marques</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === FORMULAIRE RÉPARATION === #}
+    <section class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10 col-xl-9">
+                <div class="section-block p-4 p-md-5">
+                    <div {{ react_component('RepairForm', {
+                        apiEndpoint: '/api/repair-requests',
+                        phone: '01 43 07 63 63'
+                    }) }}></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === COMMENT ÇA MARCHE === #}
+    <section class="container py-5 surface-2">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+                <div class="section-block">
+                    <h2 class="h3 mb-4 text-center">Comment ça marche ?</h2>
+                    <div class="row g-4">
+                        <div class="col-12 col-md-4">
+                            <div class="process-step text-center">
+                                <div class="process-number">1</div>
+                                <h3 class="h5 mb-2">Décrivez la panne</h3>
+                                <p class="text-soft mb-0">
+                                    Remplissez le formulaire en quelques clics. Sélectionnez votre appareil et décrivez le problème.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="process-step text-center">
+                                <div class="process-number">2</div>
+                                <h3 class="h5 mb-2">Diagnostic & devis</h3>
+                                <p class="text-soft mb-0">
+                                    Nous vous contactons sous 2h pour établir un diagnostic et vous proposer un devis gratuit.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="process-step text-center">
+                                <div class="process-number">3</div>
+                                <h3 class="h5 mb-2">Réparation rapide</h3>
+                                <p class="text-soft mb-0">
+                                    Intervention en atelier ou à domicile selon vos besoins. Garantie 6 mois sur toutes nos réparations.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === NOS TARIFS === #}
+    <section class="container py-5 surface-1">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+                <div class="section-block">
+                    <h2 class="h3 mb-4 text-center">Nos tarifs indicatifs</h2>
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <div class="price-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold">Diagnostic en atelier</div>
+                                        <div class="small text-soft">Gratuit si réparation</div>
+                                    </div>
+                                    <div class="price-value">35 €</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="price-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold">Déplacement à domicile</div>
+                                        <div class="small text-soft">Paris & proche banlieue</div>
+                                    </div>
+                                    <div class="price-value">45 €</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="price-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold">Réparation standard</div>
+                                        <div class="small text-soft">Pièces + main d'œuvre</div>
+                                    </div>
+                                    <div class="price-value">À partir de 80 €</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="price-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold">Garantie pièces</div>
+                                        <div class="small text-soft">Toutes réparations</div>
+                                    </div>
+                                    <div class="price-value">6 mois</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <p class="text-soft small mb-0">
+                            <i class="bi bi-info-circle"></i> Devis détaillé gratuit après diagnostic
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === URGENCE / CONTACT === #}
+    <section class="container py-5 surface-3">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="section-block text-center p-4 p-md-5">
+                    <h2 class="h3 mb-3">Besoin d'une réparation en urgence ?</h2>
+                    <p class="text-soft mb-4">
+                        Appelez-nous directement pour une intervention rapide
+                    </p>
+                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                        <a href="tel:+33143076363" class="btn btn-primary btn-lg">
+                            <i class="bi bi-telephone-fill"></i> 01 43 07 63 63
+                        </a>
+                        <a href="mailto:contact@recyclum.fr" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-envelope"></i> Email
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

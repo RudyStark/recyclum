@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande de réparation reçue</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #0F1418;
+            background-color: #F6F8FA;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #FFFFFF;
+        }
+        .header {
+            background: linear-gradient(135deg, #16C669, #12A85A);
+            color: #FFFFFF;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .info-block {
+            background: #F6F8FA;
+            border-left: 4px solid #16C669;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .info-row {
+            margin: 10px 0;
+        }
+        .label {
+            font-weight: 600;
+            color: #6C7783;
+            font-size: 14px;
+        }
+        .value {
+            color: #0F1418;
+            font-size: 16px;
+        }
+        .button {
+            display: inline-block;
+            background: #16C669;
+            color: #FFFFFF !important;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+        .footer {
+            background: #F6F8FA;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #6C7783;
+        }
+        .urgent-badge {
+            display: inline-block;
+            background: #FF6B6B;
+            color: #FFFFFF;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .tip-box {
+            background: #EFF6F1;
+            border: 1px solid #D7EADF;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>✅ Demande de réparation reçue</h1>
+    </div>
+
+    <div class="content">
+        <p>Bonjour {{ repairRequest.firstName }},</p>
+
+        <p>Nous avons bien reçu votre demande de réparation pour votre <strong>{{ repairRequest.categoryLabel }}</strong>.</p>
+
+        <div class="info-block">
+            <h3 style="margin-top: 0;">📋 Récapitulatif de votre demande</h3>
+
+            <div class="info-row">
+                <div class="label">Appareil</div>
+                <div class="value">
+                    {{ repairRequest.categoryLabel }}
+                    {% if repairRequest.brand %}
+                        - {{ repairRequest.brand }}
+                    {% endif %}
+                    {% if repairRequest.model %}
+                        ({{ repairRequest.model }})
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="label">Problème</div>
+                <div class="value">{{ repairRequest.issue }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="label">Description</div>
+                <div class="value">{{ repairRequest.issueDetails }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="label">Lieu de réparation</div>
+                <div class="value">
+                    {% if repairRequest.repairLocation == 'atelier' %}
+                        🏢 En atelier (vous apportez l'appareil)
+                    {% else %}
+                        🏠 À domicile
+                        {% if repairRequest.address %}
+                            <br>{{ repairRequest.fullAddress }}
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if repairRequest.preferredDate %}
+                <div class="info-row">
+                    <div class="label">Date souhaitée</div>
+                    <div class="value">{{ repairRequest.preferredDate|date('d/m/Y') }}</div>
+                </div>
+            {% endif %}
+
+            {% if repairRequest.urgency %}
+                <div class="info-row">
+                    <div class="value">
+                        <span class="urgent-badge">🚨 RÉPARATION URGENTE</span>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <h3>⏱️ Prochaines étapes</h3>
+        <ol>
+            <li><strong>Sous 2 heures</strong> : Nous vous contactons au <strong>{{ repairRequest.phone }}</strong> pour établir un diagnostic précis</li>
+            <li><strong>Devis gratuit</strong> : Nous vous proposons un devis détaillé sans engagement</li>
+            <li><strong>Réparation</strong> : Si vous acceptez le devis, nous planifions l'intervention</li>
+        </ol>
+
+        <p style="text-align: center;">
+            <a href="tel:+33143076363" class="button">📞 Nous appeler : 01 43 07 63 63</a>
+        </p>
+
+        <div class="tip-box">
+            💡 <strong>Bon à savoir :</strong> Notre diagnostic est gratuit si vous procédez à la réparation. Toutes nos réparations sont garanties 6 mois.
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>Recyclum</strong><br>
+            146 Avenue Daumesnil, 75012 Paris<br>
+            📞 01 43 07 63 63 • 📧 contact@recyclum.fr</p>
+
+        <p style="font-size: 12px; margin-top: 20px;">
+            Vous recevez cet email suite à votre demande de réparation sur notre site web.
+        </p>
+    </div>
+</div>
+</body>
+</html>
