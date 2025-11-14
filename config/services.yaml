@@ -16,5 +16,10 @@ services:
     App\:
         resource: '../src/'
 
+    # Configuration de la clé API Brevo
+    App\Service\RepairRequestEmailService:
+        arguments:
+            $brevoApiKey: '%env(BREVO_API_KEY)%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RepairController extends AbstractController
 {
-    #[Route('/repair', name: 'reparation_index')]
+    #[Route('/reparation', name: 'reparation_index')]
     public function index(): Response
     {
         return $this->render('reparation/index.html.twig', [

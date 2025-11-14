@@ -85,13 +85,17 @@ class RepairRequestController extends AbstractController
             $this->entityManager->persist($repairRequest);
             $this->entityManager->flush();
 
-            // Envoyer les emails
+            // Envoyer les emails - AFFICHER L'ERREUR
             try {
                 $this->emailService->sendClientConfirmation($repairRequest);
                 $this->emailService->sendAdminNotification($repairRequest);
             } catch (\Exception $e) {
-                // Log l'erreur mais ne bloque pas la demande
-                // $this->logger->error('Erreur envoi email: ' . $e->getMessage());
+                // RETOURNER L'ERREUR POUR LA VOIR
+                return $this->json([
+                    'success' => false,
+                    'error' => 'Erreur email: ' . $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ], 500);
             }
 
             return $this->json([
@@ -103,7 +107,7 @@ class RepairRequestController extends AbstractController
         } catch (\Exception $e) {
             return $this->json([
                 'success' => false,
-                'error' => 'Une erreur est survenue'
+                'error' => 'Une erreur est survenue: ' . $e->getMessage()
             ], 500);
         }
     }
