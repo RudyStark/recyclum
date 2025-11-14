@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Liste des catégories d'appareils avec icônes Bootstrap Icons
 const CATEGORIES = [
@@ -99,7 +99,7 @@ const COMMON_ISSUES = {
 
 export default function RepairForm({ apiEndpoint = '/api/repair-requests', phone = '01 43 07 63 63' }) {
     // États du formulaire
-    const [step, setStep] = useState(1); // Étape actuelle (1, 2, 3)
+    const [step, setStep] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [formData, setFormData] = useState({
         category: '',
@@ -115,12 +115,31 @@ export default function RepairForm({ apiEndpoint = '/api/repair-requests', phone
         zipCode: '',
         city: '',
         preferredDate: '',
-        repairLocation: 'atelier', // atelier ou domicile
+        repairLocation: 'atelier',
         urgency: false
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [submitError, setSubmitError] = useState(null);
+    const [countdown, setCountdown] = useState(20);
+
+    // Gestion du compte à rebours
+    useEffect(() => {
+        if (submitSuccess) {
+            const timer = setInterval(() => {
+                setCountdown((prev) => {
+                    if (prev <= 1) {
+                        clearInterval(timer);
+                        window.location.href = '/';
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+
+            return () => clearInterval(timer);
+        }
+    }, [submitSuccess]);
 
     // Gestion du changement de catégorie
     const handleCategorySelect = (category) => {
@@ -179,7 +198,6 @@ export default function RepairForm({ apiEndpoint = '/api/repair-requests', phone
         setSubmitError(null);
 
         try {
-            // Simuler l'envoi (à remplacer par votre API)
             const response = await fetch(apiEndpoint, {
                 method: 'POST',
                 headers: {
@@ -193,30 +211,7 @@ export default function RepairForm({ apiEndpoint = '/api/repair-requests', phone
             }
 
             setSubmitSuccess(true);
-
-            // Réinitialiser après succès
-            setTimeout(() => {
-                setStep(1);
-                setSelectedCategory(null);
-                setFormData({
-                    category: '',
-                    brand: '',
-                    model: '',
-                    issue: '',
-                    issueDetails: '',
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    phone: '',
-                    address: '',
-                    zipCode: '',
-                    city: '',
-                    preferredDate: '',
-                    repairLocation: 'atelier',
-                    urgency: false
-                });
-                setSubmitSuccess(false);
-            }, 3000);
+            setCountdown(20); // Réinitialise le compte à rebours
 
         } catch (error) {
             console.error('Erreur:', error);
@@ -226,21 +221,30 @@ export default function RepairForm({ apiEndpoint = '/api/repair-requests', phone
         }
     };
 
-    // Affichage du succès
+    // Affichage du succès avec compte à rebours
     if (submitSuccess) {
         return (
-            <div className="repair-form-success">
-                <div className="text-center">
-                    <div className="success-icon mb-3">
-                        <i className="bi bi-check-circle-fill"></i>
-                    </div>
-                    <h3 className="h4 mb-3">Demande envoyée avec succès !</h3>
-                    <p className="text-soft mb-4">
-                        Nous vous contacterons dans les 2 heures pour établir un diagnostic et vous proposer un devis gratuit.
-                    </p>
-                    <div className="alert alert-info">
-                        <i className="bi bi-telephone"></i> Besoin d'une réponse immédiate ? Appelez-nous au <strong>{phone}</strong>
-                    </div>
+            <div className="success-message">
+                <div className="success-icon">✅</div>
+                <h3>Demande envoyée avec succès !</h3>
+                <p>Nous avons bien reçu votre demande de réparation.</p>
+                <p>Vous allez recevoir un email de confirmation dans quelques instants.</p>
+                <p>Nous vous contacterons dans les 2 heures pour établir un diagnostic et vous proposer un devis gratuit.</p>
+
+                <div className="redirect-timer">
+                    Redirection automatique dans <strong>{countdown}</strong> secondes...
+                </div>
+
+                <button
+                    onClick={() => window.location.href = '/home'}
+                    className="btn-primary"
+                >
+                    Retour à l'accueil maintenant
+                </button>
+
+                <div style={{ marginTop: '20px', fontSize: '14px', color: '#6C7783' }}>
+                    <i className="bi bi-telephone"></i> Besoin d'une réponse immédiate ?
+                    <br />Appelez-nous au <strong>{phone}</strong>
                 </div>
             </div>
         );

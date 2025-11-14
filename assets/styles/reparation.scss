@@ -310,28 +310,116 @@
     }
 }
 
-/* === SUCCÈS === */
-.repair-form-success {
+/* =========================================================
+   MESSAGE DE SUCCÈS AVEC COMPTE À REBOURS
+   ========================================================= */
+
+.success-message {
     text-align: center;
-    padding: 2rem 1rem;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, #EFF6F1 0%, #D7EADF 100%);
+    border-radius: 16px;
+    border: 2px solid #16C669;
+    animation: slideIn 0.5s ease-out;
+    box-shadow: 0 8px 24px rgba(22, 198, 105, 0.15);
 
     .success-icon {
-        i {
-            font-size: 5rem;
-            color: var(--primary);
-            animation: scaleIn .5s ease;
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        animation: bounceIn 0.6s ease-out;
+        display: block;
+    }
+
+    h3 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #0F1418;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        font-size: 1rem;
+        color: #6C7783;
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+
+    .redirect-timer {
+        margin-top: 1.5rem;
+        padding: 1rem 1.5rem;
+        background: white;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: #6C7783;
+        border: 1px solid #D7EADF;
+        box-shadow: 0 2px 8px rgba(22, 198, 105, 0.08);
+
+        strong {
+            display: inline-block;
+            color: #16C669;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0.25rem;
+            min-width: 2.5rem;
+            animation: pulseNumber 1s ease-in-out infinite;
+        }
+    }
+
+    .btn-primary {
+        margin-top: 1.5rem;
+        background: #16C669;
+        color: white;
+        border: none;
+        padding: 0.875rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: #12A85A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(22, 198, 105, 0.3);
+        }
+
+        &:active {
+            transform: translateY(0);
         }
     }
 }
 
-@keyframes scaleIn {
+@keyframes slideIn {
     from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
         transform: scale(0);
         opacity: 0;
     }
-    to {
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
         transform: scale(1);
         opacity: 1;
+    }
+}
+
+@keyframes pulseNumber {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
     }
 }
 
@@ -392,6 +480,28 @@
             font-size: 1rem;
         }
     }
+
+    .success-message {
+        padding: 2rem 1.5rem;
+
+        .success-icon {
+            font-size: 3rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        p {
+            font-size: 0.95rem;
+        }
+
+        .redirect-timer {
+            strong {
+                font-size: 1.25rem;
+            }
+        }
+    }
 }
 
 @media (max-width: 575.98px) {
@@ -421,5 +531,22 @@
 
     .price-value {
         font-size: 1.25rem;
+    }
+
+    .success-message {
+        padding: 1.5rem 1rem;
+
+        .success-icon {
+            font-size: 2.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+        }
+
+        .btn-primary {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+        }
     }
 }
