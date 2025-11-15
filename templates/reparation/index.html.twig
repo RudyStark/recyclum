@@ -1,92 +1,81 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ pageTitle }} • Recyclum{% endblock %}
-{% block metaDescription %}{{ metaDescription }}{% endblock %}
+{% block title %}Réparation d'électroménager - Recyclum{% endblock %}
 
 {% block body %}
-    {# === HERO RÉPARATION (style compact comme catalog) === #}
-    <section class="catalog-hero-modern">
-        <div class="catalog-hero-gradient"></div>
+    {# ============================================
+       SECTION 1 : HERO RÉPARATION MODERNE
+       ============================================ #}
+    <section class="reparation-hero-modern">
+        <div class="hero-gradient-overlay"></div>
+        <div class="container position-relative">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    {# Badge "Service 7j/7" animé #}
+                    <div class="hero-badge mb-3">
+                        <span class="badge-glow"></span>
+                        <i class="bi bi-clock-history"></i>
+                        Service 7j/7 • Intervention rapide
+                    </div>
 
-        <div class="container">
-            <div class="catalog-hero-inner">
-                <div>
-                    <h1 class="catalog-hero-title">Réparation d'électroménager</h1>
-                    <p class="catalog-hero-description">
+                    <h1 class="hero-title mb-3">
+                        Réparation d'électroménager
+                        <span class="gradient-text">rapide et garantie</span>
+                    </h1>
+
+                    <p class="hero-subtitle mb-4">
                         Diagnostic gratuit • Intervention rapide 7j/7 • Garantie pièces & main d'œuvre
                     </p>
-                </div>
 
-                {# Badges de confiance #}
-                <div class="d-flex flex-wrap gap-3">
-                    <div class="trust-badge">
-                        <i class="bi bi-clock-history"></i>
-                        <span>7j/7 • 9h-19h</span>
-                    </div>
-                    <div class="trust-badge">
-                        <i class="bi bi-geo-alt"></i>
-                        <span>Paris & proche banlieue</span>
-                    </div>
-                    <div class="trust-badge">
-                        <i class="bi bi-shield-check"></i>
-                        <span>Garantie 6 mois</span>
-                    </div>
-                    <div class="trust-badge">
-                        <i class="bi bi-wrench"></i>
-                        <span>Toutes marques</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {# === FORMULAIRE RÉPARATION === #}
-    <section class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-10 col-xl-9">
-                <div class="section-block p-4 p-md-5">
-                    <div {{ react_component('RepairForm', {
-                        apiEndpoint: '/api/repair-requests',
-                        phone: '01 43 07 63 63'
-                    }) }}></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {# === COMMENT ÇA MARCHE === #}
-    <section class="container py-5 surface-2">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-10">
-                <div class="section-block">
-                    <h2 class="h3 mb-4 text-center">Comment ça marche ?</h2>
-                    <div class="row g-4">
-                        <div class="col-12 col-md-4">
-                            <div class="process-step text-center">
-                                <div class="process-number">1</div>
-                                <h3 class="h5 mb-2">Décrivez la panne</h3>
-                                <p class="text-soft mb-0">
-                                    Remplissez le formulaire en quelques clics. Sélectionnez votre appareil et décrivez le problème.
-                                </p>
+                    {# Badges de confiance #}
+                    <div class="trust-badges-modern mb-4">
+                        <div class="trust-badge-item">
+                            <div class="badge-icon">
+                                <i class="bi bi-clock-history"></i>
                             </div>
+                            <span>7j/7<br>9h-19h</span>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class="process-step text-center">
-                                <div class="process-number">2</div>
-                                <h3 class="h5 mb-2">Diagnostic & devis</h3>
-                                <p class="text-soft mb-0">
-                                    Nous vous contactons sous 2h pour établir un diagnostic et vous proposer un devis gratuit.
-                                </p>
+                        <div class="trust-badge-item">
+                            <div class="badge-icon">
+                                <i class="bi bi-geo-alt"></i>
                             </div>
+                            <span>Paris &<br>banlieue</span>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class="process-step text-center">
-                                <div class="process-number">3</div>
-                                <h3 class="h5 mb-2">Réparation rapide</h3>
-                                <p class="text-soft mb-0">
-                                    Intervention en atelier ou à domicile selon vos besoins. Garantie 6 mois sur toutes nos réparations.
-                                </p>
+                        <div class="trust-badge-item">
+                            <div class="badge-icon">
+                                <i class="bi bi-shield-check"></i>
                             </div>
+                            <span>Garantie<br>6 mois</span>
+                        </div>
+                        <div class="trust-badge-item">
+                            <div class="badge-icon">
+                                <i class="bi bi-wrench"></i>
+                            </div>
+                            <span>Toutes<br>marques</span>
+                        </div>
+                    </div>
+
+                    <a href="#formulaire-reparation" class="btn-modern-primary">
+                        <i class="bi bi-tools"></i>
+                        Demander un diagnostic gratuit
+                        <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+
+                    {# Stats en temps réel #}
+                    <div class="hero-stats mt-5">
+                        <div class="stat-item">
+                            <div class="stat-number">1,432</div>
+                            <div class="stat-label">Réparations</div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <div class="stat-number">4.8/5</div>
+                            <div class="stat-label">Avis clients</div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <div class="stat-number">2h</div>
+                            <div class="stat-label">Délai réponse</div>
                         </div>
                     </div>
                 </div>
@@ -94,61 +83,66 @@
         </div>
     </section>
 
-    {# === NOS TARIFS === #}
-    <section class="container py-5 surface-1">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-10">
-                <div class="section-block">
-                    <h2 class="h3 mb-4 text-center">Nos tarifs indicatifs</h2>
-                    <div class="row g-3">
-                        <div class="col-12 col-md-6">
-                            <div class="price-card">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <div class="fw-semibold">Diagnostic en atelier</div>
-                                        <div class="small text-soft">Gratuit si réparation</div>
-                                    </div>
-                                    <div class="price-value">35 €</div>
-                                </div>
-                            </div>
+    {# ============================================
+       SECTION 2 : POURQUOI NOUS CHOISIR
+       ============================================ #}
+    <section class="section-modern py-6">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-label">Nos avantages</div>
+                <h2 class="section-title-modern">Pourquoi nous choisir ?</h2>
+                <p class="section-subtitle">Un service de réparation professionnel et garanti</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card-glass">
+                        <div class="feature-icon-modern">
+                            <div class="icon-glow-green"></div>
+                            <i class="bi bi-lightbulb"></i>
                         </div>
-                        <div class="col-12 col-md-6">
-                            <div class="price-card">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <div class="fw-semibold">Déplacement à domicile</div>
-                                        <div class="small text-soft">Paris & proche banlieue</div>
-                                    </div>
-                                    <div class="price-value">45 €</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="price-card">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <div class="fw-semibold">Réparation standard</div>
-                                        <div class="small text-soft">Pièces + main d'œuvre</div>
-                                    </div>
-                                    <div class="price-value">À partir de 80 €</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="price-card">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <div class="fw-semibold">Garantie pièces</div>
-                                        <div class="small text-soft">Toutes réparations</div>
-                                    </div>
-                                    <div class="price-value">6 mois</div>
-                                </div>
-                            </div>
-                        </div>
+                        <h3 class="feature-title">Diagnostic gratuit</h3>
+                        <p class="feature-desc">
+                            Diagnostic précis gratuit en atelier. Devis détaillé avant toute intervention.
+                        </p>
                     </div>
-                    <div class="text-center mt-4">
-                        <p class="text-soft small mb-0">
-                            <i class="bi bi-info-circle"></i> Devis détaillé gratuit après diagnostic
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card-glass">
+                        <div class="feature-icon-modern">
+                            <div class="icon-glow-green"></div>
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <h3 class="feature-title">Intervention rapide</h3>
+                        <p class="feature-desc">
+                            Réponse sous 2h. Intervention 7j/7 en atelier ou à domicile selon vos besoins.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card-glass">
+                        <div class="feature-icon-modern">
+                            <div class="icon-glow-green"></div>
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h3 class="feature-title">Garantie 6 mois</h3>
+                        <p class="feature-desc">
+                            Toutes nos réparations sont garanties 6 mois pièces et main d'œuvre.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card-glass">
+                        <div class="feature-icon-modern">
+                            <div class="icon-glow-green"></div>
+                            <i class="bi bi-wrench-adjustable"></i>
+                        </div>
+                        <h3 class="feature-title">Experts qualifiés</h3>
+                        <p class="feature-desc">
+                            Techniciens certifiés pour toutes marques : Bosch, Samsung, Whirlpool, LG...
                         </p>
                     </div>
                 </div>
@@ -156,21 +150,173 @@
         </div>
     </section>
 
-    {# === URGENCE / CONTACT === #}
-    <section class="container py-5 surface-3">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-8">
-                <div class="section-block text-center p-4 p-md-5">
-                    <h2 class="h3 mb-3">Besoin d'une réparation en urgence ?</h2>
-                    <p class="text-soft mb-4">
-                        Appelez-nous directement pour une intervention rapide
-                    </p>
+    {# ============================================
+       SECTION 3 : COMMENT ÇA MARCHE
+       ============================================ #}
+    <section class="section-gray-gradient py-6">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-label">Processus</div>
+                <h2 class="section-title-modern">Comment ça marche ?</h2>
+                <p class="section-subtitle">Un processus simple en 3 étapes</p>
+            </div>
+
+            <div class="timeline-modern">
+                <div class="timeline-item">
+                    <div class="timeline-dot">
+                        <span>1</span>
+                        <div class="dot-pulse"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Décrivez la panne</h3>
+                        <p>Remplissez le formulaire en quelques clics. Sélectionnez votre appareil et décrivez le problème rencontré.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-connector"></div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">
+                        <span>2</span>
+                        <div class="dot-pulse"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Diagnostic & devis gratuit</h3>
+                        <p>Nous vous contactons sous 2h pour établir un diagnostic précis et vous proposer un devis détaillé gratuit.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-connector"></div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">
+                        <span>3</span>
+                        <div class="dot-pulse"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Réparation rapide & garantie</h3>
+                        <p>Intervention en atelier ou à domicile selon vos besoins. Garantie 6 mois sur toutes nos réparations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# ============================================
+       SECTION 4 : FORMULAIRE DE RÉPARATION
+       ============================================ #}
+    <section class="section-modern py-6" id="formulaire-reparation">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="form-container-modern">
+                        <div class="form-header-modern">
+                            <div class="form-icon-badge">
+                                <i class="bi bi-tools"></i>
+                            </div>
+                            <h2>Demande de réparation</h2>
+                            <p>Diagnostic gratuit • Réponse sous 2h</p>
+                        </div>
+
+                        <div class="form-body-modern">
+                            {# Composant React #}
+                            <div {{ react_component('RepairForm', {
+                                apiEndpoint: path('api_repair_request_create'),
+                                phone: '01 43 07 63 63'
+                            }) }}></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# ============================================
+       SECTION 5 : NOS TARIFS
+       ============================================ #}
+    <section class="section-gray-gradient py-6">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-label">Tarification</div>
+                <h2 class="section-title-modern">Nos tarifs indicatifs</h2>
+                <p class="section-subtitle">Devis détaillé gratuit après diagnostic</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="pricing-cards-modern">
+                        <div class="price-card">
+                            <div class="price-icon">
+                                <i class="bi bi-search"></i>
+                            </div>
+                            <h3>Diagnostic en atelier</h3>
+                            <span class="price-value">35€</span>
+                            <p>Gratuit si réparation effectuée</p>
+                        </div>
+
+                        <div class="price-card">
+                            <div class="price-icon">
+                                <i class="bi bi-truck"></i>
+                            </div>
+                            <h3>Déplacement à domicile</h3>
+                            <span class="price-value">45€</span>
+                            <p>Paris & proche banlieue</p>
+                        </div>
+
+                        <div class="price-card">
+                            <div class="price-icon">
+                                <i class="bi bi-wrench"></i>
+                            </div>
+                            <h3>Réparation standard</h3>
+                            <span class="price-value">À partir de 80€</span>
+                            <p>Pièces + main d'œuvre</p>
+                        </div>
+
+                        <div class="price-card">
+                            <div class="price-icon">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <h3>Garantie</h3>
+                            <span class="price-value">6 mois</span>
+                            <p>Sur toutes nos réparations</p>
+                        </div>
+                    </div>
+
+                    <div class="alert-modern-info mt-4">
+                        <div class="alert-icon">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+                        <div class="alert-content">
+                            <strong>Tarification transparente :</strong> Le diagnostic en atelier est offert si vous acceptez le devis de réparation.
+                            Pour une intervention à domicile, frais de déplacement de 45€ (Paris & proche banlieue uniquement).
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# ============================================
+       SECTION 6 : CTA FINAL - URGENCE
+       ============================================ #}
+    <section class="cta-modern">
+        <div class="cta-gradient-bg"></div>
+        <div class="container position-relative">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <div class="cta-icon-badge mb-4">
+                        <i class="bi bi-telephone-fill"></i>
+                    </div>
+                    <h2 class="cta-title mb-3">Besoin d'une réparation en urgence ?</h2>
+                    <p class="cta-subtitle mb-4">Appelez-nous directement pour une intervention rapide</p>
                     <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
-                        <a href="tel:+33143076363" class="btn btn-primary btn-lg">
-                            <i class="bi bi-telephone-fill"></i> 01 43 07 63 63
+                        <a href="tel:+33143076363" class="btn-cta-light">
+                            <i class="bi bi-telephone-fill"></i>
+                            01 43 07 63 63
                         </a>
-                        <a href="mailto:contact@recyclum.fr" class="btn btn-outline-primary btn-lg">
-                            <i class="bi bi-envelope"></i> Email
+                        <a href="mailto:contact@recyclum.fr" class="btn-cta-light">
+                            <i class="bi bi-envelope"></i>
+                            Email
                         </a>
                     </div>
                 </div>

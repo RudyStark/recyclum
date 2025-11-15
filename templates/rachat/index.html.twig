@@ -1,0 +1,450 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rachat d'électroménager - Recyclum{% endblock %}
+
+{% block body %}
+    {# ============================================
+       SECTION 1 : HERO RACHAT - DESIGN MODERNE SOMBRE
+       ============================================ #}
+    <section class="rachat-hero-modern">
+        <div class="hero-gradient-overlay"></div>
+        <div class="container position-relative">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    {# Badge "Nouveau" animé #}
+                    <div class="hero-badge mb-3">
+                        <span class="badge-glow"></span>
+                        <i class="bi bi-stars"></i>
+                        Estimation en ligne gratuite
+                    </div>
+
+                    <h1 class="hero-title mb-3">
+                        Vendez votre électroménager<br>
+                        <span class="gradient-text">au meilleur prix</span>
+                    </h1>
+
+                    <p class="hero-subtitle mb-4">
+                        Estimation instantanée • Enlèvement gratuit • Paiement immédiat
+                    </p>
+
+                    {# Badges de confiance modernes #}
+                    <div class="trust-badges-modern mb-4">
+                        <div class="trust-badge-item">
+                            <div class="badge-icon">
+                                <i class="bi bi-lightning-charge-fill"></i>
+                            </div>
+                            <span>Estimation<br>en 5 min</span>
+                        </div>
+                        <div class="trust-badge-item">
+                            <div class="badge-icon">
+                                <i class="bi bi-truck"></i>
+                            </div>
+                            <span>Enlèvement<br>gratuit</span>
+                        </div>
+                        <div class="trust-badge-item">
+                            <div class="badge-icon">
+                                <i class="bi bi-cash-coin"></i>
+                            </div>
+                            <span>Paiement<br>immédiat</span>
+                        </div>
+                        <div class="trust-badge-item">
+                            <div class="badge-icon">
+                                <i class="bi bi-recycle"></i>
+                            </div>
+                            <span>Seconde vie<br>garantie</span>
+                        </div>
+                    </div>
+
+                    <a href="#formulaire-rachat" class="btn-modern-primary">
+                        <span class="btn-gradient"></span>
+                        <i class="bi bi-calculator"></i>
+                        Obtenir une estimation gratuite
+                        <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+
+                    {# Stats en temps réel #}
+                    <div class="hero-stats mt-5">
+                        <div class="stat-item">
+                            <div class="stat-number">2,847</div>
+                            <div class="stat-label">Appareils rachetés</div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <div class="stat-number">4.9/5</div>
+                            <div class="stat-label">Avis clients</div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <div class="stat-number">24h</div>
+                            <div class="stat-label">Délai moyen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# ============================================
+       SECTION 2 : POURQUOI RECYCLUM - CARTES GLASSMORPHISM
+       ============================================ #}
+    <section class="section-modern py-6">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-label">Nos avantages</div>
+                <h2 class="section-title-modern">Pourquoi choisir Recyclum ?</h2>
+                <p class="section-subtitle">Un service simple, rapide et équitable</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card-glass">
+                        <div class="feature-icon-modern">
+                            <div class="icon-glow-green"></div>
+                            <i class="bi bi-cash-stack"></i>
+                        </div>
+                        <h3 class="feature-title">Prix justes et transparents</h3>
+                        <p class="feature-desc">
+                            Estimation basée sur le marché de l'occasion avec calculateur automatique
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card-glass">
+                        <div class="feature-icon-modern">
+                            <div class="icon-glow-green"></div>
+                            <i class="bi bi-house-door"></i>
+                        </div>
+                        <h3 class="feature-title">Enlèvement à domicile</h3>
+                        <p class="feature-desc">
+                            Nous venons chercher votre appareil chez vous (Paris & proche banlieue)
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card-glass">
+                        <div class="feature-icon-modern">
+                            <div class="icon-glow-green"></div>
+                            <i class="bi bi-wallet2"></i>
+                        </div>
+                        <h3 class="feature-title">Paiement sécurisé</h3>
+                        <p class="feature-desc">
+                            Virement bancaire ou espèces sur place selon votre préférence
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card-glass">
+                        <div class="feature-icon-modern">
+                            <div class="icon-glow-green"></div>
+                            <i class="bi bi-arrow-repeat"></i>
+                        </div>
+                        <h3 class="feature-title">Seconde vie éco-responsable</h3>
+                        <p class="feature-desc">
+                            Vos appareils sont reconditionnés ou recyclés dans le respect de l'environnement
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# ============================================
+       SECTION 3 : COMMENT ÇA MARCHE - TIMELINE MODERNE
+       ============================================ #}
+    <section class="section-gray-gradient py-6">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-label">Processus</div>
+                <h2 class="section-title-modern">Comment ça marche ?</h2>
+                <p class="section-subtitle">Un processus simple en 5 étapes</p>
+            </div>
+
+            <div class="timeline-modern">
+                <div class="timeline-item">
+                    <div class="timeline-dot">
+                        <span>1</span>
+                        <div class="dot-pulse"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Remplissez le formulaire</h3>
+                        <p>Décrivez votre appareil et téléchargez des photos en quelques clics</p>
+                    </div>
+                </div>
+
+                <div class="timeline-connector"></div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">
+                        <span>2</span>
+                        <div class="dot-pulse"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Estimation instantanée</h3>
+                        <p>Notre calculateur vous donne une fourchette de prix immédiate</p>
+                    </div>
+                </div>
+
+                <div class="timeline-connector"></div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">
+                        <span>3</span>
+                        <div class="dot-pulse"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Validation par nos experts</h3>
+                        <p>Nous vous contactons sous 24h pour confirmer l'estimation</p>
+                    </div>
+                </div>
+
+                <div class="timeline-connector"></div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">
+                        <span>4</span>
+                        <div class="dot-pulse"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Enlèvement gratuit</h3>
+                        <p>Nous venons chercher l'appareil à la date de votre choix</p>
+                    </div>
+                </div>
+
+                <div class="timeline-connector"></div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">
+                        <span>5</span>
+                        <div class="dot-pulse"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Paiement immédiat</h3>
+                        <p>Virement bancaire ou espèces sur place après validation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# ============================================
+       SECTION 4 : FORMULAIRE DE RACHAT
+       ============================================ #}
+    <section class="section-modern py-6" id="formulaire-rachat">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="form-container-modern">
+                        <div class="form-header-modern">
+                            <div class="form-icon-badge">
+                                <i class="bi bi-calculator"></i>
+                            </div>
+                            <h2>Estimation gratuite en ligne</h2>
+                            <p>Obtenez votre estimation en moins de 5 minutes</p>
+                        </div>
+
+                        <div class="form-body-modern">
+                            {# Composant React #}
+                            <div {{ react_component('BuybackForm', {
+                                apiEndpoint: path('api_buyback_request_create'),
+                                phone: phone
+                            }) }}></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# ============================================
+       SECTION 5 : PRIX INDICATIFS - TABLEAU MODERNE
+       ============================================ #}
+    <section class="section-gray-gradient py-6">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-label">Tarification</div>
+                <h2 class="section-title-modern">Prix indicatifs</h2>
+                <p class="section-subtitle">Pour appareils en bon état de fonctionnement</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="pricing-table-modern">
+                        <div class="pricing-row pricing-header">
+                            <div class="pricing-col">Appareil</div>
+                            <div class="pricing-col">Âge</div>
+                            <div class="pricing-col">Fourchette de prix</div>
+                        </div>
+                        <div class="pricing-row">
+                            <div class="pricing-col"><strong>Lave-linge</strong></div>
+                            <div class="pricing-col">< 3 ans</div>
+                            <div class="pricing-col pricing-value">150€ - 350€</div>
+                        </div>
+                        <div class="pricing-row">
+                            <div class="pricing-col"><strong>Réfrigérateur</strong></div>
+                            <div class="pricing-col">< 5 ans</div>
+                            <div class="pricing-col pricing-value">200€ - 500€</div>
+                        </div>
+                        <div class="pricing-row">
+                            <div class="pricing-col"><strong>Four encastrable</strong></div>
+                            <div class="pricing-col">< 5 ans</div>
+                            <div class="pricing-col pricing-value">100€ - 300€</div>
+                        </div>
+                        <div class="pricing-row">
+                            <div class="pricing-col"><strong>Lave-vaisselle</strong></div>
+                            <div class="pricing-col">< 3 ans</div>
+                            <div class="pricing-col pricing-value">120€ - 280€</div>
+                        </div>
+                        <div class="pricing-row">
+                            <div class="pricing-col"><strong>Sèche-linge</strong></div>
+                            <div class="pricing-col">< 3 ans</div>
+                            <div class="pricing-col pricing-value">130€ - 320€</div>
+                        </div>
+                        <div class="pricing-row">
+                            <div class="pricing-col"><strong>Cuisinière</strong></div>
+                            <div class="pricing-col">< 5 ans</div>
+                            <div class="pricing-col pricing-value">150€ - 400€</div>
+                        </div>
+                    </div>
+
+                    <div class="alert-modern-info mt-4">
+                        <div class="alert-icon">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+                        <div class="alert-content">
+                            <strong>Note :</strong> Ces prix sont donnés à titre indicatif pour des appareils en parfait état de fonctionnement.
+                            Le prix final dépend de nombreux critères (marque, modèle, état général, accessoires, etc.).
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# ============================================
+       SECTION 6 : FAQ MODERNE
+       ============================================ #}
+    <section class="section-modern py-6">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="text-center mb-5">
+                        <div class="section-label">Support</div>
+                        <h2 class="section-title-modern">Questions fréquentes</h2>
+                    </div>
+
+                    <div class="accordion-modern" id="faqAccordion">
+                        <div class="accordion-item-modern">
+                            <button class="accordion-button-modern" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                <span class="accordion-icon"><i class="bi bi-plus-lg"></i></span>
+                                Quels appareils rachetez-vous ?
+                            </button>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body-modern">
+                                    Nous rachetons tous types d'électroménagers : lave-linge, réfrigérateurs, fours, lave-vaisselle,
+                                    sèche-linge, cuisinières, caves à vin, hottes, et petit électroménager. Nous acceptons les appareils
+                                    en bon état de fonctionnement ainsi que les appareils en panne pour pièces détachées.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item-modern">
+                            <button class="accordion-button-modern collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                <span class="accordion-icon"><i class="bi bi-plus-lg"></i></span>
+                                Comment est calculé le prix ?
+                            </button>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body-modern">
+                                    Notre calculateur prend en compte plusieurs critères : la catégorie d'appareil, la marque, le modèle,
+                                    l'année d'achat, l'état de fonctionnement, l'état esthétique, la présence de la facture d'achat,
+                                    et la complétude des accessoires. Le prix final est validé lors de l'enlèvement après inspection de l'appareil.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item-modern">
+                            <button class="accordion-button-modern collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                <span class="accordion-icon"><i class="bi bi-plus-lg"></i></span>
+                                L'estimation en ligne est-elle définitive ?
+                            </button>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body-modern">
+                                    L'estimation en ligne est une fourchette de prix basée sur les informations que vous nous fournissez.
+                                    Le prix définitif est confirmé après inspection physique de l'appareil lors de l'enlèvement.
+                                    Si l'état ne correspond pas à la description, le prix peut être ajusté à la baisse.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item-modern">
+                            <button class="accordion-button-modern collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                <span class="accordion-icon"><i class="bi bi-plus-lg"></i></span>
+                                Combien de temps pour être payé ?
+                            </button>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body-modern">
+                                    Le paiement est immédiat ! Si vous choisissez le paiement en espèces, vous êtes payé sur place
+                                    lors de l'enlèvement. Si vous préférez un virement bancaire, le paiement est effectué sous 24h
+                                    après l'enlèvement et la validation finale de l'état.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item-modern">
+                            <button class="accordion-button-modern collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                <span class="accordion-icon"><i class="bi bi-plus-lg"></i></span>
+                                Que faites-vous des appareils rachetés ?
+                            </button>
+                            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body-modern">
+                                    Les appareils en bon état sont reconditionnés et revendus en seconde main, leur offrant ainsi une
+                                    seconde vie. Les appareils en panne sont soit réparés, soit démontés pour récupérer les pièces détachées.
+                                    Les éléments non réutilisables sont recyclés dans le respect des normes environnementales.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item-modern">
+                            <button class="accordion-button-modern collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                                <span class="accordion-icon"><i class="bi bi-plus-lg"></i></span>
+                                Rachetez-vous les appareils en panne ?
+                            </button>
+                            <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body-modern">
+                                    Oui ! Nous rachetons également les appareils en panne ou hors service pour récupérer les pièces détachées.
+                                    Le prix sera bien sûr inférieur à un appareil fonctionnel (généralement 5 à 20% du prix d'un appareil en bon état),
+                                    mais cela vous permet de vous en débarrasser de manière éco-responsable tout en étant rémunéré.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# ============================================
+       SECTION 7 : CTA FINAL - DESIGN IMPACTANT
+       ============================================ #}
+    <section class="cta-modern">
+        <div class="cta-gradient-bg"></div>
+        <div class="container position-relative">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <div class="cta-icon-badge mb-4">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                    </div>
+                    <h2 class="cta-title mb-3">Prêt à vendre votre électroménager ?</h2>
+                    <p class="cta-subtitle mb-4">Obtenez une estimation gratuite en moins de 5 minutes</p>
+                    <a href="#formulaire-rachat" class="btn-cta-light">
+                        <i class="bi bi-calculator"></i>
+                        Obtenir mon estimation gratuite
+                        <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
