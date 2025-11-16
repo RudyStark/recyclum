@@ -160,6 +160,107 @@ body{
 }
 
 /* =========================================================
+   REVIEWS PAGE - Style Recyclum
+   ========================================================= */
+
+/* Stars dans les barres de répartition */
+.stars-rating-bar {
+    min-width: 100px;
+    i {
+        font-size: 1rem;
+        margin-right: 2px;
+    }
+}
+
+/* Stars affichage général */
+.stars-display {
+    i {
+        font-size: 1.1rem;
+        margin-right: 3px;
+    }
+}
+
+/* Progress bars */
+.progress {
+    background-color: var(--surface-2);
+    border-radius: 8px;
+    overflow: hidden;
+
+    .progress-bar {
+        transition: width 0.6s ease;
+        border-radius: 8px;
+    }
+}
+
+/* Review Cards (Top Avis) */
+.review-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: 0 6px 18px rgba(16, 20, 24, 0.06);
+    transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 26px rgba(16, 20, 24, 0.10);
+        border-color: #DDE6EC;
+    }
+}
+
+.review-text {
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Badge vérifié */
+.badge-verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #EFF6F1;
+    color: var(--primary-600);
+    border: 1px solid #D7EADF;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+
+    i {
+        font-size: 0.9rem;
+    }
+}
+
+/* Section blocks (déjà dans le style global normalement) */
+.section-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(16, 20, 24, 0.04);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stars-display i {
+        font-size: 1rem;
+        margin-right: 2px;
+    }
+
+    .stars-rating-bar {
+        min-width: 85px;
+        i {
+            font-size: 0.9rem;
+        }
+    }
+
+    .review-card {
+        padding: 1rem;
+    }
+}
+
+/* =========================================================
    ACCESSIBILITÉ
    ========================================================= */
 @media (prefers-reduced-motion: reduce){
