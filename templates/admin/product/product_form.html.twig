@@ -1,0 +1,195 @@
+{% extends 'admin/base_layout.html.twig' %}
+
+{% block body_class 'product-form-pro' %}
+
+{# Cache les éléments du header EasyAdmin #}
+{% block content_title %}{% endblock %}
+{% block page_actions %}{% endblock %}
+{% block content_header_wrapper %}{% endblock %}
+
+{% block main %}
+    <div class="modern-product-form">
+        {# HERO HEADER #}
+        <div class="form-hero-section">
+            <div class="hero-icon">
+                <i class="fa fa-box-open"></i>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    {% if is_edit %}
+                        Modifier le produit
+                    {% else %}
+                        Créer un nouveau produit
+                    {% endif %}
+                </h1>
+                <p class="hero-subtitle">Ajoutez un produit à votre catalogue Recyclum</p>
+            </div>
+        </div>
+
+        {# LAYOUT 2 COLONNES #}
+        <div class="form-layout">
+            {# COLONNE PRINCIPALE #}
+            <div class="form-main-column">
+                {{ form_start(form, {'action': current_url, 'method': 'POST'}) }}
+
+                {# SECTION 1: Informations générales #}
+                <div class="form-panel">
+                    <div class="form-panel-header">
+                        <div class="form-panel-icon">
+                            <i class="fa fa-info-circle"></i>
+                        </div>
+                        <div class="form-panel-title">
+                            <h2>Informations générales</h2>
+                        </div>
+                    </div>
+                    <p class="form-panel-help">Titre, catégorie et marque du produit</p>
+
+                    <div class="form-panel-body">
+                        <div style="grid-column: span 12;">
+                            {{ form_row(form.title) }}
+                        </div>
+                        <div style="grid-column: span 6;">
+                            {{ form_row(form.category) }}
+                        </div>
+                        <div style="grid-column: span 6;">
+                            {{ form_row(form.brand) }}
+                        </div>
+                    </div>
+                </div>
+
+                {# SECTION 2: Prix et caractéristiques #}
+                <div class="form-panel">
+                    <div class="form-panel-header">
+                        <div class="form-panel-icon">
+                            <i class="fa fa-euro-sign"></i>
+                        </div>
+                        <div class="form-panel-title">
+                            <h2>Prix et caractéristiques</h2>
+                        </div>
+                    </div>
+                    <p class="form-panel-help">Informations commerciales et techniques</p>
+
+                    <div class="form-panel-body">
+                        {# Ligne 1 : Prix (plus large), Stock, Garantie (réduits) #}
+                        <div class="product-form-price" style="grid-column: span 6;">
+                            {{ form_row(form.price) }}
+                        </div>
+                        <div class="product-form-stock" style="grid-column: span 3;">
+                            {{ form_row(form.stock) }}
+                        </div>
+                        <div class="product-form-warranty" style="grid-column: span 3;">
+                            {{ form_row(form.warrantyMonths) }}
+                        </div>
+
+                        {# Ligne 2 : Étiquette énergie, Produit publié (switch) #}
+                        <div class="product-form-energy" style="grid-column: span 6;" data-controller="admin--energy-select">
+                            <label for="{{ form.energyLabel.vars.id }}">{{ form.energyLabel.vars.label }}</label>
+                            {{ form_widget(form.energyLabel, {
+                                'attr': {
+                                    'data-admin--energy-select-target': 'select'
+                                }
+                            }) }}
+                        </div>
+                        <div class="product-form-published" style="grid-column: span 6;">
+                            <label>Produit publié</label>
+                            <div class="switch-container">
+                                {{ form_widget(form.isPublished, {'attr': {'class': 'switch-input'}}) }}
+                                <label for="{{ form.isPublished.vars.id }}" class="switch-label">
+                                    <span class="switch-button"></span>
+                                    <span class="switch-text">Visible sur le site</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# SECTION 3: Description #}
+                <div class="form-panel">
+                    <div class="form-panel-header">
+                        <div class="form-panel-icon">
+                            <i class="fa fa-align-left"></i>
+                        </div>
+                        <div class="form-panel-title">
+                            <h2>Description</h2>
+                        </div>
+                    </div>
+                    <p class="form-panel-help">Description détaillée du produit</p>
+
+                    <div class="form-panel-body">
+                        <div style="grid-column: span 12;">
+                            {{ form_row(form.shortDescription) }}
+                        </div>
+                    </div>
+                </div>
+
+                {# BOUTONS CACHÉS #}
+                <div class="hidden-form-buttons">
+                    <button type="submit" name="save_and_return" value="1" id="btn-save-return" class="hidden-btn">Save and Return</button>
+                    <button type="submit" name="save_and_add" value="1" id="btn-save-add" class="hidden-btn">Save and Add</button>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+
+            {# SIDEBAR #}
+            <div class="form-sidebar">
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <i class="fa fa-bolt"></i>
+                        <h3>Actions rapides</h3>
+                    </div>
+                    <div class="sidebar-card-body">
+                        <button type="button" onclick="document.getElementById('btn-save-return').click()" class="sidebar-btn sidebar-btn-primary">
+                            <i class="fa fa-check"></i>
+                            <span>Enregistrer et fermer</span>
+                        </button>
+
+                        <button type="button" onclick="document.getElementById('btn-save-add').click()" class="sidebar-btn sidebar-btn-secondary">
+                            <i class="fa fa-plus"></i>
+                            <span>Enregistrer et créer un autre</span>
+                        </button>
+
+                        <a href="{{ ea_url().setController('App\\Controller\\Admin\\ProductCrudController').setAction('index').generateUrl() }}" class="sidebar-btn sidebar-btn-ghost">
+                            <i class="fa fa-times"></i>
+                            <span>Annuler</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <i class="fa fa-info-circle"></i>
+                        <h3>Aide</h3>
+                    </div>
+                    <div class="sidebar-card-body">
+                        <p>Les champs avec <span class="required-badge">*</span> sont obligatoires.</p>
+                        <p>Le slug sera généré automatiquement à partir du titre.</p>
+                        {% if is_edit %}
+                            <hr style="margin: 1rem 0; border: none; border-top: 1px solid #e6edf2;">
+                            <p><strong>Produit #{{ product.id }}</strong></p>
+                            <p style="font-size: 0.875rem; color: #6c7783;">
+                                Créé le {{ product.createdAt|date('d/m/Y à H:i') }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if is_edit %}
+                    <div class="sidebar-card">
+                        <div class="sidebar-card-header">
+                            <i class="fa fa-images"></i>
+                            <h3>Galerie</h3>
+                        </div>
+                        <div class="sidebar-card-body">
+                            <p>Gérez les images de ce produit</p>
+                            <a href="{{ ea_url().setController('App\\Controller\\Admin\\ProductImageCrudController').setAction('productGallery').set('productId', product.id).generateUrl() }}" class="sidebar-btn sidebar-btn-primary">
+                                <i class="fa fa-images"></i>
+                                <span>Gérer les images</span>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

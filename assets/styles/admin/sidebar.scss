@@ -1,0 +1,253 @@
+/* =========================================================
+   RECYCLUM SIDEBAR
+   ========================================================= */
+
+.recyclum-sidebar {
+    width: 260px;
+    height: 100vh;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafb 100%);
+    border-right: 1px solid $border;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03);
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.sidebar-header {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid $border;
+    background: white;
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.sidebar-brand {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: $text;
+    letter-spacing: -0.02em;
+}
+
+.sidebar-subtitle {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-left: 2.25rem;
+}
+
+/* =========================================================
+   USER INFO
+   ========================================================= */
+.sidebar-user {
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    background: rgba($primary, 0.03);
+    border-bottom: 1px solid $border;
+}
+
+.user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba($primary, 0.2);
+}
+
+.user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-name {
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: $text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-role {
+    font-size: 0.75rem;
+    color: $text-muted;
+    font-weight: 500;
+}
+
+/* =========================================================
+   MENU
+   ========================================================= */
+.sidebar-menu {
+    flex: 1;
+    padding: 1rem 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Custom scrollbar */
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba($primary, 0.2);
+        border-radius: 3px;
+
+        &:hover {
+            background: rgba($primary, 0.3);
+        }
+    }
+}
+
+.menu-section {
+    margin-bottom: 1.5rem;
+}
+
+.menu-section-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.5rem 1.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.75rem 1.25rem;
+    color: $text;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    position: relative;
+    font-weight: 600;
+    font-size: 0.875rem;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 0;
+        background: $primary;
+        border-radius: 0 4px 4px 0;
+        transition: height 0.2s ease;
+    }
+
+    &:hover {
+        background: rgba($primary, 0.05);
+        color: $primary;
+
+        .menu-icon {
+            color: $primary;
+            transform: translateX(2px);
+        }
+    }
+
+    &.active {
+        background: rgba($primary, 0.08);
+        color: $primary;
+        font-weight: 700;
+
+        &::before {
+            height: 28px;
+        }
+
+        .menu-icon {
+            color: $primary;
+        }
+    }
+}
+
+.menu-icon {
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+    color: $text-muted;
+    transition: all 0.2s ease;
+}
+
+.menu-label {
+    flex: 1;
+}
+
+.menu-item-logout {
+    color: #ef4444;
+
+    &:hover {
+        background: rgba(239, 68, 68, 0.05);
+        color: #dc2626;
+
+        .menu-icon {
+            color: #dc2626;
+        }
+    }
+
+    .menu-icon {
+        color: #ef4444;
+    }
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.sidebar-footer {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid $border;
+    background: white;
+}
+
+.sidebar-version {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: $text-muted;
+    font-weight: 600;
+
+    i {
+        color: $primary;
+        font-size: 0.875rem;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 768px) {
+    .recyclum-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+
+        &.mobile-open {
+            transform: translateX(0);
+        }
+    }
+}

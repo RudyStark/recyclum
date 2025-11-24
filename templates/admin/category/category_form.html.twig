@@ -1,0 +1,101 @@
+{% extends 'admin/base_layout.html.twig' %}
+
+{% block body_class 'product-form-pro' %}
+
+{# Cache les éléments du header EasyAdmin #}
+{% block content_title %}{% endblock %}
+{% block page_actions %}{% endblock %}
+{% block content_header_wrapper %}{% endblock %}
+
+{% block main %}
+    <div class="modern-product-form">
+        {# HERO HEADER #}
+        <div class="form-hero-section">
+            <div class="hero-icon">
+                <i class="fa fa-folder"></i>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    {% if is_edit %}
+                        Modifier la catégorie
+                    {% else %}
+                        Créer une nouvelle catégorie
+                    {% endif %}
+                </h1>
+                <p class="hero-subtitle">Organisez votre catalogue avec des catégories</p>
+            </div>
+        </div>
+
+        {# LAYOUT 2 COLONNES #}
+        <div class="form-layout">
+            {# COLONNE PRINCIPALE #}
+            <div class="form-main-column">
+                {{ form_start(form, {'action': current_url, 'method': 'POST'}) }}
+
+                {# SECTION: Informations #}
+                <div class="form-panel">
+                    <div class="form-panel-header">
+                        <div class="form-panel-icon">
+                            <i class="fa fa-info-circle"></i>
+                        </div>
+                        <div class="form-panel-title">
+                            <h2>Informations</h2>
+                        </div>
+                    </div>
+                    <p class="form-panel-help">Nom de la catégorie</p>
+
+                    <div class="form-panel-body">
+                        <div style="grid-column: span 12;">
+                            {{ form_row(form.name) }}
+                        </div>
+                    </div>
+                </div>
+
+                {# BOUTONS CACHÉS #}
+                <div class="hidden-form-buttons">
+                    <button type="submit" name="save_and_return" value="1" id="btn-save-return" class="hidden-btn">Save and Return</button>
+                    <button type="submit" name="save_and_add" value="1" id="btn-save-add" class="hidden-btn">Save and Add</button>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+
+            {# SIDEBAR #}
+            <div class="form-sidebar">
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <i class="fa fa-bolt"></i>
+                        <h3>Actions rapides</h3>
+                    </div>
+                    <div class="sidebar-card-body">
+                        <button type="button" onclick="document.getElementById('btn-save-return').click()" class="sidebar-btn sidebar-btn-primary">
+                            <i class="fa fa-check"></i>
+                            <span>Enregistrer et fermer</span>
+                        </button>
+
+                        <button type="button" onclick="document.getElementById('btn-save-add').click()" class="sidebar-btn sidebar-btn-secondary">
+                            <i class="fa fa-plus"></i>
+                            <span>Enregistrer et créer une autre</span>
+                        </button>
+
+                        <a href="{{ ea_url().setController('App\\Controller\\Admin\\CategoryCrudController').setAction('index').generateUrl() }}" class="sidebar-btn sidebar-btn-ghost">
+                            <i class="fa fa-times"></i>
+                            <span>Annuler</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <i class="fa fa-info-circle"></i>
+                        <h3>Aide</h3>
+                    </div>
+                    <div class="sidebar-card-body">
+                        <p>Les champs avec <span class="required-badge">*</span> sont obligatoires.</p>
+                        <p>Le slug sera généré automatiquement à partir du nom.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

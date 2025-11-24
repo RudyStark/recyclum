@@ -1,0 +1,193 @@
+{% extends 'admin/base_layout.html.twig' %}
+
+{% block body_class 'admin-index-pro' %}
+
+{% block content_title %}{% endblock %}
+{% block page_actions %}{% endblock %}
+{% block content_header_wrapper %}{% endblock %}
+
+{% block main %}
+    <div class="index-container">
+        {# HERO HEADER #}
+        <div class="index-hero">
+            <div class="index-hero-content">
+                <div class="index-hero-icon">
+                    <i class="fa fa-folder"></i>
+                </div>
+                <div>
+                    <h1 class="index-hero-title">Catégories</h1>
+                    <p class="index-hero-subtitle">Organisez vos produits par catégorie</p>
+                </div>
+            </div>
+            <div class="index-hero-actions">
+                <a href="{{ ea_url().setController('App\\Controller\\Admin\\CategoryCrudController').setAction('newCategory').generateUrl() }}" class="btn-hero-primary">
+                    <i class="fa fa-plus"></i>
+                    <span>Nouvelle catégorie</span>
+                </a>
+            </div>
+        </div>
+
+        {# STATS CARDS #}
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-primary">
+                    <i class="fa fa-folder"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ total_items }}</div>
+                    <div class="stat-label">Catégories total</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-success">
+                    <i class="fa fa-box"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ categories|reduce((carry, c) => carry + c.products|length, 0) }}</div>
+                    <div class="stat-label">Produits associés</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-warning">
+                    <i class="fa fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ categories|filter(c => c.createdAt > date('-30 days'))|length }}</div>
+                    <div class="stat-label">Ajoutées ce mois</div>
+                </div>
+            </div>
+        </div>
+
+        {# TABLEAU CATÉGORIES #}
+        <div class="data-table-card">
+            <div class="data-table-header">
+                <h2>Liste des catégories</h2>
+                <div class="data-table-actions">
+                    <a href="{{ path('admin_categories_export') }}" class="btn-outline">
+                        <i class="fa fa-download"></i>
+                        Export
+                    </a>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th width="80">ID</th>
+                        <th>Nom</th>
+                        <th width="150">Slug</th>
+                        <th width="150">Produits</th>
+                        <th width="180">Date de création</th>
+                        <th width="180" class="text-end">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for category in categories %}
+                        <tr>
+                            <td>
+                                <span class="id-badge">#{{ category.id }}</span>
+                            </td>
+                            <td>
+                                <div class="name-cell">
+                                    <div class="name-icon">
+                                        <i class="fa fa-folder"></i>
+                                    </div>
+                                    <div class="name-content">
+                                        <div class="name-title">{{ category.name }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <code class="slug-badge">{{ category.slug }}</code>
+                            </td>
+                            <td>
+                                    <span class="count-badge">
+                                        <i class="fa fa-box"></i>
+                                        {{ category.products|length }} produit{{ category.products|length > 1 ? 's' : '' }}
+                                    </span>
+                            </td>
+                            <td>
+                                <span class="date-badge">{{ category.createdAt|date('d/m/Y à H:i') }}</span>
+                            </td>
+                            <td class="text-end">
+                                <div class="action-buttons">
+                                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\CategoryCrudController').setAction('editCategory').setEntityId(category.id).generateUrl() }}" class="btn-action btn-action-edit" title="Modifier">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <form method="post" action="{{ path('admin_category_delete', {id: category.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+                                        <button type="submit" class="btn-action btn-action-delete" title="Supprimer">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <div class="empty-state">
+                                    <i class="fa fa-folder-open"></i>
+                                    <h3>Aucune catégorie</h3>
+                                    <p>Commencez par créer votre première catégorie</p>
+                                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\CategoryCrudController').setAction('newCategory').generateUrl() }}" class="btn-hero-primary mt-3">
+                                        <i class="fa fa-plus"></i>
+                                        Créer une catégorie
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {# PAGINATION #}
+            {% if total_pages > 1 %}
+                <div class="pagination-wrapper">
+                    <div class="pagination-info">
+                        Affichage de {{ (current_page - 1) * per_page + 1 }} à {{ min(current_page * per_page, total_items) }} sur {{ total_items }} résultats
+                    </div>
+                    <nav class="pagination-nav">
+                        <ul class="pagination">
+                            {% if current_page > 1 %}
+                                <li class="page-item">
+                                    <a href="?page={{ current_page - 1 }}" class="page-link">
+                                        <i class="fa fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% for page in 1..total_pages %}
+                                {% if page == current_page %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page }}</span>
+                                    </li>
+                                {% elseif page == 1 or page == total_pages or (page >= current_page - 2 and page <= current_page + 2) %}
+                                    <li class="page-item">
+                                        <a href="?page={{ page }}" class="page-link">{{ page }}</a>
+                                    </li>
+                                {% elseif page == current_page - 3 or page == current_page + 3 %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if current_page < total_pages %}
+                                <li class="page-item">
+                                    <a href="?page={{ current_page + 1 }}" class="page-link">
+                                        <i class="fa fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

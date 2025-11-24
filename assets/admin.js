@@ -1,3 +1,3 @@
-import './styles/admin.scss';
 import './bootstrap.js';
+import './styles/admin.scss';
 

@@ -1,0 +1,166 @@
+{% extends 'admin/base_layout.html.twig' %}
+
+{% block body_class 'admin-index-pro' %}
+
+{% block content_title %}{% endblock %}
+{% block page_actions %}{% endblock %}
+{% block content_header_wrapper %}{% endblock %}
+
+{% block main %}
+    <div class="index-container">
+        {# HERO HEADER #}
+        <div class="index-hero">
+            <div class="index-hero-content">
+                <div class="index-hero-icon">
+                    <i class="fa fa-images"></i>
+                </div>
+                <div>
+                    <h1 class="index-hero-title">Galerie produits</h1>
+                    <p class="index-hero-subtitle">Gérez les images de vos produits</p>
+                </div>
+            </div>
+        </div>
+
+        {# STATS CARDS #}
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-primary">
+                    <i class="fa fa-image"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ total_images }}</div>
+                    <div class="stat-label">Images total</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-success">
+                    <i class="fa fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ products_with_images }}</div>
+                    <div class="stat-label">Produits avec images</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-warning">
+                    <i class="fa fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ products_without_images }}</div>
+                    <div class="stat-label">Produits sans images</div>
+                </div>
+            </div>
+        </div>
+
+        {# GRILLE DE PRODUITS #}
+        <div class="product-gallery-grid">
+            {% for product in products %}
+                <div class="product-gallery-card">
+                    {# Image principale ou placeholder #}
+                    <div class="product-gallery-image">
+                        {% if product.mainImage %}
+                            <img src="{{ asset('uploads/products/' ~ product.mainImage) }}" alt="{{ product.title }}">
+                        {% else %}
+                            <div class="product-gallery-placeholder">
+                                <i class="fa fa-image"></i>
+                                <span>Aucune image</span>
+                            </div>
+                        {% endif %}
+
+                        {# Badge nombre d'images #}
+                        <div class="image-count-badge {% if product.images|length == 0 %}badge-empty{% endif %}">
+                            <i class="fa fa-images"></i>
+                            {{ product.images|length }}
+                        </div>
+                    </div>
+
+                    {# Informations produit #}
+                    <div class="product-gallery-info">
+                        <h3 class="product-gallery-title">{{ product.title }}</h3>
+                        <div class="product-gallery-meta">
+                            <span class="meta-item">
+                                <i class="fa fa-hashtag"></i>
+                                {{ product.id }}
+                            </span>
+                            <span class="meta-item">
+                                <i class="fa fa-tag"></i>
+                                {{ product.category ? product.category.name : 'Sans catégorie' }}
+                            </span>
+                        </div>
+
+                        {# Actions #}
+                        <div class="product-gallery-actions">
+                            {% if product.images|length > 0 %}
+                                <a href="{{ ea_url().setController('App\\Controller\\Admin\\ProductImageCrudController').setAction('productGallery').set('productId', product.id).generateUrl() }}" class="btn-gallery-primary">
+                                    <i class="fa fa-images"></i>
+                                    Gérer les images ({{ product.images|length }})
+                                </a>
+                            {% else %}
+                                <a href="{{ ea_url().setController('App\\Controller\\Admin\\ProductImageCrudController').setAction('productGallery').set('productId', product.id).generateUrl() }}" class="btn-gallery-add">
+                                    <i class="fa fa-plus"></i>
+                                    Ajouter des images
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-state-full">
+                    <i class="fa fa-box-open"></i>
+                    <h3>Aucun produit</h3>
+                    <p>Créez d'abord des produits pour gérer leurs images</p>
+                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\ProductCrudController').setAction('newProduct').generateUrl() }}" class="btn-hero-primary">
+                        <i class="fa fa-plus"></i>
+                        Créer un produit
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+        {# PAGINATION #}
+        {% if total_pages > 1 %}
+            <div class="pagination-wrapper">
+                <div class="pagination-info">
+                    Affichage de {{ (current_page - 1) * per_page + 1 }} à {{ min(current_page * per_page, total_items) }} sur {{ total_items }} produits
+                </div>
+                <nav class="pagination-nav">
+                    <ul class="pagination">
+                        {% if current_page > 1 %}
+                            <li class="page-item">
+                                <a href="?page={{ current_page - 1 }}" class="page-link">
+                                    <i class="fa fa-chevron-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% for page in 1..total_pages %}
+                            {% if page == current_page %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page }}</span>
+                                </li>
+                            {% elseif page == 1 or page == total_pages or (page >= current_page - 2 and page <= current_page + 2) %}
+                                <li class="page-item">
+                                    <a href="?page={{ page }}" class="page-link">{{ page }}</a>
+                                </li>
+                            {% elseif page == current_page - 3 or page == current_page + 3 %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if current_page < total_pages %}
+                            <li class="page-item">
+                                <a href="?page={{ current_page + 1 }}" class="page-link">
+                                    <i class="fa fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

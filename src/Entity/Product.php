@@ -306,6 +306,13 @@ class Product
         return $this->images->first() ?: null;
     }
 
+    public function setMainImage(?string $mainImage): self
+    {
+        $this->mainImage = $mainImage;
+
+        return $this;
+    }
+
     public function getMainImageFilename(): ?string
     {
         $img = $this->getMainImage();

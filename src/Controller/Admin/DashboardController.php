@@ -16,17 +16,13 @@ use Symfony\Component\Routing\Attribute\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
-
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
 {
     public function index(): Response
     {
-        $url = $this->container->get(AdminUrlGenerator::class)
-            ->setController(ProductCrudController::class)
-            ->generateUrl();
-
-        return $this->redirect($url);
+        // Affiche le dashboard au lieu de rediriger
+        return $this->render('admin/dashboard.html.twig');
     }
 
     public function configureAssets(): Assets
@@ -52,15 +48,8 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-
-        yield MenuItem::section('Catalogue');
-        yield MenuItem::linkToCrud('Produits', 'fa fa-box', Product::class);
-        yield MenuItem::linkToCrud('Images produits', 'fa fa-image', ProductImage::class);
-        yield MenuItem::linkToCrud('Categories', 'fa fa-tags', Category::class);
-        yield MenuItem::linkToCrud('Marques', 'fa fa-industry', Brand::class);
-
-        yield MenuItem::section('Compte');
-        yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out-alt');
+        // Retourne un tableau vide pour cacher le menu par défaut d'EasyAdmin
+        // On utilise notre menu custom dans menu.html.twig
+        return [];
     }
 }

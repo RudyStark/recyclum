@@ -32,6 +32,9 @@ Encore
     })
 
     .enableSingleRuntimeChunk()
+    .configureSplitChunks((splitChunks) => {
+        splitChunks.chunks = 'all';
+    })
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction())
