@@ -1,20 +1,1165 @@
-@import "admin/energy-badges";
-@import "admin/product_gallery";
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+$primary: #16C669;
+$primary-dark: #12A85A;
+$primary-light: #6FDEA7;
+$surface: #FFFFFF;
+$bg: #F6F8FA;
+$border: #E6EDF2;
+$text: #0F1418;
+$text-muted: #6C7783;
+$radius: 12px;
+$shadow: 0 4px 12px rgba(15, 20, 24, 0.1);
 
-.ea-upload-thumb{
-    display:block;
+/* =========================================================
+   CORPS & LAYOUT
+   ========================================================= */
+.product-form-pro {
+    background: $bg !important;
+}
+
+.modern-product-form {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* =========================================================
+   BOUTONS INDEX (Nouveau produit, Filters, Modifier, etc.)
+   ========================================================= */
+.btn-primary,
+.action-new,
+.global-action {
+    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba($primary, 0.3) !important;
+    transition: all 0.2s ease !important;
+
+    i {
+        margin-right: 0.5rem;
+    }
+
+    &:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba($primary, 0.4) !important;
+    }
+}
+
+/* Bouton Modifier */
+.action-edit {
+    background: $surface !important;
+    border: 2px solid $primary !important;
+    border-radius: 8px !important;
+    padding: 0.625rem 1.25rem !important;
+    font-weight: 600 !important;
+    color: $primary !important;
+    transition: all 0.2s ease !important;
+
+    i {
+        margin-right: 0.5rem;
+    }
+
+    &:hover {
+        background: rgba($primary, 0.05) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($primary, 0.2) !important;
+    }
+}
+
+/* Bouton Delete */
+.action-delete {
+    background: $surface !important;
+    border: 2px solid #EF4444 !important;
+    border-radius: 8px !important;
+    padding: 0.625rem 1.25rem !important;
+    font-weight: 600 !important;
+    color: #EF4444 !important;
+    transition: all 0.2s ease !important;
+
+    &:hover {
+        background: rgba(#EF4444, 0.05) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(#EF4444, 0.2) !important;
+    }
+}
+
+/* Bouton Filters */
+.filters-button,
+.action-filters {
+    background: $surface !important;
+    border: 2px solid $border !important;
+    border-radius: 10px !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    color: $text !important;
+    transition: all 0.2s ease !important;
+
+    i {
+        margin-right: 0.5rem;
+        color: $text-muted;
+    }
+
+    &:hover {
+        border-color: $primary !important;
+        background: rgba($primary, 0.05) !important;
+        color: $primary !important;
+
+        i {
+            color: $primary;
+        }
+    }
+}
+
+/* Traduction "Filters" en "Filtres" */
+.filters-button::after,
+.action-filters::after {
+    content: 'Filtres' !important;
+}
+
+.filters-button span,
+.action-filters span {
+    display: none;
+}
+
+/* =========================================================
+   HERO SECTION
+   ========================================================= */
+.form-hero-section {
+    background: linear-gradient(135deg,
+        rgba($primary, 0.12) 0%,
+        rgba($primary, 0.04) 50%,
+        transparent 100%
+    );
+    border: 1px solid $border;
+    border-radius: $radius;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    box-shadow: $shadow;
+}
+
+.hero-icon {
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+    border-radius: $radius;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 8px 24px rgba($primary, 0.35);
+
+    i {
+        font-size: 2.25rem;
+        color: white;
+    }
+}
+
+.hero-title {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: $text;
+    margin: 0 0 0.375rem 0;
+    letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+    font-size: 0.95rem;
+    color: $text-muted;
+    margin: 0;
+}
+
+/* =========================================================
+   LAYOUT 2 COLONNES
+   ========================================================= */
+.form-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 2rem;
+}
+
+.form-main-column {
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: $radius;
+    padding: 2.5rem;
+    box-shadow: $shadow;
+}
+
+/* =========================================================
+   PANELS (SECTIONS)
+   ========================================================= */
+.form-panel {
+    background: linear-gradient(135deg, rgba($primary, 0.02) 0%, transparent 100%);
+    border: 2px solid $border;
+    border-radius: $radius;
+    padding: 2rem;
+    margin-bottom: 2rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.form-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid $border;
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 70px;
+        height: 3px;
+        background: linear-gradient(90deg, $primary 0%, $primary-light 100%);
+        border-radius: 2px;
+    }
+}
+
+.form-panel-icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, rgba($primary, 0.15) 0%, rgba($primary, 0.08) 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba($primary, 0.25);
+    flex-shrink: 0;
+
+    i {
+        color: $primary;
+        font-size: 1.125rem;
+    }
+}
+
+.form-panel-title h2 {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: $text;
+    margin: 0;
+}
+
+.form-panel-help {
+    font-size: 0.875rem;
+    color: $text-muted;
+    margin: -0.75rem 0 1.5rem 3.5rem;
+}
+
+.form-panel-body {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+}
+
+/* =========================================================
+   FORMULAIRE - LABELS & INPUTS
+   ========================================================= */
+label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: $text;
+    margin-bottom: 0.5rem;
+
+    &.required::after {
+        content: ' *';
+        color: #EF4444;
+        font-weight: 900;
+    }
+}
+
+.form-help {
+    font-size: 0.8rem;
+    color: $text-muted;
+    margin-top: 0.375rem;
+}
+
+/* INPUTS - Taille normale et professionnelle */
+.form-control,
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+    width: 100% !important;
+    min-height: 44px !important;
+    padding: 0 1rem !important;
+    background: $surface !important;
+    border: 2px solid $border !important;
+    border-radius: 8px !important;
+    font-size: 0.9rem !important;
+    color: $text !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+
+    &::placeholder {
+        color: $text-muted;
+        opacity: 0.6;
+    }
+
+    &:hover {
+        border-color: darken($border, 8%) !important;
+    }
+
+    &:focus {
+        outline: none !important;
+        border-color: $primary !important;
+        box-shadow: 0 0 0 3px rgba($primary, 0.1) !important;
+    }
+}
+
+textarea.form-control {
+    min-height: 110px !important;
+    padding: 0.875rem 1rem !important;
+    line-height: 1.6 !important;
+}
+
+select.form-select,
+select.form-control {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath fill='%2316C669' d='M7 10L2 5h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 1rem center !important;
+    background-size: 12px !important;
+    appearance: none !important;
+    padding-right: 3rem !important;
+    cursor: pointer !important;
+}
+
+/* Money Field */
+.field-money .input-group-text {
+    background: rgba($primary, 0.05) !important;
+    border: 2px solid $border !important;
+    border-right: none !important;
+    color: $primary !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    padding: 0 1rem !important;
+    min-height: 44px !important;
+}
+
+.field-money input {
+    border-left: none !important;
+}
+
+/* =========================================================
+   CHAMP PRIX - € DANS L'INPUT
+   ========================================================= */
+.product-form-pro {
+    .product-form-price {
+        position: relative;
+
+        label {
+            display: block;
+            height: 20px;
+            line-height: 20px;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: $text;
+
+            &.required::after {
+                content: ' *';
+                color: #EF4444;
+            }
+        }
+
+        input {
+            padding-left: 2.5rem !important;
+            min-height: 44px !important;
+            height: 44px !important;
+        }
+
+        /* Symbole € avant l'input */
+        &::before {
+            content: '€';
+            position: absolute;
+            left: 1rem;
+            bottom: 0;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: $primary;
+            pointer-events: none;
+            z-index: 5;
+        }
+    }
+
+    /* Alignement des autres champs */
+    .product-form-energy,
+    .product-form-warranty {
+        label {
+            display: block;
+            height: 20px;
+            line-height: 20px;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: $text;
+        }
+
+        input,
+        select {
+            min-height: 44px !important;
+            height: 44px !important;
+        }
+    }
+
+    .product-form-stock {
+        label {
+            display: block;
+            height: 20px;
+            line-height: 20px;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: $text;
+
+            &.required::after {
+                content: ' *';
+                color: #EF4444;
+            }
+        }
+
+        input {
+            min-height: 44px !important;
+            height: 44px !important;
+        }
+    }
+
+    .product-form-published {
+        > label {
+            display: block;
+            height: 20px;
+            line-height: 20px;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: $text;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.625rem 1rem;
+            background: linear-gradient(135deg, rgba($primary, 0.06) 0%, rgba($primary, 0.02) 100%);
+            border: 2px solid rgba($primary, 0.2);
+            border-radius: 10px;
+            margin: 0;
+            height: 44px;
+
+            input[type="checkbox"] {
+                width: 50px;
+                height: 28px;
+                appearance: none;
+                background: #D1D5DB;
+                border-radius: 14px;
+                position: relative;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                flex-shrink: 0;
+                margin: 0;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    width: 22px;
+                    height: 22px;
+                    background: white;
+                    border-radius: 50%;
+                    top: 3px;
+                    left: 3px;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                }
+
+                &:checked {
+                    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+
+                    &::before {
+                        transform: translateX(22px);
+                    }
+                }
+            }
+
+            label {
+                margin: 0 !important;
+                font-weight: 700 !important;
+                font-size: 0.95rem !important;
+                cursor: pointer;
+                color: $text !important;
+                height: auto !important;
+            }
+        }
+    }
+}
+
+/* =========================================================
+   ALIGNEMENT FORMULAIRE - FIX COMPLET
+   ========================================================= */
+.product-form-pro {
+    /* LIGNE 1 - Prix, Étiquette, Garantie */
+    .product-form-price,
+    .product-form-energy,
+    .product-form-warranty {
+        display: flex;
+        flex-direction: column;
+
+        label {
+            display: block;
+            height: 20px;
+            line-height: 20px;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: $text;
+            flex-shrink: 0;
+
+            &.required::after {
+                content: ' *';
+                color: #EF4444;
+            }
+        }
+
+        /* Force tous les inputs à la même hauteur */
+        .form-control,
+        select,
+        .input-group {
+            min-height: 44px !important;
+        }
+    }
+
+    /* Fix spécifique pour le champ Prix avec input-group */
+    .product-form-price {
+        .input-group {
+            display: flex;
+            align-items: stretch;
+            min-height: 44px !important;
+
+            .input-group-text {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 44px !important;
+                height: 44px !important;
+                padding: 0 1rem !important;
+            }
+
+            input {
+                min-height: 44px !important;
+                height: 44px !important;
+            }
+        }
+    }
+
+    /* LIGNE 2 - Stock et Produit publié */
+    .product-form-stock,
+    .product-form-published {
+        display: flex;
+        flex-direction: column;
+
+        > label {
+            display: block;
+            height: 20px;
+            line-height: 20px;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: $text;
+            flex-shrink: 0;
+
+            &.required::after {
+                content: ' *';
+                color: #EF4444;
+            }
+        }
+    }
+
+    .product-form-stock {
+        input {
+            min-height: 44px !important;
+            height: 44px !important;
+        }
+    }
+
+    /* Checkbox Produit publié */
+    .product-form-published {
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.625rem 1rem;
+            background: linear-gradient(135deg, rgba($primary, 0.06) 0%, rgba($primary, 0.02) 100%);
+            border: 2px solid rgba($primary, 0.2);
+            border-radius: 10px;
+            margin: 0;
+            min-height: 44px;
+            height: 44px;
+
+            input[type="checkbox"] {
+                width: 50px;
+                height: 28px;
+                appearance: none;
+                background: #D1D5DB;
+                border-radius: 14px;
+                position: relative;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                flex-shrink: 0;
+                margin: 0;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    width: 22px;
+                    height: 22px;
+                    background: white;
+                    border-radius: 50%;
+                    top: 3px;
+                    left: 3px;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                }
+
+                &:checked {
+                    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+
+                    &::before {
+                        transform: translateX(22px);
+                    }
+                }
+            }
+
+            label {
+                margin: 0 !important;
+                font-weight: 700 !important;
+                font-size: 0.95rem !important;
+                cursor: pointer;
+                color: $text !important;
+                height: auto !important;
+                line-height: normal !important;
+            }
+        }
+    }
+}
+
+/* =========================================================
+   FORMULAIRE PRODUIT - ALIGNEMENT ET SWITCH
+   ========================================================= */
+.product-form-pro {
+    /* Labels uniformes */
+    .product-form-price label,
+    .product-form-stock label,
+    .product-form-warranty label,
+    .product-form-energy label,
+    .product-form-published > label {
+        display: block;
+        height: 20px;
+        line-height: 20px;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        font-size: 0.875rem;
+        color: $text;
+
+        &.required::after {
+            content: ' *';
+            color: #EF4444;
+        }
+    }
+
+    /* Champ Prix avec € intégré */
+    .product-form-price {
+        position: relative;
+
+        input {
+            padding-left: 2.5rem !important;
+            min-height: 44px !important;
+            height: 44px !important;
+        }
+
+        &::before {
+            content: '€';
+            position: absolute;
+            left: 1rem;
+            bottom: 0;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: $primary;
+            pointer-events: none;
+            z-index: 5;
+        }
+    }
+
+    /* Stock et Garantie - inputs réduits */
+    .product-form-stock,
+    .product-form-warranty {
+        input {
+            min-height: 44px !important;
+            height: 44px !important;
+            text-align: center;
+            font-weight: 600;
+        }
+    }
+
+    /* Étiquette énergie */
+    .product-form-energy {
+        select {
+            min-height: 44px !important;
+            height: 44px !important;
+        }
+    }
+
+    /* Switch moderne pour Produit publié */
+    .product-form-published {
+        .switch-container {
+            display: flex;
+            align-items: center;
+            padding: 0.625rem 1.25rem;
+            background: linear-gradient(135deg, rgba($primary, 0.06) 0%, rgba($primary, 0.02) 100%);
+            border: 2px solid rgba($primary, 0.2);
+            border-radius: 10px;
+            min-height: 44px;
+            height: 44px;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background: linear-gradient(135deg, rgba($primary, 0.1) 0%, rgba($primary, 0.04) 100%);
+                border-color: rgba($primary, 0.35);
+            }
+        }
+
+        .switch-input {
+            display: none;
+
+            &:checked + .switch-label {
+                .switch-button {
+                    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+
+                    &::before {
+                        transform: translateX(24px);
+                    }
+                }
+            }
+        }
+
+        .switch-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            margin: 0;
+            width: 100%;
+        }
+
+        .switch-button {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            background: #D1D5DB;
+            border-radius: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 3px;
+                left: 3px;
+                width: 22px;
+                height: 22px;
+                background: white;
+                border-radius: 50%;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        .switch-text {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: $text;
+        }
+    }
+}
+
+/* =========================================================
+   CUSTOM SELECT ÉTIQUETTE ÉNERGIE - STYLE EUROPÉEN
+   ========================================================= */
+.product-form-pro {
+    .product-form-energy {
+        position: relative;
+
+        .custom-energy-select {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select-display {
+            min-height: 48px;
+            height: 48px;
+            padding: 0 3rem 0 1.25rem;
+            background: $surface;
+            border: 2px solid $border;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 700;
+            font-size: 1rem;
+            position: relative;
+
+            i {
+                position: absolute;
+                right: 1rem;
+                color: $primary;
+                font-size: 0.75rem;
+                transition: transform 0.2s ease;
+            }
+
+            &:hover {
+                border-color: $primary;
+                box-shadow: 0 0 0 3px rgba($primary, 0.1);
+            }
+        }
+
+        .custom-select-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: $surface;
+            border: 2px solid $border;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            padding: 0.75rem;
+
+            &.open {
+                max-height: 450px;
+                opacity: 1;
+                overflow-y: auto;
+            }
+        }
+
+        .custom-select-option {
+            padding: 0;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 1.125rem;
+            transition: all 0.2s ease;
+            position: relative;
+            height: 44px;
+            border-radius: 4px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            &::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                display: flex;
+                align-items: center;
+                padding-left: 1.25rem;
+                color: white;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+                clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%);
+                transition: all 0.2s ease;
+            }
+
+            &:hover::before {
+                transform: translateX(8px);
+                filter: brightness(1.1);
+            }
+        }
+
+        /* LARGEURS PROGRESSIVES - A (court) → G (long) */
+        .badge-success[data-label="A"]::before {
+            background: linear-gradient(90deg, #00873e 0%, #00a94f 100%);
+            width: 40%; /* Plus court = moins d'énergie */
+        }
+
+        .badge-success[data-label="B"]::before {
+            background: linear-gradient(90deg, #4fb848 0%, #6dcd5b 100%);
+            width: 50%;
+        }
+
+        .badge-info[data-label="C"]::before {
+            background: linear-gradient(90deg, #c8d900 0%, #d7e500 100%);
+            color: #333 !important;
+            width: 60%;
+        }
+
+        .badge-primary[data-label="D"]::before {
+            background: linear-gradient(90deg, #fff200 0%, #ffed00 100%);
+            color: #333 !important;
+            width: 70%;
+        }
+
+        .badge-warning[data-label="E"]::before {
+            background: linear-gradient(90deg, #fdb913 0%, #ffc72c 100%);
+            color: #333 !important;
+            width: 80%;
+        }
+
+        .badge-danger[data-label="F"]::before {
+            background: linear-gradient(90deg, #f36f21 0%, #ff8c42 100%);
+            width: 90%;
+        }
+
+        .badge-danger[data-label="G"]::before {
+            background: linear-gradient(90deg, #ed1c24 0%, #ff3841 100%);
+            width: 100%; /* Plus long = plus d'énergie */
+        }
+
+        .badge-secondary::before {
+            background: linear-gradient(90deg, #6c757d 0%, #868e96 100%);
+            content: 'Non classé';
+            width: 75%;
+        }
+
+        /* Style du display selon la sélection */
+        .custom-select-display.badge-success {
+            background: linear-gradient(90deg, #00873e 0%, #00a94f 100%);
+            border-color: #00873e;
+            color: white;
+
+            i {
+                color: white;
+            }
+        }
+
+        .custom-select-display.badge-info {
+            background: linear-gradient(90deg, #c8d900 0%, #d7e500 100%);
+            border-color: #c8d900;
+            color: #333;
+
+            i {
+                color: #333;
+            }
+        }
+
+        .custom-select-display.badge-primary {
+            background: linear-gradient(90deg, #fff200 0%, #ffed00 100%);
+            border-color: #fff200;
+            color: #333;
+
+            i {
+                color: #333;
+            }
+        }
+
+        .custom-select-display.badge-warning {
+            background: linear-gradient(90deg, #fdb913 0%, #ffc72c 100%);
+            border-color: #fdb913;
+            color: #333;
+
+            i {
+                color: #333;
+            }
+        }
+
+        .custom-select-display.badge-danger {
+            background: linear-gradient(90deg, #ed1c24 0%, #ff3841 100%);
+            border-color: #ed1c24;
+            color: white;
+
+            i {
+                color: white;
+            }
+        }
+
+        .custom-select-display.badge-secondary {
+            background: linear-gradient(90deg, #6c757d 0%, #868e96 100%);
+            border-color: #6c757d;
+            color: white;
+
+            i {
+                color: white;
+            }
+        }
+    }
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+.form-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sidebar-card {
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: $radius;
+    box-shadow: $shadow;
+    overflow: hidden;
+}
+
+.sidebar-card-header {
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, $bg 0%, rgba($primary, 0.03) 100%);
+    border-bottom: 1px solid $border;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    i {
+        font-size: 1.125rem;
+        color: $primary;
+    }
+
+    h3 {
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: $text;
+        margin: 0;
+    }
+}
+
+.sidebar-card-body {
+    padding: 1.5rem;
+
+    p {
+        font-size: 0.875rem;
+        color: $text-muted;
+        line-height: 1.6;
+        margin: 0;
+
+        &:not(:last-child) {
+            margin-bottom: 0.75rem;
+        }
+    }
+
+    .required-badge {
+        color: #EF4444;
+        font-weight: 800;
+    }
+}
+
+.sidebar-btn {
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+
+    &:not(:last-child) {
+        margin-bottom: 0.75rem;
+    }
+}
+
+.sidebar-btn-primary {
+    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba($primary, 0.3);
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba($primary, 0.4);
+    }
+}
+
+.sidebar-btn-secondary {
+    background: $surface;
+    color: $primary;
+    border: 2px solid $primary;
+
+    &:hover {
+        background: rgba($primary, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($primary, 0.3);
+    }
+}
+
+.sidebar-btn-ghost {
+    background: $surface;
+    color: $text-muted;
+    border: 2px solid $border;
+
+    &:hover {
+        border-color: $text;
+        color: $text;
+    }
+}
+
+/* Cache les vrais boutons submit */
+.hidden-form-buttons {
+    display: none;
+}
+
+/* =========================================================
+   UPLOADS
+   ========================================================= */
+.ea-upload-thumb {
+    display: block;
     width: 100%;
     max-width: 220px;
     height: auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 14px rgba(0,0,0,.08);
-    border: 1px solid #e6edf2;
-    background: #f8fafb;
+    border-radius: $radius;
+    box-shadow: $shadow;
+    border: 1px solid $border;
+    background: $bg;
 }
 
-.ea-image-upload .ea-upload-current,
-.ea-image-upload .ea-upload-live{
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1024px) {
+    .form-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .form-sidebar {
+        order: -1;
+    }
 }
+@import "admin/layout";
+@import "admin/sidebar";
+@import "admin/energy-badges";
+@import "admin/product_gallery_index";
+@import "admin/product_gallery";
+@import "admin/global_index";

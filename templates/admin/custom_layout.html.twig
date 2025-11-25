@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block page_title %}{{ block('content_title')|striptags|raw }}{% endblock %}</title>
+
+    {% block head_stylesheets %}
+        {{ encore_entry_link_tags('admin') }}
+    {% endblock %}
+
+    {% block head_javascript %}{% endblock %}
+</head>
+
+<body>
+<div style="display: flex; min-height: 100vh;">
+    {# SIDEBAR CUSTOM #}
+    {% include 'admin/menu.html.twig' %}
+
+    {# MAIN CONTENT #}
+    <div style="flex: 1; margin-left: 260px; background: #f8fafb;">
+        <div class="wrapper">
+            {# Flash Messages #}
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+
+            {# Content #}
+            <article class="content">
+                {% block content_header_wrapper %}
+                    <section class="content-header">
+                        {% block content_header %}
+                            <div class="content-header-title">
+                                <h1 class="title">
+                                    {% block content_title %}{% endblock %}
+                                </h1>
+                            </div>
+
+                            {% block page_actions_wrapper %}
+                                <div class="page-actions">{% block page_actions %}{% endblock %}</div>
+                            {% endblock %}
+                        {% endblock content_header %}
+                    </section>
+                {% endblock content_header_wrapper %}
+
+                <section id="main" class="content-body">
+                    {% block main %}{% endblock %}
+                </section>
+            </article>
+        </div>
+    </div>
+</div>
+
+{% block body_javascript %}
+    {{ encore_entry_script_tags('admin') }}
+{% endblock %}
+</body>
+</html>

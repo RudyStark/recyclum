@@ -63,3 +63,44 @@
         .ea-g-item img { height: 96px; }
     }
 }
+
+/* Bouton "Ajouter des images" pour produits sans images */
+.btn-gallery-add {
+    width: 100%;
+    background: linear-gradient(135deg, rgba($primary, 0.1) 0%, rgba($primary, 0.05) 100%);
+    border: 2px dashed $primary;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: $primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    i {
+        font-size: 0.875rem;
+    }
+
+    &:hover {
+        background: rgba($primary, 0.15);
+        border-style: solid;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($primary, 0.2);
+        color: $primary;
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+/* Badge vide pour produits sans images */
+.image-count-badge.badge-empty {
+    background: rgba(107, 114, 128, 0.75);
+    backdrop-filter: blur(8px);
+}

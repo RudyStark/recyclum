@@ -1,0 +1,79 @@
+{% trans_default_domain ea.i18n.translationDomain %}
+
+<nav id="main-menu" class="recyclum-sidebar" role="navigation">
+    {# LOGO / HEADER #}
+    <div class="sidebar-header">
+        <div class="sidebar-logo">
+            <i class="fa fa-recycle" style="font-size: 1.5rem; color: #16C669;"></i>
+            <span class="sidebar-brand">Recyclum</span>
+        </div>
+        <div class="sidebar-subtitle">BackOffice</div>
+    </div>
+
+    {# USER INFO #}
+    <div class="sidebar-user">
+        <div class="user-avatar">
+            <i class="fa fa-user-circle"></i>
+        </div>
+        <div class="user-info">
+            <div class="user-name">{{ app.user.email|split('@')[0] }}</div>
+            <div class="user-role">Administrateur</div>
+        </div>
+    </div>
+
+    {# MENU ITEMS #}
+    <div class="sidebar-menu">
+        {# DASHBOARD #}
+        <a href="{{ path('admin') }}" class="menu-item {% if app.request.get('_route') == 'admin' and not app.request.query.get('crudAction') %}active{% endif %}">
+            <i class="fa fa-home menu-icon"></i>
+            <span class="menu-label">Dashboard</span>
+        </a>
+
+        {# SECTION: CATALOGUE #}
+        <div class="menu-section">
+            <div class="menu-section-title">CATALOGUE</div>
+
+            <a href="{{ ea_url().setController('App\\Controller\\Admin\\ProductCrudController').setAction('productIndex').generateUrl() }}"
+               class="menu-item {% if app.request.query.get('crudControllerFqcn') == 'App\\Controller\\Admin\\ProductCrudController' %}active{% endif %}">
+                <i class="fa fa-box menu-icon"></i>
+                <span class="menu-label">Produits</span>
+            </a>
+
+            <a href="{{ ea_url().setController('App\\Controller\\Admin\\ProductImageCrudController').setAction('productImagesIndex').generateUrl() }}"
+               class="menu-item {% if app.request.query.get('crudControllerFqcn') == 'App\\Controller\\Admin\\ProductImageCrudController' %}active{% endif %}">
+                <i class="fa fa-images menu-icon"></i>
+                <span class="menu-label">Images produits</span>
+            </a>
+
+            <a href="{{ ea_url().setController('App\\Controller\\Admin\\CategoryCrudController').setAction('categoryIndex').generateUrl() }}"
+               class="menu-item {% if app.request.query.get('crudControllerFqcn') == 'App\\Controller\\Admin\\CategoryCrudController' %}active{% endif %}">
+                <i class="fa fa-tags menu-icon"></i>
+                <span class="menu-label">Catégories</span>
+            </a>
+
+            <a href="{{ ea_url().setController('App\\Controller\\Admin\\BrandCrudController').setAction('brandIndex').generateUrl() }}"
+               class="menu-item {% if app.request.query.get('crudControllerFqcn') == 'App\\Controller\\Admin\\BrandCrudController' %}active{% endif %}">
+                <i class="fa fa-copyright menu-icon"></i>
+                <span class="menu-label">Marques</span>
+            </a>
+        </div>
+
+        {# SECTION: COMPTE #}
+        <div class="menu-section">
+            <div class="menu-section-title">COMPTE</div>
+
+            <a href="{{ path('app_logout') }}" class="menu-item menu-item-logout">
+                <i class="fa fa-sign-out-alt menu-icon"></i>
+                <span class="menu-label">Déconnexion</span>
+            </a>
+        </div>
+    </div>
+
+    {# FOOTER #}
+    <div class="sidebar-footer">
+        <div class="sidebar-version">
+            <i class="fa fa-code"></i>
+            Version 1.0.0 par RV Agency
+        </div>
+    </div>
+</nav>
