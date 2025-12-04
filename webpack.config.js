@@ -9,6 +9,7 @@ Encore
     .setPublicPath('/build')
 
     .addEntry('app', './assets/app.js')
+    .addEntry('client', './assets/client.js')
     .addEntry('admin', './assets/admin.js')
 
     .enableStimulusBridge('./assets/controllers.json')

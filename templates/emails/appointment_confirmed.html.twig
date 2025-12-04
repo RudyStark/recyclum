@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rendez-vous confirmé - Recyclum</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f6f8fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #16C669 0%, #12a356 100%);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+        }
+        .header .icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: 900;
+        }
+        .header p {
+            margin: 0;
+            font-size: 16px;
+            opacity: 0.95;
+        }
+        .content {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 0 0 12px 12px;
+        }
+        .appointment-box {
+            background: linear-gradient(135deg, rgba(22, 198, 105, 0.08) 0%, rgba(22, 198, 105, 0.02) 100%);
+            border: 2px solid rgba(22, 198, 105, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .appointment-box h3 {
+            margin: 0 0 20px 0;
+            font-size: 18px;
+            color: #1a2332;
+            font-weight: 800;
+        }
+        .appointment-detail {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+        .appointment-detail:last-child {
+            margin-bottom: 0;
+        }
+        .appointment-detail .icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(22, 198, 105, 0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #16C669;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .appointment-detail .text {
+            flex: 1;
+        }
+        .appointment-detail .label {
+            display: block;
+            font-size: 12px;
+            color: #6c7783;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 3px;
+        }
+        .appointment-detail .value {
+            display: block;
+            font-size: 16px;
+            color: #1a2332;
+            font-weight: 700;
+        }
+        .info-box {
+            background: white;
+            border: 2px solid #e6edf2;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .info-box h3 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            color: #1a2332;
+            font-weight: 800;
+        }
+        .info-box p {
+            margin: 0;
+            color: #1a2332;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        .checklist {
+            margin: 20px 0;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .checklist-item:last-child {
+            margin-bottom: 0;
+        }
+        .checklist-item .check {
+            width: 24px;
+            height: 24px;
+            background: #16C669;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .checklist-item .text {
+            flex: 1;
+            color: #1a2332;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+        .warning-box {
+            background: #fff9e6;
+            border: 2px solid #f59e0b;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+        }
+        .warning-box .icon {
+            color: #f59e0b;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        .warning-box .text {
+            flex: 1;
+        }
+        .warning-box .text p {
+            margin: 0;
+            color: #92400e;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        .warning-box .text strong {
+            color: #92400e;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 25px 30px;
+            margin-top: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 14px;
+            color: #6c7783;
+        }
+        .footer strong {
+            color: #1a2332;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        .footer a {
+            color: #16C669;
+            text-decoration: none;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #e6edf2;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="icon">✅</div>
+        <h1>Rendez-vous confirmé !</h1>
+        <p>Votre réparation est planifiée</p>
+    </div>
+
+    <div class="content">
+        <h2 style="color: #1a2332; font-size: 20px; margin-top: 0;">Bonjour {{ request.firstName }},</h2>
+
+        <p style="color: #6c7783; line-height: 1.6; margin-bottom: 25px;">
+            Nous avons bien enregistré votre rendez-vous pour la réparation de votre <strong>{{ request.categoryLabel }}</strong>.
+            Notre technicien se rendra à votre domicile à la date et l'heure convenues.
+        </p>
+
+        <div class="appointment-box">
+            <h3>📅 Détails de votre rendez-vous</h3>
+
+            <div class="appointment-detail">
+                <div class="icon">📅</div>
+                <div class="text">
+                    <span class="label">Date</span>
+                    <span class="value">{{ appointment.dateFormatted }}</span>
+                </div>
+            </div>
+
+            <div class="appointment-detail">
+                <div class="icon">🕐</div>
+                <div class="text">
+                    <span class="label">Heure</span>
+                    <span class="value">{{ appointment.appointmentTime|date('H:i') }}</span>
+                </div>
+            </div>
+
+            <div class="appointment-detail">
+                <div class="icon">📍</div>
+                <div class="text">
+                    <span class="label">Adresse</span>
+                    <span class="value">{{ request.fullAddress }}</span>
+                </div>
+            </div>
+
+            <div class="appointment-detail">
+                <div class="icon">🔧</div>
+                <div class="text">
+                    <span class="label">Appareil</span>
+                    <span class="value">{{ request.categoryLabel }}{% if request.brand %} - {{ request.brand }}{% if request.model %} {{ request.model }}{% endif %}{% endif %}</span>
+                </div>
+            </div>
+
+            <div class="appointment-detail">
+                <div class="icon">⚠️</div>
+                <div class="text">
+                    <span class="label">Problème signalé</span>
+                    <span class="value">{{ request.issue }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>🔔 Prochaines étapes</h3>
+            <div class="checklist">
+                <div class="checklist-item">
+                    <div class="check">✓</div>
+                    <div class="text">
+                        <strong>24h avant l'intervention</strong> : Notre technicien vous contactera pour confirmer sa venue
+                    </div>
+                </div>
+                <div class="checklist-item">
+                    <div class="check">✓</div>
+                    <div class="text">
+                        <strong>Jour J</strong> : Assurez-vous d'être présent à l'adresse indiquée et que l'appareil soit accessible
+                    </div>
+                </div>
+                <div class="checklist-item">
+                    <div class="check">✓</div>
+                    <div class="text">
+                        <strong>Après réparation</strong> : Vous recevrez un compte-rendu de l'intervention et une facture
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <div class="icon">⚠️</div>
+            <div class="text">
+                <p>
+                    <strong>Important :</strong> Si vous devez annuler ou modifier votre rendez-vous, merci de nous contacter au moins 24h à l'avance au
+                    <strong>01 23 45 67 89</strong> ou par email à <strong>contact@recyclum.fr</strong>
+                </p>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>📋 Récapitulatif de votre demande</h3>
+            <p>
+                <strong>N° de demande :</strong> #{{ request.id }}<br>
+                <strong>Date de la demande :</strong> {{ request.createdAt|date('d/m/Y à H:i') }}
+            </p>
+        </div>
+
+        <hr>
+
+        <div class="footer">
+            <strong>Besoin d'aide ?</strong>
+            Notre équipe est à votre disposition<br><br>
+            📧 Email : <a href="mailto:contact@recyclum.fr">contact@recyclum.fr</a><br>
+            📞 Téléphone : <a href="tel:+33123456789">01 23 45 67 89</a><br>
+            🌐 Site web : <a href="https://recyclum.fr">www.recyclum.fr</a>
+        </div>
+
+        <p style="text-align: center; color: #6c7783; font-size: 12px; margin-top: 20px;">
+            Merci de faire confiance à Recyclum pour la réparation de vos appareils ! 🔧💚
+        </p>
+    </div>
+</div>
+</body>
+</html>

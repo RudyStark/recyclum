@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau RDV confirmé - Recyclum</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f6f8fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            font-weight: 900;
+        }
+        .header p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        .content {
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 12px 12px;
+        }
+        .alert-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(59, 130, 246, 0.02) 100%);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .alert-box .icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .alert-box h2 {
+            margin: 0 0 10px 0;
+            font-size: 22px;
+            color: #1a2332;
+            font-weight: 800;
+        }
+        .alert-box p {
+            margin: 0;
+            color: #6c7783;
+            font-size: 14px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .info-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        .info-item .label {
+            font-size: 11px;
+            color: #6c7783;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 5px;
+        }
+        .info-item .value {
+            font-size: 15px;
+            color: #1a2332;
+            font-weight: 700;
+        }
+        .client-box {
+            background: white;
+            border: 2px solid #e6edf2;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .client-box h3 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            color: #1a2332;
+            font-weight: 800;
+        }
+        .client-detail {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .client-detail:last-child {
+            margin-bottom: 0;
+        }
+        .client-detail .icon {
+            width: 32px;
+            text-align: center;
+            color: #3b82f6;
+        }
+        .client-detail .text {
+            color: #1a2332;
+        }
+        .problem-box {
+            background: #fff9e6;
+            border: 2px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .problem-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #92400e;
+            font-weight: 800;
+        }
+        .problem-box p {
+            margin: 0;
+            color: #92400e;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white !important;
+            padding: 15px 40px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 14px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            text-align: center;
+        }
+        .cta-container {
+            text-align: center;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #e6edf2;
+            margin: 25px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔔 Nouveau rendez-vous confirmé</h1>
+        <p>Un client a confirmé sa prise de rendez-vous</p>
+    </div>
+
+    <div class="content">
+        <div class="alert-box">
+            <div class="icon">📅</div>
+            <h2>{{ appointment.dateFormatted }}</h2>
+            <p>à {{ appointment.appointmentTime|date('H:i') }}</p>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="label">N° Demande</div>
+                <div class="value">#{{ request.id }}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Type</div>
+                <div class="value">{{ request.repairLocationLabel }}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Appareil</div>
+                <div class="value">{{ request.categoryLabel }}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Confirmé le</div>
+                <div class="value">{{ appointment.confirmedAt|date('d/m/Y H:i') }}</div>
+            </div>
+        </div>
+
+        <div class="client-box">
+            <h3>👤 Informations client</h3>
+            <div class="client-detail">
+                <div class="icon">👤</div>
+                <div class="text"><strong>{{ request.fullName }}</strong></div>
+            </div>
+            <div class="client-detail">
+                <div class="icon">📧</div>
+                <div class="text">{{ request.email }}</div>
+            </div>
+            <div class="client-detail">
+                <div class="icon">📞</div>
+                <div class="text">{{ request.phone }}</div>
+            </div>
+            <div class="client-detail">
+                <div class="icon">📍</div>
+                <div class="text">{{ request.fullAddress }}</div>
+            </div>
+        </div>
+
+        <div class="client-box">
+            <h3>🔧 Détails de l'appareil</h3>
+            <p style="margin: 0; color: #1a2332; line-height: 1.6;">
+                <strong>Catégorie :</strong> {{ request.categoryLabel }}<br>
+                {% if request.brand %}<strong>Marque :</strong> {{ request.brand }}{% if request.model %} {{ request.model }}{% endif %}<br>{% endif %}
+                {% if request.urgency %}<strong style="color: #ef4444;">⚠️ URGENT</strong><br>{% endif %}
+            </p>
+        </div>
+
+        <div class="problem-box">
+            <h3>⚠️ Problème signalé</h3>
+            <p><strong>{{ request.issue }}</strong></p>
+            <p style="margin-top: 10px;">{{ request.issueDetails }}</p>
+        </div>
+
+        <hr>
+
+        <div class="cta-container">
+            <a href="{{ viewUrl }}" class="cta-button">
+                👁️ Voir la demande complète
+            </a>
+        </div>
+
+        <p style="text-align: center; color: #6c7783; font-size: 12px; margin-top: 20px;">
+            N'oubliez pas de contacter le client 24h avant l'intervention pour confirmer le rendez-vous.
+        </p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rendez-vous déjà confirmé - Recyclum</title>
+    {{ encore_entry_link_tags('client') }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="client-space">
+<div class="client-container">
+    <div class="client-logo">
+        <h1><i class="fa fa-recycle"></i> Recyclum</h1>
+        <p class="tagline">Espace Client</p>
+    </div>
+
+    <div class="client-card">
+        <div class="client-card-body" style="text-align: center; padding: 60px 40px;">
+            <div style="width: 100px; height: 100px; background: linear-gradient(135deg, rgba(22, 198, 105, 0.15) 0%, rgba(22, 198, 105, 0.05) 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; border: 3px solid rgba(22, 198, 105, 0.3);">
+                <i class="fa fa-check" style="font-size: 3rem; color: #16C669;"></i>
+            </div>
+
+            <h2 style="font-size: 2rem; font-weight: 900; color: #1a2332; margin-bottom: 15px;">
+                Rendez-vous déjà confirmé
+            </h2>
+
+            <p style="font-size: 1.125rem; color: #6c7783; margin-bottom: 40px; line-height: 1.6;">
+                Vous avez déjà confirmé votre rendez-vous pour cette demande.
+            </p>
+
+            <div style="background: linear-gradient(135deg, rgba(22, 198, 105, 0.08) 0%, rgba(22, 198, 105, 0.02) 100%); border: 2px solid rgba(22, 198, 105, 0.3); border-radius: 12px; padding: 30px; margin-bottom: 30px; text-align: left;">
+                <h3 style="font-weight: 800; color: #1a2332; margin-bottom: 20px; font-size: 1.25rem;">
+                    📅 Votre rendez-vous
+                </h3>
+
+                <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 40px; height: 40px; background: rgba(22, 198, 105, 0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="fa fa-calendar" style="color: #16C669; font-size: 1.125rem;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.75rem; color: #6c7783; font-weight: 700; text-transform: uppercase; margin-bottom: 3px;">Date</div>
+                        <div style="font-size: 1.125rem; color: #1a2332; font-weight: 800;">{{ appointment.dateFormatted }}</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 40px; height: 40px; background: rgba(22, 198, 105, 0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="fa fa-clock" style="color: #16C669; font-size: 1.125rem;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.75rem; color: #6c7783; font-weight: 700; text-transform: uppercase; margin-bottom: 3px;">Heure</div>
+                        <div style="font-size: 1.125rem; color: #1a2332; font-weight: 800;">{{ appointment.appointmentTime|date('H:i') }}</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 40px; height: 40px; background: rgba(22, 198, 105, 0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="fa fa-map-marker-alt" style="color: #16C669; font-size: 1.125rem;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.75rem; color: #6c7783; font-weight: 700; text-transform: uppercase; margin-bottom: 3px;">Adresse</div>
+                        <div style="font-size: 0.95rem; color: #1a2332; font-weight: 600;">{{ request.fullAddress }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #e6f7ff; border: 2px solid #3b82f6; border-radius: 12px; padding: 20px; margin-bottom: 30px; display: flex; gap: 15px; text-align: left;">
+                <i class="fa fa-info-circle" style="color: #3b82f6; font-size: 1.5rem; flex-shrink: 0;"></i>
+                <p style="margin: 0; color: #1e40af; line-height: 1.6;">
+                    <strong>N'oubliez pas !</strong><br>
+                    Notre technicien vous contactera 24h avant l'intervention pour confirmer le rendez-vous. Vous avez également reçu un email de confirmation avec tous les détails.
+                </p>
+            </div>
+
+            <div style="background: #f8f9fa; border: 2px solid #e6edf2; border-radius: 12px; padding: 25px; text-align: left;">
+                <h4 style="margin: 0 0 15px 0; color: #1a2332; font-weight: 800; font-size: 1rem;">
+                    📋 Informations de la demande
+                </h4>
+                <div style="color: #6c7783; line-height: 1.8;">
+                    <div style="margin-bottom: 8px;">
+                        <strong style="color: #1a2332;">N° de demande :</strong> #{{ request.id }}
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong style="color: #1a2332;">Appareil :</strong> {{ request.categoryLabel }}{% if request.brand %} - {{ request.brand }}{% if request.model %} {{ request.model }}{% endif %}{% endif %}
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong style="color: #1a2332;">Problème :</strong> {{ request.issue }}
+                    </div>
+                    <div>
+                        <strong style="color: #1a2332;">Confirmé le :</strong> {{ appointment.confirmedAt|date('d/m/Y à H:i') }}
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #fff9e6; border: 2px solid #f59e0b; border-radius: 12px; padding: 20px; margin: 30px 0; display: flex; gap: 15px; text-align: left;">
+                <i class="fa fa-exclamation-triangle" style="color: #f59e0b; font-size: 1.5rem; flex-shrink: 0;"></i>
+                <p style="margin: 0; color: #92400e; line-height: 1.6;">
+                    <strong>Besoin de modifier ou annuler ?</strong><br>
+                    Contactez-nous au moins 24h à l'avance :<br>
+                    📞 <a href="tel:+33123456789" style="color: #92400e; font-weight: 700;">01 23 45 67 89</a> ou
+                    📧 <a href="mailto:contact@recyclum.fr" style="color: #92400e; font-weight: 700;">contact@recyclum.fr</a>
+                </p>
+            </div>
+
+            <p style="margin-top: 40px;">
+                <a href="https://recyclum.fr" style="color: #16C669; text-decoration: none; font-weight: 700;">
+                    <i class="fa fa-arrow-left"></i> Retour au site Recyclum
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+{{ encore_entry_script_tags('client') }}
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choisir mon rendez-vous - Recyclum</title>
+
+    {# Charge le CSS de l'espace client #}
+    {{ encore_entry_link_tags('client') }}
+
+    {# Font Awesome #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="client-space">
+<div class="client-container">
+    <div class="client-logo">
+        <h1><i class="fa fa-recycle"></i> Recyclum</h1>
+        <p class="tagline">Espace Client</p>
+    </div>
+
+    <div class="client-card">
+        <div class="client-card-header">
+            <h2>📅 Choisissez votre rendez-vous</h2>
+            <p>Demande #{{ request.id }} - {{ request.categoryLabel }}</p>
+        </div>
+        <div class="client-card-body">
+            {% if request.repairLocation == 'domicile' %}
+                <div id="appointment-selector"
+                     data-controller="client--appointment-calendar"
+                     data-client--appointment-calendar-blocked-slots-value="{{ blockedSlots }}"
+                     data-client--appointment-calendar-token-value="{{ request.confirmationToken }}">
+
+                    {# ÉTAPE 1 : CALENDRIER #}
+                    <div class="calendar-container">
+                        <div class="step-title">
+                            <span class="step-number">1</span>
+                            Sélectionnez une date
+                        </div>
+
+                        <div class="calendar-header">
+                            <h3 id="current-month-year"></h3>
+                            <div class="calendar-nav">
+                                <button type="button" id="prev-month" aria-label="Mois précédent">
+                                    <i class="fa fa-chevron-left"></i>
+                                </button>
+                                <button type="button" id="next-month" aria-label="Mois suivant">
+                                    <i class="fa fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="calendar-weekdays">
+                            <div class="calendar-weekday">Lun</div>
+                            <div class="calendar-weekday">Mar</div>
+                            <div class="calendar-weekday">Mer</div>
+                            <div class="calendar-weekday">Jeu</div>
+                            <div class="calendar-weekday">Ven</div>
+                            <div class="calendar-weekday">Sam</div>
+                            <div class="calendar-weekday">Dim</div>
+                        </div>
+
+                        <div id="calendar" class="calendar-grid"></div>
+                    </div>
+
+                    {# ÉTAPE 2 : CRÉNEAUX HORAIRES #}
+                    <div class="time-slots-container" id="time-slots-section" style="display: none;">
+                        <div class="step-title">
+                            <span class="step-number">2</span>
+                            Choisissez un créneau horaire
+                        </div>
+                        <div id="time-slots" class="time-slots-grid"></div>
+                    </div>
+
+                    {# ÉTAPE 3 : CONFIRMATION #}
+                    <div id="confirmation-section" style="display: none;">
+                        <div class="step-title">
+                            <span class="step-number">3</span>
+                            Confirmez votre rendez-vous
+                        </div>
+
+                        <div class="confirmation-box">
+                            <h4>✅ Récapitulatif</h4>
+                            <div class="confirmation-detail">
+                                <i class="fa fa-calendar"></i>
+                                <span><strong>Date :</strong> <span id="selected-date-display"></span></span>
+                            </div>
+                            <div class="confirmation-detail">
+                                <i class="fa fa-clock"></i>
+                                <span><strong>Heure :</strong> <span id="selected-time-display"></span></span>
+                            </div>
+                            <div class="confirmation-detail">
+                                <i class="fa fa-map-marker-alt"></i>
+                                <span><strong>Lieu :</strong> {{ request.fullAddress }}</span>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn-client-primary" id="btn-confirm-appointment">
+                            <i class="fa fa-check"></i> Confirmer mon rendez-vous
+                        </button>
+                    </div>
+                </div>
+
+            {% else %}
+                {# RÉPARATION EN ATELIER #}
+                <div class="atelier-info">
+                    <h3>🏪 Déposez votre appareil à notre atelier</h3>
+
+                    <div class="atelier-detail">
+                        <h4><i class="fa fa-map-marker-alt"></i> Adresse</h4>
+                        <p>
+                            <strong>Recyclum - Atelier de réparation</strong><br>
+                            123 Avenue de la Réparation<br>
+                            75001 Paris
+                        </p>
+                    </div>
+
+                    <div class="atelier-detail">
+                        <h4><i class="fa fa-clock"></i> Horaires d'ouverture</h4>
+                        <p>
+                            <strong>Lundi - Vendredi :</strong> 9h00 - 18h00<br>
+                            <strong>Samedi :</strong> 9h00 - 12h00<br>
+                            <strong>Dimanche :</strong> Fermé
+                        </p>
+                    </div>
+
+                    <div class="client-alert-warning">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        <p>
+                            <strong>Important :</strong> Merci de bien mentionner votre numéro de demande <strong>#{{ request.id }}</strong> lors du dépôt de votre appareil.
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{# Charge le JS de l'espace client #}
+{{ encore_entry_script_tags('client') }}
+</body>
+</html>

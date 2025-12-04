@@ -1,0 +1,293 @@
+{% extends 'admin/base_layout.html.twig' %}
+
+{% block body_class 'repair-request-show-pro' %}
+
+{% block main %}
+    <div class="repair-show-container">
+        {# HEADER #}
+        {# Header avec boutons d'action #}
+        <div class="repair-show-header">
+            <div>
+                <button onclick="window.history.back()" class="btn-back">
+                    <i class="fa fa-arrow-left"></i>
+                    Retour
+                </button>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <h1 class="repair-show-title">
+                    Demande #{{ request.id }}
+                    {% if request.urgency %}
+                        <span class="urgency-badge-large">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    URGENT
+                </span>
+                    {% endif %}
+                </h1>
+
+                {# Badge de statut à droite du titre #}
+                {% if request.status == 'contacted' %}
+                    <span class="status-info-badge status-contacted">
+                <i class="fa fa-clock"></i>
+                En attente de confirmation client
+            </span>
+                {% elseif request.status == 'scheduled' %}
+                    <span class="status-info-badge status-scheduled">
+                <i class="fa fa-check-circle"></i>
+                Rendez-vous confirmé
+            </span>
+                {% elseif request.status == 'completed' %}
+                    <span class="status-info-badge status-completed">
+                <i class="fa fa-check-double"></i>
+                Réparation terminée
+            </span>
+                {% elseif request.status == 'cancelled' %}
+                    <span class="status-info-badge status-cancelled">
+                <i class="fa fa-times-circle"></i>
+                Demande refusée
+            </span>
+                {% endif %}
+            </div>
+
+            <div class="repair-show-actions">
+                {# Boutons visibles UNIQUEMENT si status = pending #}
+                {% if request.status == 'pending' %}
+                    <button class="btn-action-primary"
+                            data-controller="admin--repair-response"
+                            data-admin--repair-response-request-id-value="{{ request.id }}"
+                            data-action="click->admin--repair-response#showAcceptModal">
+                        <i class="fa fa-check"></i>
+                        Accepter la demande
+                    </button>
+                    <button class="btn-action-danger"
+                            data-controller="admin--repair-response"
+                            data-admin--repair-response-request-id-value="{{ request.id }}"
+                            data-action="click->admin--repair-response#showRejectModal">
+                        <i class="fa fa-times"></i>
+                        Refuser la demande
+                    </button>
+                {% elseif request.status == 'scheduled' and request.appointment %}
+                    {# Si RDV confirmé, affiche un bouton vers le calendrier #}
+                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\RepairRequestCrudController').setAction('appointmentsCalendar').generateUrl() }}"
+                       class="btn-action-secondary">
+                        <i class="fa fa-calendar-alt"></i>
+                        Voir dans le calendrier
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <p class="repair-show-date">Reçue le {{ request.createdAt|date('d/m/Y à H:i') }}</p>
+
+        {# Message informatif selon le statut #}
+        {% if request.status == 'contacted' %}
+            <div class="alert-info-box">
+                <i class="fa fa-info-circle"></i>
+                <div>
+                    <strong>Email envoyé au client</strong>
+                    <p>Le client a reçu un email avec un lien pour choisir son créneau de rendez-vous. Dès qu'il confirmera, vous recevrez une notification.</p>
+                </div>
+            </div>
+        {% elseif request.status == 'scheduled' and request.appointment %}
+            <div class="alert-success-box">
+                <i class="fa fa-check-circle"></i>
+                <div>
+                    <strong>Rendez-vous confirmé par le client</strong>
+                    <p>
+                        <strong>Date :</strong> {{ request.appointment.dateFormatted }}<br>
+                        <strong>Heure :</strong> {{ request.appointment.appointmentTime|date('H:i') }}<br>
+                        <strong>Confirmé le :</strong> {{ request.appointment.confirmedAt|date('d/m/Y à H:i') }}
+                    </p>
+                </div>
+            </div>
+        {% elseif request.status == 'cancelled' %}
+            <div class="alert-danger-box">
+                <i class="fa fa-times-circle"></i>
+                <div>
+                    <strong>Demande refusée</strong>
+                    <p>Cette demande a été refusée. Le client a été informé par email.</p>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="repair-show-layout">
+            {# COLONNE PRINCIPALE #}
+            <div class="repair-show-main">
+                {# STATUS CARD #}
+                <div class="show-card">
+                    <div class="show-card-header">
+                        <i class="fa fa-info-circle"></i>
+                        <h2>Statut de la demande</h2>
+                    </div>
+                    <div class="show-card-body">
+                        <div class="status-timeline">
+                            <div class="timeline-item {% if request.status == 'pending' %}active{% endif %}">
+                                <div class="timeline-icon">
+                                    <i class="fa fa-clock"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">En attente</div>
+                                    <div class="timeline-desc">Demande reçue</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item {% if request.status == 'contacted' %}active{% endif %}">
+                                <div class="timeline-icon">
+                                    <i class="fa fa-phone"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">Contacté</div>
+                                    <div class="timeline-desc">Client contacté</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item {% if request.status == 'scheduled' %}active{% endif %}">
+                                <div class="timeline-icon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">Planifié</div>
+                                    <div class="timeline-desc">Rendez-vous fixé</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item {% if request.status == 'completed' %}active{% endif %}">
+                                <div class="timeline-icon">
+                                    <i class="fa fa-check"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">Terminé</div>
+                                    <div class="timeline-desc">Réparation effectuée</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="status-actions">
+                            <label>Changer le statut :</label>
+                            <select class="form-control" data-controller="admin--status-updater" data-admin--status-updater-request-id-value="{{ request.id }}" data-action="change->admin--status-updater#updateStatus">
+                                <option value="pending" {% if request.status == 'pending' %}selected{% endif %}>En attente</option>
+                                <option value="contacted" {% if request.status == 'contacted' %}selected{% endif %}>Contacté</option>
+                                <option value="scheduled" {% if request.status == 'scheduled' %}selected{% endif %}>Planifié</option>
+                                <option value="completed" {% if request.status == 'completed' %}selected{% endif %}>Terminé</option>
+                                <option value="cancelled" {% if request.status == 'cancelled' %}selected{% endif %}>Annulé</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                {# APPAREIL #}
+                <div class="show-card">
+                    <div class="show-card-header">
+                        <i class="fa fa-tools"></i>
+                        <h2>Informations sur l'appareil</h2>
+                    </div>
+                    <div class="show-card-body">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Catégorie</div>
+                                <div class="info-value">{{ request.categoryLabel }}</div>
+                            </div>
+                            {% if request.brand %}
+                                <div class="info-item">
+                                    <div class="info-label">Marque</div>
+                                    <div class="info-value">{{ request.brand }}</div>
+                                </div>
+                            {% endif %}
+                            {% if request.model %}
+                                <div class="info-item">
+                                    <div class="info-label">Modèle</div>
+                                    <div class="info-value">{{ request.model }}</div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {# PROBLÈME #}
+                <div class="show-card">
+                    <div class="show-card-header">
+                        <i class="fa fa-exclamation-circle"></i>
+                        <h2>Description du problème</h2>
+                    </div>
+                    <div class="show-card-body">
+                        <div class="issue-summary">
+                            <h3>{{ request.issue }}</h3>
+                            <p>{{ request.issueDetails|nl2br }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# SIDEBAR #}
+            <div class="repair-show-sidebar">
+                {# CLIENT #}
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <i class="fa fa-user"></i>
+                        <h3>Informations client</h3>
+                    </div>
+                    <div class="sidebar-card-body">
+                        <div class="client-detail">
+                            <div class="client-name-large">{{ request.fullName }}</div>
+                        </div>
+                        <div class="contact-list">
+                            <a href="mailto:{{ request.email }}" class="contact-item">
+                                <i class="fa fa-envelope"></i>
+                                <span>{{ request.email }}</span>
+                            </a>
+                            <a href="tel:{{ request.phone }}" class="contact-item">
+                                <i class="fa fa-phone"></i>
+                                <span>{{ request.phone }}</span>
+                            </a>
+                        </div>
+                        {% if request.address %}
+                            <div class="address-box">
+                                <div class="address-label">
+                                    <i class="fa fa-map-marker-alt"></i>
+                                    Adresse
+                                </div>
+                                <div class="address-text">{{ request.fullAddress }}</div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# DÉTAILS #}
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <i class="fa fa-list"></i>
+                        <h3>Détails de la demande</h3>
+                    </div>
+                    <div class="sidebar-card-body">
+                        <div class="detail-list">
+                            <div class="detail-item">
+                                <span class="detail-label">Lieu de réparation</span>
+                                <span class="location-badge location-{{ request.repairLocation }}">
+                                    <i class="fa fa-{{ request.repairLocation == 'atelier' ? 'store' : 'home' }}"></i>
+                                    {{ request.repairLocationLabel }}
+                                </span>
+                            </div>
+                            {% if request.preferredDate %}
+                                <div class="detail-item">
+                                    <span class="detail-label">Date souhaitée</span>
+                                    <span class="detail-value">{{ request.preferredDate|date('d/m/Y') }}</span>
+                                </div>
+                            {% endif %}
+                            <div class="detail-item">
+                                <span class="detail-label">Urgence</span>
+                                <span class="detail-value">{{ request.urgency ? 'Oui ⚠️' : 'Non' }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Demande créée le</span>
+                                <span class="detail-value">{{ request.createdAt|date('d/m/Y à H:i') }}</span>
+                            </div>
+                            {% if request.updatedAt %}
+                                <div class="detail-item">
+                                    <span class="detail-label">Dernière modification</span>
+                                    <span class="detail-value">{{ request.updatedAt|date('d/m/Y à H:i') }}</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

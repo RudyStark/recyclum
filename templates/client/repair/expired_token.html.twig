@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lien expiré - Recyclum</title>
+    {{ encore_entry_link_tags('client') }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="client-space">
+<div class="client-container">
+    <div class="client-logo">
+        <h1><i class="fa fa-recycle"></i> Recyclum</h1>
+        <p class="tagline">Espace Client</p>
+    </div>
+
+    <div class="client-card">
+        <div class="client-card-body" style="text-align: center; padding: 60px 40px;">
+            <div style="width: 100px; height: 100px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; border: 3px solid rgba(245, 158, 11, 0.3);">
+                <i class="fa fa-clock" style="font-size: 3rem; color: #f59e0b;"></i>
+            </div>
+
+            <h2 style="font-size: 2rem; font-weight: 900; color: #1a2332; margin-bottom: 15px;">
+                Lien expiré
+            </h2>
+
+            <p style="font-size: 1.125rem; color: #6c7783; margin-bottom: 40px; line-height: 1.6;">
+                Le lien de confirmation a expiré. Les liens sont valables pendant 14 jours après leur envoi.
+            </p>
+
+            <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(245, 158, 11, 0.02) 100%); border: 2px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 25px; margin-bottom: 30px; text-align: left;">
+                <h3 style="font-weight: 800; color: #1a2332; margin-bottom: 15px; font-size: 1.125rem;">
+                    📋 Informations de votre demande
+                </h3>
+                <div style="color: #6c7783; line-height: 1.8;">
+                    <div style="margin-bottom: 10px;">
+                        <strong style="color: #1a2332;">N° de demande :</strong> #{{ request.id }}
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong style="color: #1a2332;">Appareil :</strong> {{ request.categoryLabel }}
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong style="color: #1a2332;">Date de la demande :</strong> {{ request.createdAt|date('d/m/Y à H:i') }}
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #fff9e6; border: 2px solid #f59e0b; border-radius: 12px; padding: 20px; margin-bottom: 30px; display: flex; gap: 15px; text-align: left;">
+                <i class="fa fa-exclamation-triangle" style="color: #f59e0b; font-size: 1.5rem; flex-shrink: 0;"></i>
+                <p style="margin: 0; color: #92400e; line-height: 1.6;">
+                    <strong>Pour planifier votre rendez-vous :</strong><br>
+                    Veuillez contacter notre équipe qui vous enverra un nouveau lien de confirmation.
+                </p>
+            </div>
+
+            <div style="background: #f8f9fa; border: 2px solid #e6edf2; border-radius: 12px; padding: 25px; text-align: left;">
+                <h4 style="margin: 0 0 15px 0; color: #1a2332; font-weight: 800; font-size: 1rem;">
+                    📞 Contactez-nous
+                </h4>
+                <p style="margin: 0; color: #6c7783; line-height: 1.6;">
+                    Notre équipe vous aidera à replanifier votre rendez-vous :<br><br>
+                    <strong style="color: #1a2332;">📧 Email :</strong> <a href="mailto:contact@recyclum.fr" style="color: #16C669; text-decoration: none;">contact@recyclum.fr</a><br>
+                    <strong style="color: #1a2332;">📞 Téléphone :</strong> <a href="tel:+33123456789" style="color: #16C669; text-decoration: none;">01 23 45 67 89</a><br><br>
+                    <em style="font-size: 0.9rem;">Merci d'indiquer votre numéro de demande : <strong>#{{ request.id }}</strong></em>
+                </p>
+            </div>
+
+            <p style="margin-top: 40px;">
+                <a href="https://recyclum.fr" style="color: #16C669; text-decoration: none; font-weight: 700;">
+                    <i class="fa fa-arrow-left"></i> Retour au site Recyclum
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+{{ encore_entry_script_tags('client') }}
+</body>
+</html>
