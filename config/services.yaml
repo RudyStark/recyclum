@@ -17,9 +17,12 @@ services:
         resource: '../src/'
 
     # Configuration de la clé API Brevo
-    App\Service\RepairRequestEmailService:
+    App\Service\EmailService:
         arguments:
             $brevoApiKey: '%env(BREVO_API_KEY)%'
+            $senderEmail: 'rudy.saksik@gmail.com'
+            $senderName: 'Recyclum'
+            $adminEmail: 'rudy.saksik@gmail.com'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

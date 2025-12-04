@@ -1,0 +1,21 @@
+/* =========================================================
+   VARIABLES RECYCLUM - CLIENT
+   ========================================================= */
+
+$primary: #16C669;
+$primary-dark: #12A85A;
+$primary-light: #6FDEA7;
+$surface: #FFFFFF;
+$bg: #F6F8FA;
+$border: #E6EDF2;
+$text: #1A2332;
+$text-muted: #6C7783;
+$radius: 12px;
+$shadow: 0 4px 12px rgba(15, 20, 24, 0.1);
+
+/* =========================================================
+   IMPORTS
+   ========================================================= */
+
+@import "client/base";
+@import "client/appointment";

@@ -1,0 +1,366 @@
+/* =========================================================
+   CALENDRIER DES RENDEZ-VOUS ADMIN
+   ========================================================= */
+
+// Timeline
+.appointments-timeline {
+    margin-top: 20px;
+}
+
+.timeline-month-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 0 15px;
+    margin-bottom: 20px;
+    border-bottom: 3px solid $primary;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: $text;
+
+    i {
+        color: $primary;
+        font-size: 1.5rem;
+    }
+}
+
+// Jour
+.timeline-day {
+    margin-bottom: 30px;
+    background: $surface;
+    border: 2px solid $border;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.timeline-day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    background: linear-gradient(135deg, rgba($primary, 0.08) 0%, rgba($primary, 0.02) 100%);
+    border-bottom: 2px solid rgba($primary, 0.2);
+}
+
+.timeline-day-date {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    .day-number {
+        width: 50px;
+        height: 50px;
+        background: $primary;
+        color: white;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 900;
+        box-shadow: 0 4px 12px rgba($primary, 0.3);
+    }
+
+    .day-name {
+        font-size: 1.125rem;
+        font-weight: 800;
+        color: $text;
+    }
+}
+
+.timeline-day-count {
+    padding: 8px 16px;
+    background: white;
+    border: 2px solid $border;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: $text-muted;
+}
+
+// Appointments list
+.timeline-appointments {
+    padding: 20px 25px;
+}
+
+.appointment-card {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    background: $bg;
+    border: 2px solid $border;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    transition: all 0.2s ease;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &:hover {
+        border-color: $primary;
+        box-shadow: 0 4px 12px rgba($primary, 0.15);
+        transform: translateY(-2px);
+    }
+}
+
+.appointment-time {
+    flex-shrink: 0;
+    width: 80px;
+    padding: 15px 10px;
+    background: white;
+    border: 2px solid $primary;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    i {
+        color: $primary;
+        font-size: 1.25rem;
+    }
+
+    span {
+        font-size: 1rem;
+        font-weight: 900;
+        color: $text;
+    }
+}
+
+.appointment-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.appointment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.appointment-client {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.125rem;
+    color: $text;
+
+    i {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+    }
+
+    strong {
+        font-weight: 800;
+    }
+}
+
+.appointment-id {
+    padding: 6px 12px;
+    background: white;
+    border: 2px solid $border;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: $text-muted;
+}
+
+.appointment-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.appointment-detail-item {
+    display: flex;
+    align-items: start;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: $text-muted;
+
+    i {
+        width: 20px;
+        color: $primary;
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+
+    span {
+        flex: 1;
+        line-height: 1.4;
+    }
+}
+
+.appointment-contact {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: white;
+    border: 2px solid $border;
+    border-radius: 8px;
+    color: $text;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    i {
+        color: $primary;
+        font-size: 0.875rem;
+    }
+
+    &:hover {
+        border-color: $primary;
+        background: rgba($primary, 0.05);
+        color: $primary;
+        transform: translateY(-1px);
+    }
+}
+
+.appointment-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 8px;
+    border-top: 1px solid $border;
+}
+
+.btn-appointment-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+
+    i {
+        font-size: 0.875rem;
+    }
+
+    &.btn-view {
+        background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+        color: white;
+        box-shadow: 0 2px 8px rgba($primary, 0.3);
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba($primary, 0.4);
+        }
+    }
+}
+
+.badge-urgent {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #fee;
+    border: 2px solid #ef4444;
+    border-radius: 8px;
+    color: #dc2626;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-left: auto;
+
+    i {
+        font-size: 0.875rem;
+    }
+}
+
+// Empty state
+.empty-state {
+    text-align: center;
+    padding: 80px 40px;
+    color: $text-muted;
+
+    i {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        opacity: 0.3;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: $text;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 1rem;
+        margin: 0;
+    }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .timeline-day-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .appointment-card {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .appointment-time {
+        width: 100%;
+        flex-direction: row;
+        padding: 12px;
+    }
+
+    .appointment-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .appointment-contact {
+        flex-direction: column;
+
+        .contact-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    .appointment-actions {
+        flex-direction: column;
+        align-items: stretch;
+
+        .btn-appointment-action {
+            justify-content: center;
+        }
+
+        .badge-urgent {
+            margin-left: 0;
+            justify-content: center;
+        }
+    }
+}

@@ -3,7 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\RepairRequest;
-use App\Service\RepairRequestEmailService;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +15,7 @@ class RepairRequestController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private RepairRequestEmailService $emailService
+        private EmailService $emailService
     ) {}
 
     #[Route('/repair-requests', name: 'api_repair_request_create', methods: ['POST'])]
@@ -85,17 +85,20 @@ class RepairRequestController extends AbstractController
             $this->entityManager->persist($repairRequest);
             $this->entityManager->flush();
 
-            // Envoyer les emails - AFFICHER L'ERREUR
+            // Envoyer les emails via le service unifié
             try {
-                $this->emailService->sendClientConfirmation($repairRequest);
-                $this->emailService->sendAdminNotification($repairRequest);
+                $this->emailService->sendRepairRequestClientConfirmation($repairRequest);
+                $this->emailService->sendRepairRequestAdminNotification($repairRequest);
             } catch (\Exception $e) {
-                // RETOURNER L'ERREUR POUR LA VOIR
+                // Log l'erreur mais ne bloque pas la réponse
+                error_log('Erreur envoi email: ' . $e->getMessage());
+
                 return $this->json([
-                    'success' => false,
-                    'error' => 'Erreur email: ' . $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
-                ], 500);
+                    'success' => true,
+                    'message' => 'Demande enregistrée avec succès',
+                    'request_id' => $repairRequest->getId(),
+                    'warning' => 'Erreur lors de l\'envoi des emails de confirmation'
+                ], 201);
             }
 
             return $this->json([

@@ -1,0 +1,174 @@
+{% extends 'admin/base_layout.html.twig' %}
+
+{% block title %}Calendrier des rendez-vous{% endblock %}
+
+{% block main %}
+    <div class="index-container">
+        {# HERO HEADER RECYCLUM #}
+        <div class="index-hero">
+            <div class="index-hero-content">
+                <div class="index-hero-icon">
+                    <i class="fa fa-calendar-alt"></i>
+                </div>
+                <div>
+                    <h1 class="index-hero-title">Calendrier des rendez-vous</h1>
+                    <p class="index-hero-subtitle">Visualisez et gérez tous vos rendez-vous planifiés</p>
+                </div>
+            </div>
+        </div>
+
+        {# Stats Cards #}
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-primary">
+                    <i class="fa fa-calendar-check"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.total }}</div>
+                    <div class="stat-label">Total à venir</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-warning">
+                    <i class="fa fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.today }}</div>
+                    <div class="stat-label">Aujourd'hui</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-info">
+                    <i class="fa fa-calendar-week"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.week }}</div>
+                    <div class="stat-label">Cette semaine</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-success">
+                    <i class="fa fa-calendar-day"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.month }}</div>
+                    <div class="stat-label">Ce mois-ci</div>
+                </div>
+            </div>
+        </div>
+
+        {# CALENDRIER #}
+        <div class="data-table-card">
+            <div class="data-table-header">
+                <h2>Rendez-vous planifiés</h2>
+            </div>
+
+            <div class="card-body">
+                {% if appointments is empty %}
+                    <div class="empty-state">
+                        <i class="fa fa-calendar-times"></i>
+                        <h3>Aucun rendez-vous planifié</h3>
+                        <p>Les rendez-vous confirmés par vos clients apparaîtront ici.</p>
+                    </div>
+                {% else %}
+                    <div class="appointments-timeline">
+                        {% set currentMonth = null %}
+                        {% for dateKey, dayAppointments in appointmentsByDate %}
+                            {% set date = dayAppointments[0].appointmentDate %}
+                            {% set monthYear = date|date('F Y') %}
+
+                            {# Affiche le header du mois si changement #}
+                            {% if monthYear != currentMonth %}
+                                {% set currentMonth = monthYear %}
+                                <div class="timeline-month-header">
+                                    <i class="fa fa-calendar-alt"></i>
+                                    <span>{{ monthYear|capitalize }}</span>
+                                </div>
+                            {% endif %}
+
+                            {# Affiche le jour #}
+                            <div class="timeline-day">
+                                <div class="timeline-day-header">
+                                    <div class="timeline-day-date">
+                                        <div class="day-number">{{ date|date('d') }}</div>
+                                        <div class="day-name">{{ date|date('l')|capitalize }}</div>
+                                    </div>
+                                    <div class="timeline-day-count">
+                                        {{ dayAppointments|length }} rendez-vous
+                                    </div>
+                                </div>
+
+                                <div class="timeline-appointments">
+                                    {% for appointment in dayAppointments %}
+                                        {% set request = appointment.repairRequest %}
+                                        <div class="appointment-card">
+                                            <div class="appointment-time">
+                                                <i class="fa fa-clock"></i>
+                                                <span>{{ appointment.appointmentTime|date('H:i') }}</span>
+                                            </div>
+
+                                            <div class="appointment-content">
+                                                <div class="appointment-header">
+                                                    <div class="appointment-client">
+                                                        <i class="fa fa-user"></i>
+                                                        <strong>{{ request.fullName }}</strong>
+                                                    </div>
+                                                    <div class="appointment-id">
+                                                        #{{ request.id }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="appointment-details">
+                                                    <div class="appointment-detail-item">
+                                                        <i class="fa fa-wrench"></i>
+                                                        <span>{{ request.categoryLabel }}{% if request.brand %} - {{ request.brand }}{% if request.model %} {{ request.model }}{% endif %}{% endif %}</span>
+                                                    </div>
+                                                    <div class="appointment-detail-item">
+                                                        <i class="fa fa-map-marker-alt"></i>
+                                                        <span>{{ request.fullAddress }}</span>
+                                                    </div>
+                                                    <div class="appointment-detail-item">
+                                                        <i class="fa fa-exclamation-circle"></i>
+                                                        <span>{{ request.issue }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="appointment-contact">
+                                                    <a href="tel:{{ request.phone }}" class="contact-btn">
+                                                        <i class="fa fa-phone"></i>
+                                                        {{ request.phone }}
+                                                    </a>
+                                                    <a href="mailto:{{ request.email }}" class="contact-btn">
+                                                        <i class="fa fa-envelope"></i>
+                                                        {{ request.email }}
+                                                    </a>
+                                                </div>
+
+                                                <div class="appointment-actions">
+                                                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\RepairRequestCrudController').setAction('repairRequestShow').set('id', request.id).generateUrl() }}"
+                                                       class="btn-appointment-action btn-view">
+                                                        <i class="fa fa-eye"></i>
+                                                        Voir la demande
+                                                    </a>
+                                                    {% if request.urgency %}
+                                                        <span class="badge-urgent">
+                                                            <i class="fa fa-exclamation-triangle"></i>
+                                                            URGENT
+                                                        </span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

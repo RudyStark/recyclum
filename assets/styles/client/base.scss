@@ -1,0 +1,181 @@
+/* =========================================================
+   BASE ESPACE CLIENT - RECYCLUM
+   ========================================================= */
+
+// Reset minimal pour l'espace Client
+body.client-space {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #f6f8fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+}
+
+// Container global
+.client-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+// Logo Recyclum
+.client-logo {
+    text-align: center;
+    margin-bottom: 40px;
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: $primary;
+        margin: 0;
+
+        i {
+            margin-right: 0.5rem;
+        }
+    }
+
+    .tagline {
+        font-size: 0.95rem;
+        color: $text-muted;
+        margin-top: 0.5rem;
+    }
+}
+
+// Cards génériques
+.client-card {
+    background: $surface;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.client-card-header {
+    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+    color: white;
+    padding: 30px;
+
+    h2 {
+        margin: 0 0 10px 0;
+        font-size: 1.75rem;
+        font-weight: 900;
+    }
+
+    p {
+        margin: 0;
+        opacity: 0.95;
+        font-size: 1rem;
+    }
+}
+
+.client-card-body {
+    padding: 40px;
+}
+
+// Step indicator
+.step-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: $text;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    background: $primary;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 900;
+    flex-shrink: 0;
+}
+
+// Buttons
+.btn-client-primary {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 800;
+    font-size: 1.125rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba($primary, 0.3);
+
+    i {
+        margin-right: 0.5rem;
+    }
+
+    &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba($primary, 0.4);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+// Alert boxes
+.client-alert-success {
+    background: linear-gradient(135deg, rgba($primary, 0.08) 0%, rgba($primary, 0.02) 100%);
+    border: 2px solid rgba($primary, 0.3);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.client-alert-warning {
+    background: #fff9e6;
+    border: 2px solid #f59e0b;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: start;
+
+    i {
+        color: #f59e0b;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    p {
+        margin: 0;
+        color: #92400e;
+        line-height: 1.6;
+    }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .client-container {
+        padding: 20px 15px;
+    }
+
+    .client-logo h1 {
+        font-size: 2rem;
+    }
+
+    .client-card-header {
+        padding: 20px;
+
+        h2 {
+            font-size: 1.5rem;
+        }
+    }
+
+    .client-card-body {
+        padding: 25px 20px;
+    }
+}

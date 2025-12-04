@@ -58,6 +58,24 @@
             </a>
         </div>
 
+        {# SECTION: REQUETE #}
+        <div class="menu-section">
+            <div class="menu-section-title">REQUETES</div>
+
+            <a href="{{ ea_url().setController('App\\Controller\\Admin\\RepairRequestCrudController').setAction('repairRequestIndex').generateUrl() }}"
+               class="menu-item {% if app.request.query.get('crudControllerFqcn') == 'App\\Controller\\Admin\\RepairRequestCrudController' %}active{% endif %}">
+                <i class="fa fa-wrench menu-icon"></i>
+                <span class="menu-label">Demandes réparation</span>
+            </a>
+
+            <a href="{{ ea_url().setController('App\\Controller\\Admin\\RepairRequestCrudController').setAction('appointmentsCalendar').generateUrl() }}"
+               class="menu-item {% if app.request.query.get('crudAction') == 'appointmentsCalendar' %}active{% endif %}">
+                <i class="fa fa-calendar-alt menu-icon"></i>
+                <span class="menu-label">Calendrier RDV</span>
+            </a>
+
+        </div>
+
         {# SECTION: COMPTE #}
         <div class="menu-section">
             <div class="menu-section-title">COMPTE</div>

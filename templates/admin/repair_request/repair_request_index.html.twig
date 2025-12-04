@@ -1,0 +1,174 @@
+{% extends 'admin/base_layout.html.twig' %}
+
+{% block body_class 'admin-index-pro' %}
+
+{% block main %}
+    <div class="index-container">
+        {# HERO HEADER #}
+        <div class="index-hero">
+            <div class="index-hero-content">
+                <div class="index-hero-icon">
+                    <i class="fa fa-wrench"></i>
+                </div>
+                <div>
+                    <h1 class="index-hero-title">Demandes de réparation</h1>
+                    <p class="index-hero-subtitle">Gérez les demandes de réparation de vos clients</p>
+                </div>
+            </div>
+        </div>
+
+        {# STATS CARDS #}
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-primary">
+                    <i class="fa fa-clipboard-list"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.total }}</div>
+                    <div class="stat-label">Total demandes</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-warning">
+                    <i class="fa fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.pending }}</div>
+                    <div class="stat-label">En attente</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
+                    <i class="fa fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.urgent }}</div>
+                    <div class="stat-label">Urgentes</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-success">
+                    <i class="fa fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.completed }}</div>
+                    <div class="stat-label">Terminées</div>
+                </div>
+            </div>
+        </div>
+
+        {# DATA TABLE #}
+        <div class="data-table-card">
+            <div class="data-table-header">
+                <h2>Liste des demandes</h2>
+                <div class="data-table-actions">
+                    <button class="btn-outline" onclick="window.location.reload()">
+                        <i class="fa fa-sync"></i>
+                        Actualiser
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>CLIENT</th>
+                        <th>APPAREIL</th>
+                        <th>PROBLÈME</th>
+                        <th>LIEU</th>
+                        <th>DATE DEMANDE</th>
+                        <th>STATUT</th>
+                        <th class="text-end">ACTIONS</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for request in requests %}
+                        <tr>
+                            <td>
+                                <span class="id-badge">#{{ request.id }}</span>
+                            </td>
+                            <td>
+                                <div class="client-cell">
+                                    <div class="client-icon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <div class="client-info">
+                                        <div class="client-name">{{ request.fullName }}</div>
+                                        <div class="client-contact">
+                                            <i class="fa fa-envelope"></i>
+                                            {{ request.email }}
+                                        </div>
+                                        <div class="client-contact">
+                                            <i class="fa fa-phone"></i>
+                                            {{ request.phone }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="appliance-cell">
+                                    <div class="appliance-category">{{ request.categoryLabel }}</div>
+                                    {% if request.brand %}
+                                        <div class="appliance-brand">{{ request.brand }}{% if request.model %} - {{ request.model }}{% endif %}</div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="issue-cell">
+                                    <div class="issue-title">{{ request.issue }}</div>
+                                    {% if request.urgency %}
+                                        <span class="urgency-badge">
+                                                <i class="fa fa-exclamation-triangle"></i>
+                                                Urgent
+                                            </span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                    <span class="location-badge location-{{ request.repairLocation }}">
+                                        <i class="fa fa-{{ request.repairLocation == 'atelier' ? 'store' : 'home' }}"></i>
+                                        {{ request.repairLocationLabel }}
+                                    </span>
+                            </td>
+                            <td>
+                                <div class="date-badge">
+                                    {{ request.createdAt|date('d/m/Y') }}<br>
+                                    <span style="font-size: 0.75rem; opacity: 0.7;">{{ request.createdAt|date('H:i') }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                    <span class="status-badge status-{{ request.status }}">
+                                        {{ request.statusLabel }}
+                                    </span>
+                            </td>
+                            <td class="text-end">
+                                <div class="action-buttons">
+                                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\RepairRequestCrudController').setAction('repairRequestShow').set('id', request.id).generateUrl() }}"
+                                       class="btn-action btn-action-view">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8">
+                                <div class="empty-state">
+                                    <i class="fa fa-inbox"></i>
+                                    <h3>Aucune demande</h3>
+                                    <p>Aucune demande de réparation n'a été reçue pour le moment.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

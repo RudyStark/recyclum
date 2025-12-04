@@ -82,6 +82,15 @@ class RepairRequest
         $this->updatedAt = new \DateTimeImmutable();
     }
 
+    #[ORM\Column(length: 64, unique: true, nullable: true)]
+    private ?string $confirmationToken = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $tokenCreatedAt = null;
+
+    #[ORM\OneToOne(mappedBy: 'repairRequest', targetEntity: RepairAppointment::class, cascade: ['persist', 'remove'])]
+    private ?RepairAppointment $appointment = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -334,5 +343,70 @@ class RepairRequest
         ];
 
         return $labels[$this->status] ?? $this->status;
+    }
+
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken(?string $confirmationToken): static
+    {
+        $this->confirmationToken = $confirmationToken;
+        return $this;
+    }
+
+    public function getAppointment(): ?RepairAppointment
+    {
+        return $this->appointment;
+    }
+
+    public function setAppointment(?RepairAppointment $appointment): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($appointment === null && $this->appointment !== null) {
+            $this->appointment->setRepairRequest(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($appointment !== null && $appointment->getRepairRequest() !== $this) {
+            $appointment->setRepairRequest($this);
+        }
+
+        $this->appointment = $appointment;
+        return $this;
+    }
+
+    public function getTokenCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->tokenCreatedAt;
+    }
+
+    public function setTokenCreatedAt(?\DateTimeImmutable $tokenCreatedAt): static
+    {
+        $this->tokenCreatedAt = $tokenCreatedAt;
+        return $this;
+    }
+
+    public function generateConfirmationToken(): string
+    {
+        $this->confirmationToken = bin2hex(random_bytes(32));
+        $this->tokenCreatedAt = new \DateTimeImmutable();
+        return $this->confirmationToken;
+    }
+
+    public function isTokenExpired(): bool
+    {
+        if (!$this->tokenCreatedAt) {
+            return true;
+        }
+
+        $expirationDate = $this->tokenCreatedAt->modify('+14 days');
+        return new \DateTimeImmutable() > $expirationDate;
+    }
+
+    public function hasAppointment(): bool
+    {
+        return $this->appointment !== null;
     }
 }

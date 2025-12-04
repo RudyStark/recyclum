@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\BuybackRequest;
 use App\Service\BuybackCalculator;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +16,8 @@ class BuybackRequestController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private BuybackCalculator $calculator
+        private BuybackCalculator $calculator,
+        private EmailService $emailService
     ) {}
 
     #[Route('/buyback-requests', name: 'api_buyback_request_create', methods: ['POST'])]
@@ -111,9 +113,9 @@ class BuybackRequestController extends AbstractController
             $this->entityManager->persist($buybackRequest);
             $this->entityManager->flush();
 
-            // TODO: Envoyer les emails de confirmation
-            // $this->emailService->sendClientConfirmation($buybackRequest);
-            // $this->emailService->sendAdminNotification($buybackRequest);
+            // TODO: Créer les méthodes dans EmailService pour les buybacks
+            // $this->emailService->sendBuybackRequestClientConfirmation($buybackRequest);
+            // $this->emailService->sendBuybackRequestAdminNotification($buybackRequest);
 
             return $this->json([
                 'success' => true,
