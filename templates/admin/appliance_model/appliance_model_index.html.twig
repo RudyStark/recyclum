@@ -1,0 +1,260 @@
+{% extends 'admin/base_layout.html.twig' %}
+{% block body_class 'admin-index-pro' %}
+
+{% block content_title %}{% endblock %}
+{% block page_actions %}{% endblock %}
+{% block content_header_wrapper %}{% endblock %}
+
+{% block main %}
+    <div class="index-container">
+        {# HERO HEADER #}
+        <div class="index-hero">
+            <div class="index-hero-content">
+                <div class="index-hero-icon">
+                    <i class="fa fa-database"></i>
+                </div>
+                <div>
+                    <h1 class="index-hero-title">Modèles d'électroménager</h1>
+                    <p class="index-hero-subtitle">Base de données des appareils pour le calculateur de rachat</p>
+                </div>
+            </div>
+            <div class="index-hero-actions">
+                <a href="{{ ea_url().setController('App\\Controller\\Admin\\ApplianceModelCrudController').setAction('newModel').generateUrl() }}" class="btn-hero-primary">
+                    <i class="fa fa-plus"></i>
+                    <span>Ajouter un modèle</span>
+                </a>
+            </div>
+        </div>
+
+        {# STATS CARDS #}
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-primary">
+                    <i class="fa fa-database"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ total_items }}</div>
+                    <div class="stat-label">Modèles actifs</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-success">
+                    <i class="fa fa-tags"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ total_categories }}</div>
+                    <div class="stat-label">Catégories</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-warning">
+                    <i class="fa fa-copyright"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ total_brands }}</div>
+                    <div class="stat-label">Marques</div>
+                </div>
+            </div>
+        </div>
+
+        {# TABLEAU MODÈLES #}
+        <div class="data-table-card" data-controller="admin--toggle">
+            <div class="data-table-header">
+                <h2>Liste des modèles</h2>
+                <div class="data-table-actions">
+                    <button class="btn-outline" data-action="click->admin--toggle#toggleFilters">
+                        <i class="fa fa-filter"></i>
+                        Filtres
+                    </button>
+                </div>
+            </div>
+
+            {# PANNEAU FILTRES #}
+            <div class="filters-panel" data-admin--toggle-target="panel" style="display: none;">
+                <form method="get" class="filters-form">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label for="search">Recherche</label>
+                            <input type="text" id="search" name="search" class="form-control" placeholder="Référence, nom, marque..." value="{{ filters.search }}">
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="category">Catégorie</label>
+                            <select id="category" name="category" class="form-control">
+                                <option value="">Toutes les catégories</option>
+                                <option value="lave-linge" {% if filters.category == 'lave-linge' %}selected{% endif %}>Lave-linge</option>
+                                <option value="refrigerateur" {% if filters.category == 'refrigerateur' %}selected{% endif %}>Réfrigérateur</option>
+                                <option value="four" {% if filters.category == 'four' %}selected{% endif %}>Four</option>
+                                <option value="lave-vaisselle" {% if filters.category == 'lave-vaisselle' %}selected{% endif %}>Lave-vaisselle</option>
+                                <option value="seche-linge" {% if filters.category == 'seche-linge' %}selected{% endif %}>Sèche-linge</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="brand">Marque</label>
+                            <select id="brand" name="brand" class="form-control">
+                                <option value="">Toutes les marques</option>
+                                <option value="miele" {% if filters.brand == 'miele' %}selected{% endif %}>Miele</option>
+                                <option value="bosch" {% if filters.brand == 'bosch' %}selected{% endif %}>Bosch</option>
+                                <option value="samsung" {% if filters.brand == 'samsung' %}selected{% endif %}>Samsung</option>
+                                <option value="lg" {% if filters.brand == 'lg' %}selected{% endif %}>LG</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="tier">Gamme</label>
+                            <select id="tier" name="tier" class="form-control">
+                                <option value="">Toutes les gammes</option>
+                                <option value="premium" {% if filters.tier == 'premium' %}selected{% endif %}>Premium</option>
+                                <option value="standard" {% if filters.tier == 'standard' %}selected{% endif %}>Standard</option>
+                                <option value="entry" {% if filters.tier == 'entry' %}selected{% endif %}>Entrée de gamme</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button type="submit" class="btn-filter-apply">
+                            <i class="fa fa-check"></i>
+                            Appliquer les filtres
+                        </button>
+                        <a href="?" class="btn-filter-reset">
+                            <i class="fa fa-times"></i>
+                            Réinitialiser
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th width="60">
+                            <input type="checkbox" class="form-check-input">
+                        </th>
+                        <th>Catégorie</th>
+                        <th>Marque</th>
+                        <th>Référence</th>
+                        <th>Nom du modèle</th>
+                        <th width="80">Année</th>
+                        <th width="120">Gamme</th>
+                        <th width="200" class="text-end">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for model in models %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="form-check-input">
+                            </td>
+                            <td>
+                                <span class="badge" style="background-color: #3498db; color: white; padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;">
+                                    {{ model.categoryLabel }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="brand-badge">{{ model.brand|capitalize }}</span>
+                            </td>
+                            <td>
+                                <code style="background: #f8f9fa; padding: 3px 8px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 12px; color: #16C669; font-weight: 600; border: 1px solid #e9ecef;">
+                                    {{ model.modelReference }}
+                                </code>
+                            </td>
+                            <td>
+                                <div class="product-title">{{ model.modelName }}</div>
+                            </td>
+                            <td>
+                                <span class="date-badge">{{ model.releaseYear }}</span>
+                            </td>
+                            <td>
+                                {% set tier_config = {
+                                    'premium': { color: '#FFD700', icon: '⭐', label: 'Premium' },
+                                    'standard': { color: '#3498db', icon: '●', label: 'Standard' },
+                                    'entry': { color: '#95a5a6', icon: '○', label: 'Entrée' }
+                                } %}
+                                {% set config = tier_config[model.tier] ?? tier_config.standard %}
+                                <span class="badge" style="background-color: {{ config.color }}; color: #2c3e50; padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;">
+                                    {{ config.icon }} {{ config.label }}
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <div class="action-buttons">
+                                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\ApplianceModelCrudController').setAction('editModel').setEntityId(model.id).generateUrl() }}" class="btn-action btn-action-edit" title="Modifier">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <form method="post" action="{{ path('admin_appliance_model_delete', {id: model.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce modèle ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ model.id) }}">
+                                        <button type="submit" class="btn-action btn-action-delete" title="Supprimer">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center py-5">
+                                <div class="empty-state">
+                                    <i class="fa fa-database"></i>
+                                    <h3>Aucun modèle</h3>
+                                    <p>Commencez par référencer votre premier modèle</p>
+                                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\ApplianceModelCrudController').setAction('newModel').generateUrl() }}" class="btn-hero-primary mt-3">
+                                        <i class="fa fa-plus"></i>
+                                        Ajouter un modèle
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {# PAGINATION #}
+            {% if total_pages > 1 %}
+                <div class="pagination-wrapper">
+                    <div class="pagination-info">
+                        Affichage de {{ (current_page - 1) * per_page + 1 }} à {{ min(current_page * per_page, total_items) }} sur {{ total_items }} résultats
+                    </div>
+                    <nav class="pagination-nav">
+                        <ul class="pagination">
+                            {% if current_page > 1 %}
+                                <li class="page-item">
+                                    <a href="?page={{ current_page - 1 }}" class="page-link">
+                                        <i class="fa fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% for page in 1..total_pages %}
+                                {% if page == current_page %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page }}</span>
+                                    </li>
+                                {% elseif page == 1 or page == total_pages or (page >= current_page - 2 and page <= current_page + 2) %}
+                                    <li class="page-item">
+                                        <a href="?page={{ page }}" class="page-link">{{ page }}</a>
+                                    </li>
+                                {% elseif page == current_page - 3 or page == current_page + 3 %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if current_page < total_pages %}
+                                <li class="page-item">
+                                    <a href="?page={{ current_page + 1 }}" class="page-link">
+                                        <i class="fa fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

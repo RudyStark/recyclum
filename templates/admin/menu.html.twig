@@ -58,14 +58,17 @@
             </a>
         </div>
 
-        {# SECTION: REQUETE #}
+        {# SECTION: RÉPARATION #}
         <div class="menu-section">
-            <div class="menu-section-title">REQUETES</div>
+            <div class="menu-section-title">RÉPARATION</div>
 
             <a href="{{ ea_url().setController('App\\Controller\\Admin\\RepairRequestCrudController').setAction('repairRequestIndex').generateUrl() }}"
                class="menu-item {% if app.request.query.get('crudControllerFqcn') == 'App\\Controller\\Admin\\RepairRequestCrudController' %}active{% endif %}">
                 <i class="fa fa-wrench menu-icon"></i>
                 <span class="menu-label">Demandes réparation</span>
+                {% if pending_repair_count is defined and pending_repair_count > 0 %}
+                    <span class="menu-badge">{{ pending_repair_count }}</span>
+                {% endif %}
             </a>
 
             <a href="{{ ea_url().setController('App\\Controller\\Admin\\RepairRequestCrudController').setAction('appointmentsCalendar').generateUrl() }}"
@@ -73,7 +76,29 @@
                 <i class="fa fa-calendar-alt menu-icon"></i>
                 <span class="menu-label">Calendrier RDV</span>
             </a>
+        </div>
 
+        {# SECTION: RACHAT #}
+        <div class="menu-section">
+            <div class="menu-section-title">RACHAT</div>
+
+            <a href="{{ ea_url().setController('App\\Controller\\Admin\\ApplianceModelCrudController').setAction('index').generateUrl() }}"
+               class="menu-item {% if app.request.query.get('crudControllerFqcn') == 'App\\Controller\\Admin\\ApplianceModelCrudController' %}active{% endif %}">
+                <i class="fa fa-database menu-icon"></i>
+                <span class="menu-label">Modèles d'appareils</span>
+                {% if total_models_count is defined and total_models_count > 0 %}
+                    <span class="menu-badge menu-badge-success">{{ total_models_count }}</span>
+                {% endif %}
+            </a>
+
+            <a href="{{ ea_url().setController('App\\Controller\\Admin\\BuybackRequestCrudController').setAction('index').generateUrl() }}"
+               class="menu-item {% if app.request.query.get('crudControllerFqcn') == 'App\\Controller\\Admin\\BuybackRequestCrudController' %}active{% endif %}">
+                <i class="fa fa-shopping-cart menu-icon"></i>
+                <span class="menu-label">Demandes de rachat</span>
+                {% if pending_buyback_count is defined and pending_buyback_count > 0 %}
+                    <span class="menu-badge">{{ pending_buyback_count }}</span>
+                {% endif %}
+            </a>
         </div>
 
         {# SECTION: COMPTE #}

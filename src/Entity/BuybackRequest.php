@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class BuybackRequest
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'IDENTITY')] // ← Important pour PostgreSQL
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
@@ -25,28 +25,37 @@ class BuybackRequest
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $model = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $purchaseYear = null; // Ex: "2022-2023"
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $serialNumber = null;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $purchaseYear = null;
 
     #[ORM\Column]
     private ?bool $hasInvoice = false;
 
     // === ÉTAT DE L'APPAREIL ===
     #[ORM\Column(length: 50)]
-    private ?string $functionalState = null; // parfait, panne-legere, hors-service, pieces
+    private ?string $functionalCondition = null; // perfect, working, minor_issues, major_issues, not_working
 
     #[ORM\Column(length: 50)]
-    private ?string $aestheticState = null; // tres-bon, bon, usage, tres-usage
+    private ?string $aestheticCondition = null; // excellent, good, fair, poor, very_poor
 
     #[ORM\Column]
     private ?bool $hasAllAccessories = true;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $additionalComments = null;
+    private ?string $defectsDescription = null;
 
     // === PHOTOS ===
-    #[ORM\Column(type: Types::JSON)]
-    private array $photos = [];
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo1 = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo2 = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo3 = null;
 
     // === COORDONNÉES CLIENT ===
     #[ORM\Column(length: 100)]
@@ -65,43 +74,21 @@ class BuybackRequest
     private ?string $address = null;
 
     #[ORM\Column(length: 10)]
-    private ?string $zipCode = null;
+    private ?string $postalCode = null;
 
     #[ORM\Column(length: 100)]
     private ?string $city = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
-    private ?string $floor = null;
-
-    #[ORM\Column]
-    private ?bool $hasElevator = false;
-
     // === PAIEMENT ===
     #[ORM\Column(length: 20)]
-    private ?string $paymentMethod = null; // virement ou especes
+    private ?string $paymentMethod = null; // virement, cheque, especes
 
     #[ORM\Column(length: 34, nullable: true)]
     private ?string $iban = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $accountHolder = null;
-
-    // === DISPONIBILITÉS ===
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $preferredDate = null;
-
-    #[ORM\Column(type: Types::JSON)]
-    private array $timeSlots = []; // ["matin", "apres-midi", "flexible"]
-
     // === ESTIMATION ===
     #[ORM\Column(nullable: true)]
-    private ?int $estimatedPriceMin = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $estimatedPriceMax = null;
-
-    #[ORM\Column(type: Types::JSON, nullable: true)]
-    private ?array $calculationDetails = null;
+    private ?int $estimatedPrice = null;
 
     // === STATUT ===
     #[ORM\Column(length: 50)]
@@ -109,6 +96,9 @@ class BuybackRequest
 
     #[ORM\Column(nullable: true)]
     private ?int $finalPrice = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $notes = null;
 
     // === DATES ===
     #[ORM\Column]
@@ -148,6 +138,23 @@ class BuybackRequest
         return $this;
     }
 
+    public function getCategoryLabel(): string
+    {
+        return match($this->category) {
+            'lave-linge' => 'Lave-linge',
+            'refrigerateur' => 'Réfrigérateur',
+            'four' => 'Four',
+            'lave-vaisselle' => 'Lave-vaisselle',
+            'seche-linge' => 'Sèche-linge',
+            'micro-ondes' => 'Micro-ondes',
+            'cuisiniere' => 'Cuisinière',
+            'cave-a-vin' => 'Cave à vin',
+            'hotte' => 'Hotte',
+            'petit-electromenager' => 'Petit électroménager',
+            default => ucfirst($this->category)
+        };
+    }
+
     public function getBrand(): ?string
     {
         return $this->brand;
@@ -170,12 +177,23 @@ class BuybackRequest
         return $this;
     }
 
-    public function getPurchaseYear(): ?string
+    public function getSerialNumber(): ?string
+    {
+        return $this->serialNumber;
+    }
+
+    public function setSerialNumber(?string $serialNumber): static
+    {
+        $this->serialNumber = $serialNumber;
+        return $this;
+    }
+
+    public function getPurchaseYear(): ?int
     {
         return $this->purchaseYear;
     }
 
-    public function setPurchaseYear(string $purchaseYear): static
+    public function setPurchaseYear(int $purchaseYear): static
     {
         $this->purchaseYear = $purchaseYear;
         return $this;
@@ -192,26 +210,50 @@ class BuybackRequest
         return $this;
     }
 
-    public function getFunctionalState(): ?string
+    public function getFunctionalCondition(): ?string
     {
-        return $this->functionalState;
+        return $this->functionalCondition;
     }
 
-    public function setFunctionalState(string $functionalState): static
+    public function setFunctionalCondition(string $functionalCondition): static
     {
-        $this->functionalState = $functionalState;
+        $this->functionalCondition = $functionalCondition;
         return $this;
     }
 
-    public function getAestheticState(): ?string
+    public function getFunctionalConditionLabel(): string
     {
-        return $this->aestheticState;
+        return match($this->functionalCondition) {
+            'perfect' => 'Parfait état',
+            'working' => 'Fonctionne bien',
+            'minor_issues' => 'Petits problèmes',
+            'major_issues' => 'Gros problèmes',
+            'not_working' => 'Ne fonctionne pas',
+            default => 'Non spécifié'
+        };
     }
 
-    public function setAestheticState(string $aestheticState): static
+    public function getAestheticCondition(): ?string
     {
-        $this->aestheticState = $aestheticState;
+        return $this->aestheticCondition;
+    }
+
+    public function setAestheticCondition(string $aestheticCondition): static
+    {
+        $this->aestheticCondition = $aestheticCondition;
         return $this;
+    }
+
+    public function getAestheticConditionLabel(): string
+    {
+        return match($this->aestheticCondition) {
+            'excellent' => 'Comme neuf',
+            'good' => 'Bon état',
+            'fair' => 'État correct',
+            'poor' => 'Usagé',
+            'very_poor' => 'Très usagé',
+            default => 'Non spécifié'
+        };
     }
 
     public function isHasAllAccessories(): ?bool
@@ -225,25 +267,47 @@ class BuybackRequest
         return $this;
     }
 
-    public function getAdditionalComments(): ?string
+    public function getDefectsDescription(): ?string
     {
-        return $this->additionalComments;
+        return $this->defectsDescription;
     }
 
-    public function setAdditionalComments(?string $additionalComments): static
+    public function setDefectsDescription(?string $defectsDescription): static
     {
-        $this->additionalComments = $additionalComments;
+        $this->defectsDescription = $defectsDescription;
         return $this;
     }
 
-    public function getPhotos(): array
+    public function getPhoto1(): ?string
     {
-        return $this->photos;
+        return $this->photo1;
     }
 
-    public function setPhotos(array $photos): static
+    public function setPhoto1(?string $photo1): static
     {
-        $this->photos = $photos;
+        $this->photo1 = $photo1;
+        return $this;
+    }
+
+    public function getPhoto2(): ?string
+    {
+        return $this->photo2;
+    }
+
+    public function setPhoto2(?string $photo2): static
+    {
+        $this->photo2 = $photo2;
+        return $this;
+    }
+
+    public function getPhoto3(): ?string
+    {
+        return $this->photo3;
+    }
+
+    public function setPhoto3(?string $photo3): static
+    {
+        $this->photo3 = $photo3;
         return $this;
     }
 
@@ -307,14 +371,14 @@ class BuybackRequest
         return $this;
     }
 
-    public function getZipCode(): ?string
+    public function getPostalCode(): ?string
     {
-        return $this->zipCode;
+        return $this->postalCode;
     }
 
-    public function setZipCode(string $zipCode): static
+    public function setPostalCode(string $postalCode): static
     {
-        $this->zipCode = $zipCode;
+        $this->postalCode = $postalCode;
         return $this;
     }
 
@@ -331,36 +395,7 @@ class BuybackRequest
 
     public function getFullAddress(): string
     {
-        $address = $this->address . ', ' . $this->zipCode . ' ' . $this->city;
-        if ($this->floor) {
-            $address .= ' - ' . $this->floor;
-        }
-        if ($this->hasElevator) {
-            $address .= ' (avec ascenseur)';
-        }
-        return $address;
-    }
-
-    public function getFloor(): ?string
-    {
-        return $this->floor;
-    }
-
-    public function setFloor(?string $floor): static
-    {
-        $this->floor = $floor;
-        return $this;
-    }
-
-    public function isHasElevator(): ?bool
-    {
-        return $this->hasElevator;
-    }
-
-    public function setHasElevator(bool $hasElevator): static
-    {
-        $this->hasElevator = $hasElevator;
-        return $this;
+        return $this->address . ', ' . $this->postalCode . ' ' . $this->city;
     }
 
     public function getPaymentMethod(): ?string
@@ -374,6 +409,16 @@ class BuybackRequest
         return $this;
     }
 
+    public function getPaymentMethodLabel(): string
+    {
+        return match($this->paymentMethod) {
+            'virement' => 'Virement bancaire',
+            'cheque' => 'Chèque',
+            'especes' => 'Espèces',
+            default => 'Non spécifié'
+        };
+    }
+
     public function getIban(): ?string
     {
         return $this->iban;
@@ -385,78 +430,23 @@ class BuybackRequest
         return $this;
     }
 
-    public function getAccountHolder(): ?string
+    public function getEstimatedPrice(): ?int
     {
-        return $this->accountHolder;
+        return $this->estimatedPrice;
     }
 
-    public function setAccountHolder(?string $accountHolder): static
+    public function setEstimatedPrice(?int $estimatedPrice): static
     {
-        $this->accountHolder = $accountHolder;
+        $this->estimatedPrice = $estimatedPrice;
         return $this;
     }
 
-    public function getPreferredDate(): ?\DateTimeInterface
+    public function getEstimatedPriceFormatted(): string
     {
-        return $this->preferredDate;
-    }
-
-    public function setPreferredDate(?\DateTimeInterface $preferredDate): static
-    {
-        $this->preferredDate = $preferredDate;
-        return $this;
-    }
-
-    public function getTimeSlots(): array
-    {
-        return $this->timeSlots;
-    }
-
-    public function setTimeSlots(array $timeSlots): static
-    {
-        $this->timeSlots = $timeSlots;
-        return $this;
-    }
-
-    public function getEstimatedPriceMin(): ?int
-    {
-        return $this->estimatedPriceMin;
-    }
-
-    public function setEstimatedPriceMin(?int $estimatedPriceMin): static
-    {
-        $this->estimatedPriceMin = $estimatedPriceMin;
-        return $this;
-    }
-
-    public function getEstimatedPriceMax(): ?int
-    {
-        return $this->estimatedPriceMax;
-    }
-
-    public function setEstimatedPriceMax(?int $estimatedPriceMax): static
-    {
-        $this->estimatedPriceMax = $estimatedPriceMax;
-        return $this;
-    }
-
-    public function getEstimatedPriceRange(): string
-    {
-        if (!$this->estimatedPriceMin || !$this->estimatedPriceMax) {
+        if (!$this->estimatedPrice) {
             return 'Non estimé';
         }
-        return $this->estimatedPriceMin . '€ - ' . $this->estimatedPriceMax . '€';
-    }
-
-    public function getCalculationDetails(): ?array
-    {
-        return $this->calculationDetails;
-    }
-
-    public function setCalculationDetails(?array $calculationDetails): static
-    {
-        $this->calculationDetails = $calculationDetails;
-        return $this;
+        return number_format($this->estimatedPrice, 0, ',', ' ') . ' €';
     }
 
     public function getStatus(): ?string
@@ -473,7 +463,7 @@ class BuybackRequest
     public function getStatusLabel(): string
     {
         return match($this->status) {
-            'pending' => 'En attente de validation',
+            'pending' => 'En attente',
             'validated' => 'Validée',
             'collected' => 'Collectée',
             'paid' => 'Payée',
@@ -490,6 +480,17 @@ class BuybackRequest
     public function setFinalPrice(?int $finalPrice): static
     {
         $this->finalPrice = $finalPrice;
+        return $this;
+    }
+
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+
+    public function setNotes(?string $notes): static
+    {
+        $this->notes = $notes;
         return $this;
     }
 
@@ -513,22 +514,5 @@ class BuybackRequest
     {
         $this->updatedAt = $updatedAt;
         return $this;
-    }
-
-    public function getCategoryLabel(): string
-    {
-        return match($this->category) {
-            'lave-linge' => 'Lave-linge',
-            'refrigerateur' => 'Réfrigérateur',
-            'four' => 'Four',
-            'lave-vaisselle' => 'Lave-vaisselle',
-            'seche-linge' => 'Sèche-linge',
-            'micro-ondes' => 'Micro-ondes',
-            'cuisiniere' => 'Cuisinière',
-            'cave-a-vin' => 'Cave à vin',
-            'hotte' => 'Hotte',
-            'petit-electromenager' => 'Petit électroménager',
-            default => ucfirst($this->category)
-        };
     }
 }

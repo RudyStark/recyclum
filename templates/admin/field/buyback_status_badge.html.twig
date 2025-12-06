@@ -1,0 +1,15 @@
+{% set status_config = {
+    'pending': { 'label': 'En attente', 'color': '#f39c12', 'icon': 'fa-clock' },
+    'validated': { 'label': 'Validée', 'color': '#3498db', 'icon': 'fa-check' },
+    'collected': { 'label': 'Collectée', 'color': '#9b59b6', 'icon': 'fa-truck' },
+    'paid': { 'label': 'Payée', 'color': '#27ae60', 'icon': 'fa-euro-sign' },
+    'cancelled': { 'label': 'Annulée', 'color': '#95a5a6', 'icon': 'fa-times' }
+} %}
+
+{% set status_value = value ?? field_value ?? 'pending' %}
+{% set config = status_config[status_value] ?? status_config['pending'] %}
+
+<span class="badge" style="background-color: {{ config.color }}; color: white; padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+    <i class="fa {{ config.icon }}"></i>
+    {{ config.label }}
+</span>

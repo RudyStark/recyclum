@@ -1,0 +1,338 @@
+{% extends 'admin/base_layout.html.twig' %}
+{% block body_class 'product-form-pro' %}
+
+{% block content_title %}{% endblock %}
+{% block page_actions %}{% endblock %}
+{% block content_header_wrapper %}{% endblock %}
+
+{% block main %}
+    <div class="form-container">
+        {# BREADCRUMB #}
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\BuybackRequestCrudController').setAction('index').generateUrl() }}">
+                        <i class="fa fa-shopping-cart"></i> Demandes de rachat
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">Demande #{{ request.id }}</li>
+            </ol>
+        </nav>
+
+        {# HERO HEADER #}
+        <div class="form-hero-section">
+            <div class="hero-icon">
+                <i class="fa fa-eye"></i>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title">{{ request.fullName }}</h1>
+                <p class="hero-subtitle">{{ request.categoryLabel }} • {{ request.brand|capitalize }} {{ request.model }} • Demande #{{ request.id }}</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            {# COLONNE PRINCIPALE #}
+            <div class="col-lg-8">
+                {# STATUT ET DATE #}
+                <div class="form-panel mb-4">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <i class="fa fa-info-circle"></i> Informations générales
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label">Statut</label>
+                                {% set status_config = {
+                                    'pending': { 'label': 'En attente', 'color': '#f39c12', 'icon': 'fa-clock' },
+                                    'validated': { 'label': 'Validée', 'color': '#3498db', 'icon': 'fa-check' },
+                                    'collected': { 'label': 'Collectée', 'color': '#9b59b6', 'icon': 'fa-truck' },
+                                    'paid': { 'label': 'Payée', 'color': '#27ae60', 'icon': 'fa-euro-sign' },
+                                    'cancelled': { 'label': 'Annulée', 'color': '#95a5a6', 'icon': 'fa-times' }
+                                } %}
+                                {% set config = status_config[request.status] ?? status_config['pending'] %}
+                                <div>
+                                    <span class="badge" style="background-color: {{ config.color }}; color: white; padding: 8px 14px; border-radius: 12px; font-size: 13px; display: inline-flex; align-items: center; gap: 8px;">
+                                        <i class="fa {{ config.icon }}"></i>
+                                        {{ config.label }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Date de demande</label>
+                                <input type="text" class="form-control" value="{{ request.createdAt|date('d/m/Y à H:i') }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# INFORMATIONS APPAREIL #}
+                <div class="form-panel mb-4">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <i class="fa fa-tv"></i> Appareil
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label">Catégorie</label>
+                                <input type="text" class="form-control" value="{{ request.categoryLabel }}" readonly>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Marque</label>
+                                <input type="text" class="form-control" value="{{ request.brand|capitalize }}" readonly>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Modèle / Référence</label>
+                                <input type="text" class="form-control" value="{{ request.model ?? 'N/A' }}" readonly>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Numéro de série</label>
+                                <input type="text" class="form-control" value="{{ request.serialNumber ?? 'N/A' }}" readonly>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Année d'achat</label>
+                                <input type="text" class="form-control" value="{{ request.purchaseYear }}" readonly>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Facture d'achat</label>
+                                <input type="text" class="form-control" value="{{ request.isHasInvoice ? '✓ Oui (+10%)' : '✗ Non' }}" readonly style="{% if request.isHasInvoice %}color: #16C669; font-weight: 600;{% endif %}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# ÉTAT #}
+                <div class="form-panel mb-4">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <i class="fa fa-wrench"></i> État de l'appareil
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label">État fonctionnel</label>
+                                <input type="text" class="form-control" value="{{ request.functionalConditionLabel }}" readonly>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">État esthétique</label>
+                                <input type="text" class="form-control" value="{{ request.aestheticConditionLabel }}" readonly>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Accessoires complets</label>
+                                <input type="text" class="form-control" value="{{ request.isHasAllAccessories ? '✓ Oui' : '✗ Non (−10%)' }}" readonly style="{% if not request.isHasAllAccessories %}color: #e74c3c; font-weight: 600;{% else %}color: #16C669; font-weight: 600;{% endif %}">
+                            </div>
+                            {% if request.defectsDescription %}
+                                <div class="col-12">
+                                    <label class="form-label">Description des défauts</label>
+                                    <textarea class="form-control" rows="3" readonly>{{ request.defectsDescription }}</textarea>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {# PHOTOS #}
+                <div class="form-panel mb-4">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <i class="fa fa-camera"></i> Photos
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row g-3">
+                            {% if request.photo1 %}
+                                <div class="col-4">
+                                    <div style="position: relative;">
+                                        <img src="{{ request.photo1 }}" alt="Photo 1" class="img-fluid rounded" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer;" onclick="window.open(this.src, '_blank')">
+                                        <div style="position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px;">
+                                            Photo 1
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if request.photo2 %}
+                                <div class="col-4">
+                                    <div style="position: relative;">
+                                        <img src="{{ request.photo2 }}" alt="Photo 2" class="img-fluid rounded" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer;" onclick="window.open(this.src, '_blank')">
+                                        <div style="position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px;">
+                                            Photo 2
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if request.photo3 %}
+                                <div class="col-4">
+                                    <div style="position: relative;">
+                                        <img src="{{ request.photo3 }}" alt="Photo 3" class="img-fluid rounded" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer;" onclick="window.open(this.src, '_blank')">
+                                        <div style="position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px;">
+                                            Photo 3
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% if not request.photo1 and not request.photo2 and not request.photo3 %}
+                            <div class="text-center text-muted py-3">
+                                <i class="fa fa-image"></i> Aucune photo
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# CLIENT #}
+                <div class="form-panel mb-4">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <i class="fa fa-user"></i> Coordonnées client
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label">Prénom</label>
+                                <input type="text" class="form-control" value="{{ request.firstName }}" readonly>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Nom</label>
+                                <input type="text" class="form-control" value="{{ request.lastName }}" readonly>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Email</label>
+                                <div class="input-group">
+                                    <input type="email" class="form-control" value="{{ request.email }}" readonly>
+                                    <a href="mailto:{{ request.email }}" class="btn btn-outline-secondary" title="Envoyer un email">
+                                        <i class="fa fa-envelope"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Téléphone</label>
+                                <div class="input-group">
+                                    <input type="tel" class="form-control" value="{{ request.phone }}" readonly>
+                                    <a href="tel:{{ request.phone }}" class="btn btn-outline-secondary" title="Appeler">
+                                        <i class="fa fa-phone"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Adresse complète</label>
+                                <textarea class="form-control" rows="2" readonly>{{ request.fullAddress }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# PAIEMENT #}
+                <div class="form-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <i class="fa fa-credit-card"></i> Informations de paiement
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">Mode de paiement</label>
+                                <input type="text" class="form-control" value="{{ request.paymentMethodLabel }}" readonly>
+                            </div>
+                            {% if request.iban %}
+                                <div class="col-12">
+                                    <label class="form-label">IBAN</label>
+                                    <input type="text" class="form-control" value="{{ request.iban }}" readonly style="font-family: 'Courier New', monospace;">
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# SIDEBAR #}
+            <div class="col-lg-4">
+                {# ESTIMATION #}
+                <div class="form-panel mb-4" style="background: linear-gradient(135deg, #16C669 0%, #12A85A 100%); color: white;">
+                    <div class="panel-header" style="border-bottom-color: rgba(255,255,255,0.2);">
+                        <h2 class="panel-title" style="color: white;">
+                            <i class="fa fa-calculator"></i> Estimation
+                        </h2>
+                    </div>
+                    <div class="panel-body text-center">
+                        <div class="mb-2" style="font-size: 0.9rem; opacity: 0.9;">Prix estimé</div>
+                        <div style="font-size: 2.5rem; font-weight: 900; margin: 1rem 0;">
+                            {{ request.estimatedPrice|number_format(0, ',', ' ') }} €
+                        </div>
+                        <div style="background: rgba(255,255,255,0.15); padding: 0.75rem; border-radius: 8px; font-size: 0.85rem; margin-top: 1rem;">
+                            <i class="fa fa-info-circle"></i> Prix définitif après validation sur place
+                        </div>
+
+                        {% if request.finalPrice %}
+                            <hr style="border-color: rgba(255,255,255,0.2); margin: 1.5rem 0;">
+                            <div class="mb-2" style="font-size: 0.9rem; opacity: 0.9;">Prix final validé</div>
+                            <div style="font-size: 2rem; font-weight: 900;">
+                                {{ request.finalPrice|number_format(0, ',', ' ') }} €
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# ACTIONS RAPIDES #}
+                <div class="form-panel mb-4">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <i class="fa fa-bolt"></i> Actions rapides
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="d-grid gap-2">
+                            <a href="mailto:{{ request.email }}" class="btn btn-outline-primary">
+                                <i class="fa fa-envelope"></i> Envoyer un email
+                            </a>
+                            <a href="tel:{{ request.phone }}" class="btn btn-outline-success">
+                                <i class="fa fa-phone"></i> Appeler le client
+                            </a>
+                            <button class="btn btn-outline-secondary" onclick="window.print()">
+                                <i class="fa fa-print"></i> Imprimer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {# NOTES #}
+                <div class="form-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <i class="fa fa-sticky-note"></i> Notes internes
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        {% if request.notes %}
+                            <textarea class="form-control" rows="5" readonly>{{ request.notes }}</textarea>
+                        {% else %}
+                            <div class="text-center text-muted py-3">
+                                <i class="fa fa-file-o"></i> Aucune note
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# FOOTER ACTIONS #}
+        <div class="form-actions mt-4">
+            <a href="{{ ea_url().setController('App\\Controller\\Admin\\BuybackRequestCrudController').setAction('index').generateUrl() }}" class="btn btn-outline-secondary">
+                <i class="fa fa-arrow-left"></i> Retour à la liste
+            </a>
+            <div>
+                <form method="post" action="{{ path('admin_buyback_request_delete', {id: request.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette demande ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ request.id) }}">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-trash"></i> Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

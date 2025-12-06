@@ -1,0 +1,24 @@
+{% extends 'admin/base_layout.html.twig' %}
+{% block body_class 'admin-index-pro' %}
+
+{% block content_title %}{% endblock %}
+{% block page_actions %}{% endblock %}
+{% block content_header_wrapper %}{% endblock %}
+
+{% block main %}
+    <div class="index-container">
+        {# HERO HEADER #}
+        <div class="form-hero-section">
+            <div class="hero-icon">
+                <i class="fa fa-eye"></i>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title">{{ entity.fullName }}</h1>
+                <p class="hero-subtitle">{{ entity.categoryLabel }} • {{ entity.tierLabel }} • {{ entity.releaseYear }}</p>
+            </div>
+        </div>
+
+        {# CONTENU EASYADMIN PAR DÉFAUT #}
+        {{ parent() }}
+    </div>
+{% endblock %}
