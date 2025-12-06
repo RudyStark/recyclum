@@ -1,0 +1,150 @@
+{% extends 'admin/base_layout.html.twig' %}
+
+{% block body_class 'product-form-pro' %}
+
+{% block content_title %}{% endblock %}
+{% block page_actions %}{% endblock %}
+{% block content_header_wrapper %}{% endblock %}
+
+{% block main %}
+    <div class="modern-product-form">
+        {# HERO HEADER #}
+        <div class="form-hero-section">
+            <div class="hero-icon">
+                <i class="fa fa-database"></i>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    {% if is_edit %}
+                        Modifier le modèle
+                    {% else %}
+                        Ajouter un modèle
+                    {% endif %}
+                </h1>
+                <p class="hero-subtitle">Référencement d'un appareil pour le calculateur de rachat</p>
+            </div>
+        </div>
+
+        {# LAYOUT 2 COLONNES #}
+        <div class="form-layout">
+            {# COLONNE PRINCIPALE #}
+            <div class="form-main-column">
+                {{ form_start(form, {'action': current_url, 'method': 'POST'}) }}
+
+                {# SECTION 1: Identification #}
+                <div class="form-panel">
+                    <div class="form-panel-header">
+                        <div class="form-panel-icon">
+                            <i class="fa fa-info-circle"></i>
+                        </div>
+                        <div class="form-panel-title">
+                            <h2>Identification du modèle</h2>
+                        </div>
+                    </div>
+                    <p class="form-panel-help">Catégorie, marque et référence unique</p>
+
+                    <div class="form-panel-body">
+                        <div style="grid-column: span 6;">
+                            {{ form_row(form.category) }}
+                        </div>
+                        <div style="grid-column: span 6;">
+                            {{ form_row(form.brand) }}
+                        </div>
+                        <div style="grid-column: span 6;">
+                            {{ form_row(form.modelReference) }}
+                        </div>
+                        <div style="grid-column: span 6;">
+                            {{ form_row(form.modelName) }}
+                        </div>
+                    </div>
+                </div>
+
+                {# SECTION 2: Gamme et année #}
+                <div class="form-panel">
+                    <div class="form-panel-header">
+                        <div class="form-panel-icon">
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="form-panel-title">
+                            <h2>Gamme et année</h2>
+                        </div>
+                    </div>
+                    <p class="form-panel-help">Positionnement et année de sortie</p>
+
+                    <div class="form-panel-body">
+                        <div style="grid-column: span 6;">
+                            {{ form_row(form.tier) }}
+                        </div>
+                        <div style="grid-column: span 6;">
+                            {{ form_row(form.releaseYear) }}
+                        </div>
+                        <div style="grid-column: span 12;">
+                            <div class="product-form-published">
+                                <label>Statut</label>
+                                <div class="switch-container">
+                                    {{ form_widget(form.isActive, {'attr': {'class': 'switch-input'}}) }}
+                                    <label for="{{ form.isActive.vars.id }}" class="switch-label">
+                                        <span class="switch-button"></span>
+                                        <span class="switch-text">Actif dans le calculateur</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# BOUTONS CACHÉS #}
+                <div class="hidden-form-buttons">
+                    <button type="submit" name="save_and_return" value="1" id="btn-save-return" class="hidden-btn">Save and Return</button>
+                    <button type="submit" name="save_and_add" value="1" id="btn-save-add" class="hidden-btn">Save and Add</button>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+
+            {# SIDEBAR #}
+            <div class="form-sidebar">
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <i class="fa fa-bolt"></i>
+                        <h3>Actions rapides</h3>
+                    </div>
+                    <div class="sidebar-card-body">
+                        <button type="button" onclick="document.getElementById('btn-save-return').click()" class="sidebar-btn sidebar-btn-primary">
+                            <i class="fa fa-check"></i>
+                            <span>Enregistrer et fermer</span>
+                        </button>
+
+                        <button type="button" onclick="document.getElementById('btn-save-add').click()" class="sidebar-btn sidebar-btn-secondary">
+                            <i class="fa fa-plus"></i>
+                            <span>Enregistrer et ajouter</span>
+                        </button>
+
+                        <a href="{{ ea_url().setController('App\\Controller\\Admin\\ApplianceModelCrudController').setAction('index').generateUrl() }}" class="sidebar-btn sidebar-btn-ghost">
+                            <i class="fa fa-times"></i>
+                            <span>Annuler</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <i class="fa fa-info-circle"></i>
+                        <h3>Aide</h3>
+                    </div>
+                    <div class="sidebar-card-body">
+                        <p>Les champs avec <span class="required-badge">*</span> sont obligatoires.</p>
+                        <p>La référence du modèle doit être unique.</p>
+                        {% if is_edit %}
+                            <hr style="margin: 1rem 0; border: none; border-top: 1px solid #e6edf2;">
+                            <p><strong>Modèle #{{ model.id }}</strong></p>
+                            <p style="font-size: 0.875rem; color: #6c7783;">
+                                Créé le {{ model.createdAt|date('d/m/Y à H:i') }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

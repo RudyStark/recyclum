@@ -1,0 +1,5 @@
+{% if value %}
+    <img src="{{ value }}" alt="Photo" style="max-width: 200px; max-height: 200px; border-radius: 8px; object-fit: cover;">
+{% else %}
+    <span class="text-muted">Aucune photo</span>
+{% endif %}

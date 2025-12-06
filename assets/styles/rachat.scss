@@ -16,13 +16,18 @@
 
     /* Cartes d'état (spécifique rachat) */
     .state-card {
-        padding: 1.25rem;
+        padding: 1.5rem 1.25rem;
         background: #FFFFFF;
         border: 2px solid #E6EDF2;
         border-radius: 16px;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         text-align: center;
         height: 100%;
+        min-height: 180px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         position: relative;
         overflow: hidden;
 
@@ -32,7 +37,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 3px;
+            height: 4px;
             background: linear-gradient(90deg, #16C669 0%, #6FDEA7 100%);
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -40,66 +45,19 @@
 
         &:hover {
             border-color: #16C669;
-            box-shadow: 0 6px 20px rgba(22, 198, 105, 0.15);
-            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(22, 198, 105, 0.15);
+            transform: translateY(-4px);
         }
 
         &.selected {
             border-color: #16C669;
             background: linear-gradient(135deg, rgba(22, 198, 105, 0.08) 0%, rgba(22, 198, 105, 0.02) 100%);
-            box-shadow: 0 6px 24px rgba(22, 198, 105, 0.25);
-            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(22, 198, 105, 0.25);
+            transform: translateY(-4px);
 
             &::before {
                 opacity: 1;
             }
-
-            &::after {
-                content: '✓';
-                position: absolute;
-                top: 8px;
-                right: 8px;
-                width: 24px;
-                height: 24px;
-                background: #16C669;
-                color: white;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-weight: 700;
-                font-size: 0.85rem;
-            }
-        }
-    }
-
-    /* Cartes de paiement (spécifique rachat) */
-    .payment-card {
-        display: block;
-        cursor: pointer;
-        border: 2px solid #E6EDF2;
-        border-radius: 16px;
-        background: #FFFFFF;
-        transition: all 0.3s ease;
-        height: 100%;
-        position: relative;
-
-        input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        &:hover {
-            border-color: #16C669;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(22, 198, 105, 0.12);
-        }
-
-        &.selected {
-            border-color: #16C669;
-            background: linear-gradient(135deg, rgba(22, 198, 105, 0.08) 0%, rgba(22, 198, 105, 0.02) 100%);
-            box-shadow: 0 15px 40px rgba(22, 198, 105, 0.2);
 
             &::after {
                 content: '✓';
@@ -116,7 +74,313 @@
                 justify-content: center;
                 font-weight: 700;
                 font-size: 1rem;
+                box-shadow: 0 2px 8px rgba(22, 198, 105, 0.3);
             }
+        }
+
+        i {
+            transition: transform 0.3s ease;
+        }
+
+        &:hover i {
+            transform: scale(1.1);
+        }
+
+        /* COULEURS PAR ÉTAT */
+
+        /* Perfect / Working - Vert */
+        &[data-state="perfect"],
+        &[data-state="working"] {
+            background: linear-gradient(135deg, rgba(22, 198, 105, 0.06) 0%, rgba(22, 198, 105, 0.02) 100%);
+
+            &:hover {
+                background: linear-gradient(135deg, rgba(22, 198, 105, 0.1) 0%, rgba(22, 198, 105, 0.04) 100%);
+            }
+
+            &.selected {
+                background: linear-gradient(135deg, rgba(22, 198, 105, 0.12) 0%, rgba(22, 198, 105, 0.05) 100%);
+            }
+        }
+
+        /* Minor issues - Orange */
+        &[data-state="minor_issues"] {
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.06) 0%, rgba(255, 165, 0, 0.02) 100%);
+
+            &:hover {
+                background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(255, 165, 0, 0.04) 100%);
+            }
+
+            &.selected {
+                background: linear-gradient(135deg, rgba(255, 165, 0, 0.12) 0%, rgba(255, 165, 0, 0.05) 100%);
+                border-color: #FFA500;
+
+                &::before {
+                    background: linear-gradient(90deg, #FFA500 0%, #FFB84D 100%);
+                }
+
+                &::after {
+                    background: #FFA500;
+                }
+            }
+        }
+
+        /* Major issues - Rouge clair */
+        &[data-state="major_issues"] {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.06) 0%, rgba(255, 107, 107, 0.02) 100%);
+
+            &:hover {
+                background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0.04) 100%);
+            }
+
+            &.selected {
+                background: linear-gradient(135deg, rgba(255, 107, 107, 0.12) 0%, rgba(255, 107, 107, 0.05) 100%);
+                border-color: #FF6B6B;
+
+                &::before {
+                    background: linear-gradient(90deg, #FF6B6B 0%, #FF8E8E 100%);
+                }
+
+                &::after {
+                    background: #FF6B6B;
+                }
+            }
+        }
+
+        /* Not working - Rouge foncé */
+        &[data-state="not_working"] {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.06) 0%, rgba(220, 53, 69, 0.02) 100%);
+
+            &:hover {
+                background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.04) 100%);
+            }
+
+            &.selected {
+                background: linear-gradient(135deg, rgba(220, 53, 69, 0.12) 0%, rgba(220, 53, 69, 0.05) 100%);
+                border-color: #DC3545;
+
+                &::before {
+                    background: linear-gradient(90deg, #DC3545 0%, #E4606F 100%);
+                }
+
+                &::after {
+                    background: #DC3545;
+                }
+            }
+        }
+
+        /* Excellent - Or */
+        &[data-state="excellent"] {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.06) 0%, rgba(255, 215, 0, 0.02) 100%);
+
+            &:hover {
+                background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.04) 100%);
+            }
+
+            &.selected {
+                background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, rgba(255, 215, 0, 0.05) 100%);
+                border-color: #FFD700;
+
+                &::before {
+                    background: linear-gradient(90deg, #FFD700 0%, #FFDF4D 100%);
+                }
+
+                &::after {
+                    background: #FFD700;
+                }
+            }
+        }
+
+        /* Good - Vert */
+        &[data-state="good"] {
+            background: linear-gradient(135deg, rgba(22, 198, 105, 0.06) 0%, rgba(22, 198, 105, 0.02) 100%);
+
+            &:hover {
+                background: linear-gradient(135deg, rgba(22, 198, 105, 0.1) 0%, rgba(22, 198, 105, 0.04) 100%);
+            }
+
+            &.selected {
+                background: linear-gradient(135deg, rgba(22, 198, 105, 0.12) 0%, rgba(22, 198, 105, 0.05) 100%);
+            }
+        }
+
+        /* Fair - Bleu */
+        &[data-state="fair"] {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.06) 0%, rgba(52, 152, 219, 0.02) 100%);
+
+            &:hover {
+                background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.04) 100%);
+            }
+
+            &.selected {
+                background: linear-gradient(135deg, rgba(52, 152, 219, 0.12) 0%, rgba(52, 152, 219, 0.05) 100%);
+                border-color: #3498DB;
+
+                &::before {
+                    background: linear-gradient(90deg, #3498DB 0%, #5DADE2 100%);
+                }
+
+                &::after {
+                    background: #3498DB;
+                }
+            }
+        }
+
+        /* Poor - Gris */
+        &[data-state="poor"] {
+            background: linear-gradient(135deg, rgba(149, 165, 166, 0.06) 0%, rgba(149, 165, 166, 0.02) 100%);
+
+            &:hover {
+                background: linear-gradient(135deg, rgba(149, 165, 166, 0.1) 0%, rgba(149, 165, 166, 0.04) 100%);
+            }
+
+            &.selected {
+                background: linear-gradient(135deg, rgba(149, 165, 166, 0.12) 0%, rgba(149, 165, 166, 0.05) 100%);
+                border-color: #95A5A6;
+
+                &::before {
+                    background: linear-gradient(90deg, #95A5A6 0%, #ABB7B8 100%);
+                }
+
+                &::after {
+                    background: #95A5A6;
+                }
+            }
+        }
+
+        /* Very poor - Gris foncé */
+        &[data-state="very_poor"] {
+            background: linear-gradient(135deg, rgba(127, 140, 141, 0.06) 0%, rgba(127, 140, 141, 0.02) 100%);
+
+            &:hover {
+                background: linear-gradient(135deg, rgba(127, 140, 141, 0.1) 0%, rgba(127, 140, 141, 0.04) 100%);
+            }
+
+            &.selected {
+                background: linear-gradient(135deg, rgba(127, 140, 141, 0.12) 0%, rgba(127, 140, 141, 0.05) 100%);
+                border-color: #7F8C8D;
+
+                &::before {
+                    background: linear-gradient(90deg, #7F8C8D 0%, #95A5A6 100%);
+                }
+
+                &::after {
+                    background: #7F8C8D;
+                }
+            }
+        }
+    }
+
+    /* Select personnalisé */
+    .form-select {
+        border: 2px solid #E6EDF2;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #FFFFFF;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2316C669' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        background-size: 16px 12px;
+
+        &:focus {
+            border-color: #16C669;
+            box-shadow: 0 0 0 0.25rem rgba(22, 198, 105, 0.15);
+            outline: 0;
+        }
+
+        &:disabled {
+            background-color: #F6F8FA;
+            border-color: #E6EDF2;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        option {
+            padding: 0.5rem;
+
+            &:hover {
+                background-color: rgba(22, 198, 105, 0.1);
+            }
+        }
+    }
+
+    /* Input disabled state */
+    .form-control:disabled {
+        background-color: #F6F8FA;
+        border-color: #E6EDF2;
+        cursor: not-allowed;
+        opacity: 0.6;
+        color: #6C7783;
+    }
+
+    /* Alert warning pour marque non sélectionnée */
+    .alert-warning {
+        background: linear-gradient(135deg, rgba(255, 165, 0, 0.08) 0%, rgba(255, 165, 0, 0.02) 100%);
+        border: 1px solid rgba(255, 165, 0, 0.2);
+        border-left: 4px solid #FFA500;
+        border-radius: 12px;
+        color: #0F1418;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+
+        i {
+            color: #FFA500;
+        }
+    }
+
+    /* Cartes de paiement (spécifique rachat) */
+    .payment-card {
+        display: block;
+        cursor: pointer;
+        border: 2px solid #E6EDF2;
+        border-radius: 16px;
+        background: #FFFFFF;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 100%;
+        position: relative;
+
+        input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        &:hover {
+            border-color: #16C669;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(22, 198, 105, 0.15);
+        }
+
+        &.selected {
+            border-color: #16C669;
+            background: linear-gradient(135deg, rgba(22, 198, 105, 0.08) 0%, rgba(22, 198, 105, 0.02) 100%);
+            box-shadow: 0 16px 40px rgba(22, 198, 105, 0.2);
+            transform: translateY(-3px);
+
+            &::after {
+                content: '✓';
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                width: 32px;
+                height: 32px;
+                background: #16C669;
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                font-size: 1.1rem;
+                box-shadow: 0 2px 8px rgba(22, 198, 105, 0.3);
+            }
+        }
+
+        i {
+            transition: transform 0.3s ease;
+        }
+
+        &:hover i {
+            transform: scale(1.1);
         }
     }
 
@@ -125,11 +389,11 @@
         cursor: pointer;
         display: block;
         margin: 0;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
 
         > div {
             border: 2px dashed #E6EDF2 !important;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         &:hover {
@@ -137,26 +401,135 @@
 
             > div {
                 border-color: #16C669 !important;
-                background: rgba(22, 198, 105, 0.03) !important;
+                background: rgba(22, 198, 105, 0.05) !important;
             }
+
+            i {
+                transform: scale(1.1);
+                color: #12A85A !important;
+            }
+        }
+
+        i {
+            transition: all 0.3s ease;
         }
     }
 
+    /* Miniatures photos */
     img {
         border: 2px solid #E6EDF2;
-        transition: border-color 0.2s ease;
+        transition: all 0.3s ease;
 
         &:hover {
             border-color: #16C669;
+            transform: scale(1.05);
+        }
+    }
+
+    /* Bouton suppression photo */
+    button[style*="position: absolute"] {
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: rgba(220, 53, 69, 1) !important;
+            transform: scale(1.1);
+        }
+    }
+
+    /* Autocomplete suggestions - Amélioration */
+    .model-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 2px solid #16C669;
+        border-radius: 12px;
+        margin-top: 8px;
+        max-height: 280px;
+        overflow-y: auto;
+        z-index: 1000;
+        box-shadow: 0 12px 32px rgba(22, 198, 105, 0.2);
+
+        /* Scrollbar personnalisée */
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #F6F8FA;
+            border-radius: 0 12px 12px 0;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #16C669;
+            border-radius: 4px;
+
+            &:hover {
+                background: #12A85A;
+            }
+        }
+
+        .suggestion-item {
+            padding: 14px 18px;
+            cursor: pointer;
+            border-bottom: 1px solid #F6F8FA;
+            transition: all 0.2s ease;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            &:hover {
+                background: linear-gradient(135deg, rgba(22, 198, 105, 0.08) 0%, rgba(22, 198, 105, 0.02) 100%);
+
+                .suggestion-reference {
+                    color: #12A85A;
+                    transform: translateX(4px);
+                }
+            }
+
+            .suggestion-reference {
+                font-weight: 700;
+                color: #16C669;
+                font-size: 1rem;
+                transition: all 0.2s ease;
+                display: inline-block;
+            }
+
+            .suggestion-details {
+                font-size: 0.9rem;
+                color: #6C7783;
+                margin-top: 4px;
+                line-height: 1.4;
+
+                .badge {
+                    font-size: 0.7rem;
+                    padding: 0.2rem 0.5rem;
+                    vertical-align: middle;
+                }
+            }
+        }
+
+        /* État vide */
+        &:empty::after {
+            content: 'Aucun modèle trouvé';
+            display: block;
+            padding: 1rem;
+            text-align: center;
+            color: #6C7783;
+            font-size: 0.9rem;
         }
     }
 
     /* Alerts (spécifique rachat) */
     .alert-info {
         background: linear-gradient(135deg, rgba(22, 198, 105, 0.08) 0%, rgba(22, 198, 105, 0.02) 100%);
+        border: 1px solid rgba(22, 198, 105, 0.2);
         border-left: 4px solid #16C669;
         border-radius: 12px;
         color: #0F1418;
+        padding: 1.25rem;
 
         i {
             color: #16C669;
@@ -165,18 +538,91 @@
 
     .alert-light {
         background: #F8FAFB;
+        border: 1px solid #E6EDF2;
         border-left: 4px solid #E6EDF2;
         border-radius: 12px;
+        padding: 1rem;
+    }
+
+    .alert-warning {
+        background: linear-gradient(135deg, rgba(255, 165, 0, 0.08) 0%, rgba(255, 165, 0, 0.02) 100%);
+        border: 1px solid rgba(255, 165, 0, 0.2);
+        border-left: 4px solid #FFA500;
+        border-radius: 12px;
+        color: #0F1418;
+        padding: 1.25rem;
+
+        i {
+            color: #FFA500;
+        }
     }
 
     /* Badges (spécifique rachat) */
     .badge.bg-primary {
-        background: #16C669 !important;
+        background: linear-gradient(135deg, #16C669 0%, #12A85A 100%) !important;
+        padding: 0.35rem 0.75rem;
+        font-weight: 600;
+        border-radius: 6px;
     }
 
     .badge.bg-secondary {
         background: #E8ECF0 !important;
         color: #0F1418 !important;
+        padding: 0.35rem 0.75rem;
+        font-weight: 600;
+        border-radius: 6px;
+    }
+
+    /* Messages de succès */
+    .success-message {
+        text-align: center;
+        padding: 2rem;
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s ease;
+        }
+
+        h3 {
+            color: #16C669;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-20px);
+        }
+        60% {
+            transform: translateY(-10px);
+        }
+    }
+
+    /* Validation états */
+    .form-control:invalid {
+        border-color: #DC3545;
+    }
+
+    .form-control:valid {
+        border-color: #16C669;
+    }
+
+    /* Switch personnalisé */
+    .form-check-input {
+        &:checked {
+            background-color: #16C669;
+            border-color: #16C669;
+        }
+
+        &:focus {
+            border-color: #16C669;
+            box-shadow: 0 0 0 0.25rem rgba(22, 198, 105, 0.25);
+        }
     }
 }
 
@@ -211,6 +657,7 @@
             background: linear-gradient(135deg, #16C669 0%, #12A85A 100%);
             color: #FFFFFF;
             font-weight: 700;
+            font-size: 0.95rem;
         }
 
         @media (max-width: 768px) {
@@ -229,12 +676,13 @@
                 content: attr(data-label);
                 font-weight: 600;
                 margin-right: 0.5rem;
+                color: #6C7783;
             }
         }
     }
 
     .pricing-value {
-        font-size: 1.125rem;
+        font-size: 1.25rem;
         font-weight: 700;
         color: #16C669;
         justify-content: flex-end;
@@ -251,13 +699,14 @@
     gap: 1rem;
     padding: 1.25rem 1.5rem;
     background: linear-gradient(135deg, rgba(22, 198, 105, 0.05) 0%, rgba(22, 198, 105, 0.02) 100%);
+    border: 1px solid rgba(22, 198, 105, 0.2);
     border-left: 4px solid #16C669;
     border-radius: 12px;
 
     .alert-icon {
         flex-shrink: 0;
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -282,11 +731,47 @@
    RESPONSIVE RACHAT
    ============================================ */
 
+@media (max-width: 991.98px) {
+    .buyback-form {
+        .state-card {
+            min-height: 160px;
+        }
+    }
+}
+
 @media (max-width: 767.98px) {
     .buyback-form {
         .state-card {
             padding: 1rem;
+            min-height: 140px;
             font-size: 0.9rem;
+
+            i {
+                font-size: 2rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+
+            .fw-bold {
+                font-size: 0.9rem;
+            }
+        }
+
+        .payment-card {
+            i {
+                font-size: 1.75rem !important;
+            }
+        }
+    }
+}
+
+@media (max-width: 575.98px) {
+    .buyback-form {
+        .state-card {
+            min-height: 120px;
+        }
+
+        .row.g-3 {
+            gap: 0.75rem !important;
         }
     }
 }

@@ -3,144 +3,181 @@ import React, { useState, useEffect } from 'react';
 // ============================================
 // CATÉGORIES D'APPAREILS
 // ============================================
+// ============================================
+// CATÉGORIES D'APPAREILS - ICÔNES PRO
+// ============================================
 const CATEGORIES = [
     {
         id: 'lave-linge',
         name: 'Lave-linge',
-        icon: 'bi-moisture',
-        description: 'Machine à laver, sèche-linge'
+        icon: 'bi-tsunami', // Vagues pour eau
+        description: 'Machine à laver'
     },
     {
         id: 'refrigerateur',
         name: 'Réfrigérateur',
-        icon: 'bi-snow',
+        icon: 'bi-snow2', // Flocon pour froid
         description: 'Frigo, congélateur, combi'
     },
     {
         id: 'four',
         name: 'Four',
-        icon: 'bi-fire',
+        icon: 'bi-fire', // Flamme
         description: 'Four encastrable, cuisinière'
     },
     {
         id: 'lave-vaisselle',
         name: 'Lave-vaisselle',
-        icon: 'bi-cup-hot',
+        icon: 'bi-droplet-half', // Goutte pour eau
         description: 'Tous types de lave-vaisselle'
     },
     {
         id: 'seche-linge',
         name: 'Sèche-linge',
-        icon: 'bi-wind',
+        icon: 'bi-wind', // Vent pour séchage
         description: 'Condensation, évacuation'
     },
     {
         id: 'cuisiniere',
         name: 'Cuisinière',
-        icon: 'bi-grid-3x3',
+        icon: 'bi-grid-3x3-gap', // Grille pour plaques
         description: 'Cuisinière, piano de cuisson'
     },
     {
         id: 'micro-ondes',
         name: 'Micro-ondes',
-        icon: 'bi-radioactive',
+        icon: 'bi-lightning-charge', // Éclair pour micro-ondes
         description: 'Micro-ondes classique ou grill'
     },
     {
         id: 'cave-a-vin',
         name: 'Cave à vin',
-        icon: 'bi-cup-straw',
+        icon: 'bi-heart-pulse', // Température contrôlée
         description: 'Cave de service ou vieillissement'
     },
     {
         id: 'hotte',
         name: 'Hotte',
-        icon: 'bi-fan',
+        icon: 'bi-fan', // Ventilateur
         description: 'Hotte aspirante, décor'
     },
     {
         id: 'petit-electromenager',
         name: 'Petit électroménager',
-        icon: 'bi-cup',
+        icon: 'bi-cup-hot', // Tasse chaude
         description: 'Robot, cafetière, bouilloire'
     }
 ];
 
 // ============================================
-// OPTIONS D'ANNÉE D'ACHAT
+// MARQUES DISPONIBLES
 // ============================================
-const PURCHASE_YEARS = [
-    { value: '2024-2025', label: '2024-2025 (moins de 2 ans)' },
-    { value: '2022-2023', label: '2022-2023 (2-3 ans)' },
-    { value: '2020-2021', label: '2020-2021 (4-5 ans)' },
-    { value: '2018-2019', label: '2018-2019 (6-7 ans)' },
-    { value: '2015-2017', label: '2015-2017 (8-10 ans)' },
-    { value: 'avant-2015', label: 'Avant 2015 (plus de 10 ans)' }
+const BRANDS = [
+    { value: 'miele', label: 'Miele' },
+    { value: 'bosch', label: 'Bosch' },
+    { value: 'siemens', label: 'Siemens' },
+    { value: 'samsung', label: 'Samsung' },
+    { value: 'lg', label: 'LG' },
+    { value: 'whirlpool', label: 'Whirlpool' },
+    { value: 'electrolux', label: 'Electrolux' },
+    { value: 'aeg', label: 'AEG' },
+    { value: 'liebherr', label: 'Liebherr' },
+    { value: 'beko', label: 'Beko' },
+    { value: 'candy', label: 'Candy' },
+    { value: 'indesit', label: 'Indesit' },
+    { value: 'hotpoint', label: 'Hotpoint' },
+    { value: 'haier', label: 'Haier' },
+    { value: 'smeg', label: 'Smeg' },
+    { value: 'brandt', label: 'Brandt' }
 ];
 
 // ============================================
-// ÉTATS FONCTIONNELS
+// ÉTATS FONCTIONNELS - ICÔNES PRO
 // ============================================
 const FUNCTIONAL_STATES = [
     {
-        value: 'parfait',
+        value: 'perfect',
         label: 'Fonctionne parfaitement',
-        icon: '✅',
+        icon: 'bi-check-circle-fill',
+        iconColor: '#16C669',
         description: 'Aucun défaut de fonctionnement',
         priceImpact: '100%'
     },
     {
-        value: 'panne-legere',
-        label: 'Panne légère',
-        icon: '⚠️',
-        description: 'Défaut mineur réparable',
+        value: 'working',
+        label: 'Fonctionne bien',
+        icon: 'bi-check-circle',
+        iconColor: '#16C669',
+        description: 'Quelques signes d\'usage',
+        priceImpact: '85%'
+    },
+    {
+        value: 'minor_issues',
+        label: 'Petits problèmes',
+        icon: 'bi-exclamation-triangle',
+        iconColor: '#FFA500',
+        description: 'Défauts mineurs réparables',
         priceImpact: '60%'
     },
     {
-        value: 'hors-service',
-        label: 'Hors service',
-        icon: '❌',
-        description: 'Ne fonctionne plus',
-        priceImpact: '20%'
+        value: 'major_issues',
+        label: 'Gros problèmes',
+        icon: 'bi-exclamation-triangle-fill',
+        iconColor: '#FF6B6B',
+        description: 'Défauts importants',
+        priceImpact: '30%'
     },
     {
-        value: 'pieces',
-        label: 'Pour pièces',
-        icon: '🔩',
-        description: 'Récupération de pièces',
+        value: 'not_working',
+        label: 'Ne fonctionne pas',
+        icon: 'bi-x-circle-fill',
+        iconColor: '#DC3545',
+        description: 'Hors service',
         priceImpact: '10%'
     }
 ];
 
 // ============================================
-// ÉTATS ESTHÉTIQUES
+// ÉTATS ESTHÉTIQUES - ICÔNES PRO
 // ============================================
 const AESTHETIC_STATES = [
     {
-        value: 'tres-bon',
-        label: 'Très bon état',
-        icon: '⭐',
-        description: 'Comme neuf',
+        value: 'excellent',
+        label: 'Comme neuf',
+        icon: 'bi-star-fill',
+        iconColor: '#FFD700',
+        description: 'État impeccable',
         priceImpact: '100%'
     },
     {
-        value: 'bon',
+        value: 'good',
         label: 'Bon état',
-        icon: '✓',
+        icon: 'bi-star-half',
+        iconColor: '#16C669',
         description: 'Traces d\'usage légères',
         priceImpact: '85%'
     },
     {
-        value: 'usage',
-        label: 'Usagé',
-        icon: '📦',
-        description: 'Rayures, bosses visibles',
-        priceImpact: '65%'
+        value: 'fair',
+        label: 'État correct',
+        icon: 'bi-star',
+        iconColor: '#3498DB',
+        description: 'Quelques rayures',
+        priceImpact: '70%'
     },
     {
-        value: 'tres-usage',
+        value: 'poor',
+        label: 'Usagé',
+        icon: 'bi-dash-circle',
+        iconColor: '#95A5A6',
+        description: 'Rayures, bosses visibles',
+        priceImpact: '50%'
+    },
+    {
+        value: 'very_poor',
         label: 'Très usagé',
-        icon: '💔',
+        icon: 'bi-dash-circle-fill',
+        iconColor: '#7F8C8D',
         description: 'Nombreux chocs et rayures',
         priceImpact: '40%'
     }
@@ -157,32 +194,36 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
         category: '',
         brand: '',
         model: '',
+        serialNumber: '',
         purchaseYear: '',
         hasInvoice: false,
-        functionalState: '',
-        aestheticState: '',
+        functionalCondition: '',
+        aestheticCondition: '',
         hasAllAccessories: true,
-        additionalComments: '',
-        photos: [],
+        defectsDescription: '',
+        photo1: null,
+        photo2: null,
+        photo3: null,
         firstName: '',
         lastName: '',
         email: '',
         phone: '',
         address: '',
-        zipCode: '',
+        postalCode: '',
         city: '',
-        floor: '',
-        hasElevator: false,
         paymentMethod: 'virement',
-        iban: '',
-        accountHolder: '',
-        preferredDate: '',
-        timeSlots: []
+        iban: ''
     });
+    const [photos, setPhotos] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [submitError, setSubmitError] = useState(null);
-    const [estimation, setEstimation] = useState(null);
+    const [estimatedPrice, setEstimatedPrice] = useState(null);
+
+    // Autocomplete modèles
+    const [modelSuggestions, setModelSuggestions] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
+    const [showSuggestions, setShowSuggestions] = useState(false);
 
     // Handlers
     const handleCategorySelect = (category) => {
@@ -191,34 +232,81 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
         setStep(2);
     };
 
-    const handleInputChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked : value
-        });
+    const validateIBAN = (iban) => {
+        const cleanIBAN = iban.replace(/\s/g, '');
+        const ibanRegex = /^FR[0-9]{25}$/;
+        return ibanRegex.test(cleanIBAN);
     };
 
-    const handleTimeSlotChange = (slot) => {
-        const newSlots = formData.timeSlots.includes(slot)
-            ? formData.timeSlots.filter(s => s !== slot)
-            : [...formData.timeSlots, slot];
-        setFormData({ ...formData, timeSlots: newSlots });
+    const handleInputChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        let newValue = type === 'checkbox' ? checked : value;
+
+        // Formatage IBAN
+        if (name === 'iban') {
+            newValue = value.replace(/\s/g, '').toUpperCase().match(/.{1,4}/g)?.join(' ') || value;
+        }
+
+        setFormData({
+            ...formData,
+            [name]: newValue
+        });
+
+        // Recherche modèles si changement de marque ou modèle
+        if (name === 'brand' || name === 'model') {
+            searchModels(name === 'model' ? value : formData.model, name === 'brand' ? value : formData.brand);
+        }
+    };
+
+    // Recherche de modèles
+    const searchModels = async (query, brand) => {
+        if (!query || query.length < 2) {
+            setModelSuggestions([]);
+            return;
+        }
+
+        setIsSearching(true);
+        try {
+            const params = new URLSearchParams({
+                q: query,
+                category: formData.category
+            });
+            if (brand) params.append('brand', brand);
+
+            const response = await fetch(`/api/buyback/search-models?${params}`);
+            const data = await response.json();
+
+            if (data.success) {
+                setModelSuggestions(data.results);
+                setShowSuggestions(true);
+            }
+        } catch (error) {
+            console.error('Erreur recherche modèles:', error);
+        } finally {
+            setIsSearching(false);
+        }
+    };
+
+    const selectModel = (model) => {
+        setFormData({
+            ...formData,
+            brand: model.brand || formData.brand,
+            model: model.reference || model.fullName // Utilise la référence comme valeur
+        });
+        setModelSuggestions([]);
+        setShowSuggestions(false);
     };
 
     const handlePhotoUpload = async (e) => {
         const files = Array.from(e.target.files);
 
-        // Validation: max 5 photos
-        if (formData.photos.length + files.length > 5) {
-            alert('Maximum 5 photos autorisées');
+        if (photos.length + files.length > 3) {
+            alert('Maximum 3 photos autorisées');
             return;
         }
 
-        // Convertir en base64
         const photoPromises = files.map(file => {
             return new Promise((resolve, reject) => {
-                // Validation taille (5 Mo max)
                 if (file.size > 5 * 1024 * 1024) {
                     alert(`${file.name} est trop volumineux (max 5 Mo)`);
                     reject();
@@ -233,34 +321,44 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
         });
 
         try {
-            const photos = await Promise.all(photoPromises);
-            setFormData({
-                ...formData,
-                photos: [...formData.photos, ...photos]
+            const newPhotos = await Promise.all(photoPromises);
+            const updatedPhotos = [...photos, ...newPhotos];
+            setPhotos(updatedPhotos);
+
+            // Mettre à jour formData
+            const photoData = {};
+            updatedPhotos.forEach((photo, index) => {
+                photoData[`photo${index + 1}`] = photo;
             });
+            setFormData({ ...formData, ...photoData });
         } catch (error) {
             console.error('Erreur upload photos:', error);
         }
     };
 
     const removePhoto = (index) => {
-        setFormData({
-            ...formData,
-            photos: formData.photos.filter((_, i) => i !== index)
+        const updatedPhotos = photos.filter((_, i) => i !== index);
+        setPhotos(updatedPhotos);
+
+        // Réorganiser les photos dans formData
+        const photoData = { photo1: null, photo2: null, photo3: null };
+        updatedPhotos.forEach((photo, i) => {
+            photoData[`photo${i + 1}`] = photo;
         });
+        setFormData({ ...formData, ...photoData });
     };
 
     // Validations
     const validateStep2 = () => {
-        return formData.brand.trim() && formData.purchaseYear;
+        return formData.brand.trim() && formData.model.trim() && formData.purchaseYear;
     };
 
     const validateStep3 = () => {
-        return formData.functionalState && formData.aestheticState;
+        return formData.functionalCondition && formData.aestheticCondition;
     };
 
     const validateStep4 = () => {
-        return formData.photos.length >= 2;
+        return photos.length >= 2;
     };
 
     const validateStep5 = () => {
@@ -269,13 +367,13 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
             && formData.email.trim()
             && formData.phone.trim()
             && formData.address.trim()
-            && formData.zipCode.trim()
+            && formData.postalCode.trim()
             && formData.city.trim();
 
         if (!basicValid) return false;
 
         if (formData.paymentMethod === 'virement') {
-            return formData.iban.trim() && formData.accountHolder.trim();
+            return validateIBAN(formData.iban);
         }
 
         return true;
@@ -315,12 +413,11 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
             const data = await response.json();
 
             if (!response.ok || !data.success) {
-                throw new Error(data.error || 'Erreur lors de l\'envoi');
+                throw new Error(data.message || 'Erreur lors de l\'envoi');
             }
 
-            setEstimation(data.estimation);
+            setEstimatedPrice(data.estimated_price);
             setSubmitSuccess(true);
-            setCountdown(20);
 
         } catch (error) {
             console.error('Erreur:', error);
@@ -331,7 +428,7 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
     };
 
     // Affichage succès
-    if (submitSuccess && estimation) {
+    if (submitSuccess && estimatedPrice) {
         return (
             <div className="success-message">
                 <div className="success-icon">🎉</div>
@@ -345,27 +442,11 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                     boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                 }}>
                     <div style={{ fontSize: '0.9rem', color: '#6C7783', marginBottom: '1rem' }}>
-                        💰 Fourchette de prix estimée
+                        💰 Prix estimé
                     </div>
                     <div style={{ fontSize: '2.5rem', fontWeight: '900', color: '#16C669', marginBottom: '1.5rem' }}>
-                        {estimation.min}€ - {estimation.max}€
+                        {estimatedPrice} €
                     </div>
-
-                    {estimation.details && (
-                        <div style={{ textAlign: 'left', fontSize: '0.9rem', color: '#6C7783' }}>
-                            <div style={{ borderTop: '1px solid #E6EDF2', paddingTop: '1rem', marginBottom: '0.5rem' }}>
-                                <strong>📊 Détail du calcul :</strong>
-                            </div>
-                            <div style={{ marginLeft: '1rem' }}>
-                                <div>• Prix de base ({estimation.details.category_label} {estimation.details.brand}) : <strong>{estimation.details.base_price}€</strong></div>
-                                <div>• Année ({estimation.details.year_label}) : <strong>{Math.round(estimation.details.year_coefficient * 100)}%</strong></div>
-                                <div>• État fonctionnel ({estimation.details.functional_label}) : <strong>{Math.round(estimation.details.functional_coefficient * 100)}%</strong></div>
-                                <div>• État esthétique ({estimation.details.aesthetic_label}) : <strong>{Math.round(estimation.details.aesthetic_coefficient * 100)}%</strong></div>
-                                {estimation.details.invoice_bonus && <div>• Bonus facture : <strong>+10%</strong></div>}
-                                {estimation.details.accessories_malus && <div>• Accessoires incomplets : <strong>-10%</strong></div>}
-                            </div>
-                        </div>
-                    )}
 
                     <div style={{
                         background: '#FFF3CD',
@@ -387,13 +468,23 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                 </div>
                 <p>📧 Vous recevrez une confirmation par email</p>
                 <p>📞 Nous vous contactons sous 24h pour validation</p>
-                <p>🚚 Enlèvement gratuit à la date de votre choix</p>
+                <p>🚚 Enlèvement gratuit à domicile</p>
 
                 <button
                     onClick={() => window.location.href = '/'}
                     className="btn-primary"
+                    style={{
+                        marginTop: '2rem',
+                        padding: '1rem 2rem',
+                        fontSize: '1.1rem',
+                        background: '#16C669',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        cursor: 'pointer'
+                    }}
                 >
-                    Retour à l'accueil maintenant
+                    Retour à l'accueil
                 </button>
 
                 <div style={{ marginTop: '1.5rem', fontSize: '0.9rem', color: '#6C7783' }}>
@@ -476,35 +567,116 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
 
                     <form>
                         <div className="row g-3">
-                            <div className="col-12 col-md-6">
+                            <div className="col-12">
                                 <label htmlFor="brand" className="form-label">
                                     Marque <span className="text-danger">*</span>
                                 </label>
-                                <input
-                                    type="text"
-                                    className="form-control"
+                                <select
+                                    className="form-select"
                                     id="brand"
                                     name="brand"
                                     value={formData.brand}
                                     onChange={handleInputChange}
-                                    placeholder="Ex: Bosch, Samsung, Whirlpool..."
                                     required
-                                />
+                                >
+                                    <option value="">Sélectionnez une marque</option>
+                                    {BRANDS.map((brand) => (
+                                        <option key={brand.value} value={brand.value}>
+                                            {brand.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="form-text">
+                                    <i className="bi bi-info-circle"></i> Sélectionnez la marque pour activer l'autocomplete des modèles
+                                </div>
                             </div>
 
-                            <div className="col-12 col-md-6">
+                            <div className="col-12">
                                 <label htmlFor="model" className="form-label">
-                                    Modèle <span className="text-soft">(optionnel)</span>
+                                    Modèle ou référence <span className="text-danger">*</span>
+                                </label>
+                                <div style={{ position: 'relative' }}>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="model"
+                                        name="model"
+                                        value={formData.model}
+                                        onChange={handleInputChange}
+                                        onFocus={() => setShowSuggestions(true)}
+                                        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                                        placeholder={formData.brand ? "Ex: WAW28750FF, RF65DG9H0ESR..." : "Sélectionnez d'abord une marque"}
+                                        required
+                                        disabled={!formData.brand}
+                                    />
+                                    {isSearching && (
+                                        <div style={{ position: 'absolute', right: '10px', top: '10px' }}>
+                                            <span className="spinner-border spinner-border-sm" role="status"></span>
+                                        </div>
+                                    )}
+                                    {showSuggestions && modelSuggestions.length > 0 && (
+                                        <div className="model-suggestions">
+                                            {modelSuggestions.map((model, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="suggestion-item"
+                                                    onClick={() => selectModel(model)}
+                                                >
+                                                    <div className="suggestion-reference">
+                                                        {model.reference}
+                                                    </div>
+                                                    <div className="suggestion-details">
+                                                        {model.name} • {model.year}
+                                                        {model.tierLabel && (
+                                                            <span className="ms-2">
+                                                    <span className="badge bg-primary" style={{ fontSize: '0.75rem' }}>
+                                                        {model.tierLabel}
+                                                    </span>
+                                                </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="form-text">
+                                    <i className="bi bi-info-circle"></i> <strong>Obligatoire pour une estimation précise.</strong> Commencez à saisir pour voir les suggestions.
+                                </div>
+                                {!formData.brand && (
+                                    <div className="alert alert-warning mt-2" style={{ fontSize: '0.9rem', padding: '0.75rem' }}>
+                                        <i className="bi bi-exclamation-triangle"></i> Veuillez d'abord sélectionner une marque pour activer la recherche de modèles.
+                                    </div>
+                                )}
+                                {formData.brand && (
+                                    <div className="alert alert-info mt-2" style={{ fontSize: '0.9rem', padding: '0.75rem' }}>
+                                        <i className="bi bi-search"></i> <strong>Comment trouver la référence ?</strong>
+                                        <ul className="mb-0 mt-1" style={{ fontSize: '0.85rem' }}>
+                                            <li>Sur la plaque signalétique de l'appareil</li>
+                                            <li>À l'intérieur de la porte (lave-linge, lave-vaisselle)</li>
+                                            <li>À l'arrière ou sous l'appareil</li>
+                                            <li>Sur la facture d'achat</li>
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="col-12">
+                                <label htmlFor="serialNumber" className="form-label">
+                                    Numéro de série <span className="text-soft">(optionnel)</span>
                                 </label>
                                 <input
                                     type="text"
                                     className="form-control"
-                                    id="model"
-                                    name="model"
-                                    value={formData.model}
+                                    id="serialNumber"
+                                    name="serialNumber"
+                                    value={formData.serialNumber}
                                     onChange={handleInputChange}
-                                    placeholder="Numéro de modèle"
+                                    placeholder="Ex: ABC123456789"
                                 />
+                                <div className="form-text">
+                                    <i className="bi bi-info-circle"></i> Se trouve généralement à l'arrière ou sous l'appareil
+                                </div>
                             </div>
 
                             <div className="col-12">
@@ -519,11 +691,9 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                                     onChange={handleInputChange}
                                     required
                                 >
-                                    <option value="">Sélectionnez une période</option>
-                                    {PURCHASE_YEARS.map((year) => (
-                                        <option key={year.value} value={year.value}>
-                                            {year.label}
-                                        </option>
+                                    <option value="">Sélectionnez une année</option>
+                                    {Array.from({ length: 16 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                        <option key={year} value={year}>{year}</option>
                                     ))}
                                 </select>
                             </div>
@@ -540,7 +710,9 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                                     />
                                     <label className="form-check-label" htmlFor="hasInvoice">
                                         <strong>J'ai la facture d'achat</strong>
-                                        <div className="small text-soft">+10% sur le prix de rachat</div>
+                                        <div className="small text-success">
+                                            <i className="bi bi-cash-coin"></i> +10% sur le prix de rachat
+                                        </div>
                                     </label>
                                 </div>
                             </div>
@@ -554,6 +726,11 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                                 >
                                     Continuer <i className="bi bi-arrow-right"></i>
                                 </button>
+                                {(!formData.brand || !formData.model.trim() || !formData.purchaseYear) && (
+                                    <div className="text-center mt-2 small text-danger">
+                                        <i className="bi bi-exclamation-triangle"></i> Veuillez remplir tous les champs obligatoires (*)
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </form>
@@ -586,12 +763,18 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                                     {FUNCTIONAL_STATES.map((state) => (
                                         <div key={state.value} className="col-6">
                                             <div
-                                                className={`state-card ${formData.functionalState === state.value ? 'selected' : ''}`}
-                                                onClick={() => setFormData({ ...formData, functionalState: state.value })}
+                                                className={`state-card ${formData.functionalCondition === state.value ? 'selected' : ''}`}
+                                                onClick={() => setFormData({ ...formData, functionalCondition: state.value })}
+                                                data-state={state.value}
                                                 style={{ cursor: 'pointer' }}
                                             >
-                                                <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{state.icon}</div>
-                                                <div className="fw-bold mb-1">{state.label}</div>
+                                                <i className={`bi ${state.icon}`} style={{
+                                                    fontSize: '2.5rem',
+                                                    color: state.iconColor,
+                                                    marginBottom: '0.75rem',
+                                                    display: 'block'
+                                                }}></i>
+                                                <div className="fw-bold mb-1" style={{ fontSize: '1rem' }}>{state.label}</div>
                                                 <div className="small text-soft mb-2">{state.description}</div>
                                                 <div className="small">
                                                     <span className="badge bg-primary">{state.priceImpact} du prix</span>
@@ -611,12 +794,17 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                                     {AESTHETIC_STATES.map((state) => (
                                         <div key={state.value} className="col-6">
                                             <div
-                                                className={`state-card ${formData.aestheticState === state.value ? 'selected' : ''}`}
-                                                onClick={() => setFormData({ ...formData, aestheticState: state.value })}
+                                                className={`state-card ${formData.aestheticCondition === state.value ? 'selected' : ''}`}
+                                                onClick={() => setFormData({ ...formData, aestheticCondition: state.value })}
                                                 style={{ cursor: 'pointer' }}
                                             >
-                                                <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{state.icon}</div>
-                                                <div className="fw-bold mb-1">{state.label}</div>
+                                                <i className={`bi ${state.icon}`} style={{
+                                                    fontSize: '2.5rem',
+                                                    color: state.iconColor,
+                                                    marginBottom: '0.75rem',
+                                                    display: 'block'
+                                                }}></i>
+                                                <div className="fw-bold mb-1" style={{ fontSize: '1rem' }}>{state.label}</div>
                                                 <div className="small text-soft mb-2">{state.description}</div>
                                                 <div className="small">
                                                     <span className="badge bg-secondary">{state.priceImpact} du prix</span>
@@ -645,19 +833,19 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                                 </div>
                             </div>
 
-                            {/* Commentaires */}
+                            {/* Description défauts */}
                             <div className="col-12">
-                                <label htmlFor="additionalComments" className="form-label">
-                                    Commentaires additionnels <span className="text-soft">(optionnel)</span>
+                                <label htmlFor="defectsDescription" className="form-label">
+                                    Description des défauts <span className="text-soft">(optionnel)</span>
                                 </label>
                                 <textarea
                                     className="form-control"
-                                    id="additionalComments"
-                                    name="additionalComments"
+                                    id="defectsDescription"
+                                    name="defectsDescription"
                                     rows="3"
-                                    value={formData.additionalComments}
+                                    value={formData.defectsDescription}
                                     onChange={handleInputChange}
-                                    placeholder="Précisions sur l'état, l'historique d'utilisation, etc."
+                                    placeholder="Précisions sur l'état, défauts visibles, historique..."
                                 ></textarea>
                             </div>
 
@@ -715,7 +903,7 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                                         ou glissez-déposez vos fichiers
                                     </div>
                                     <div className="small text-soft mt-2">
-                                        JPG, PNG, HEIC • Max 5 Mo par photo • Max 5 photos
+                                        JPG, PNG, HEIC • Max 5 Mo par photo • Max 3 photos
                                     </div>
                                 </div>
                             </div>
@@ -731,10 +919,10 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                     </div>
 
                     {/* Aperçu des photos */}
-                    {formData.photos.length > 0 && (
+                    {photos.length > 0 && (
                         <div className="row g-3 mb-4">
-                            {formData.photos.map((photo, index) => (
-                                <div key={index} className="col-4 col-md-3">
+                            {photos.map((photo, index) => (
+                                <div key={index} className="col-4">
                                     <div style={{ position: 'relative' }}>
                                         <img
                                             src={photo}
@@ -782,15 +970,15 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                         Continuer <i className="bi bi-arrow-right"></i>
                     </button>
 
-                    {formData.photos.length < 2 && (
+                    {photos.length < 2 && (
                         <div className="text-center mt-3 small text-danger">
-                            <i className="bi bi-exclamation-triangle"></i> Minimum 2 photos requises ({formData.photos.length}/2)
+                            <i className="bi bi-exclamation-triangle"></i> Minimum 2 photos requises ({photos.length}/2)
                         </div>
                     )}
                 </div>
             )}
 
-            {/* ÉTAPE 5 : COORDONNÉES */}
+            {/* ÉTAPE 5 : COORDONNÉES - Suite dans le prochain message... */}
             {step === 5 && (
                 <div className="form-step">
                     <div className="mb-4">
@@ -894,15 +1082,15 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                             </div>
 
                             <div className="col-12 col-md-4">
-                                <label htmlFor="zipCode" className="form-label">
+                                <label htmlFor="postalCode" className="form-label">
                                     Code postal <span className="text-danger">*</span>
                                 </label>
                                 <input
                                     type="text"
                                     className="form-control"
-                                    id="zipCode"
-                                    name="zipCode"
-                                    value={formData.zipCode}
+                                    id="postalCode"
+                                    name="postalCode"
+                                    value={formData.postalCode}
                                     onChange={handleInputChange}
                                     placeholder="75012"
                                     required
@@ -925,38 +1113,6 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                                 />
                             </div>
 
-                            <div className="col-12 col-md-6">
-                                <label htmlFor="floor" className="form-label">
-                                    Étage <span className="text-soft">(optionnel)</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="floor"
-                                    name="floor"
-                                    value={formData.floor}
-                                    onChange={handleInputChange}
-                                    placeholder="3ème étage"
-                                />
-                            </div>
-
-                            <div className="col-12 col-md-6">
-                                <label className="form-label d-block">&nbsp;</label>
-                                <div className="form-check form-switch">
-                                    <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        id="hasElevator"
-                                        name="hasElevator"
-                                        checked={formData.hasElevator}
-                                        onChange={handleInputChange}
-                                    />
-                                    <label className="form-check-label" htmlFor="hasElevator">
-                                        Ascenseur disponible
-                                    </label>
-                                </div>
-                            </div>
-
                             {/* Mode de paiement */}
                             <div className="col-12">
                                 <label className="form-label fw-bold">
@@ -964,13 +1120,21 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                                 </label>
                                 <div className="row g-3">
                                     <div className="col-6">
-                                        <label className={`payment-card ${formData.paymentMethod === 'virement' ? 'selected' : ''}`}>
+                                        <label className={`payment-card ${formData.paymentMethod === 'virement' ? 'selected' : ''}`}
+                                               style={{
+                                                   display: 'block',
+                                                   border: '2px solid ' + (formData.paymentMethod === 'virement' ? '#16C669' : '#D7EADF'),
+                                                   borderRadius: '8px',
+                                                   cursor: 'pointer',
+                                                   transition: 'all 0.2s'
+                                               }}>
                                             <input
                                                 type="radio"
                                                 name="paymentMethod"
                                                 value="virement"
                                                 checked={formData.paymentMethod === 'virement'}
                                                 onChange={handleInputChange}
+                                                style={{ display: 'none' }}
                                             />
                                             <div className="text-center p-3">
                                                 <i className="bi bi-bank" style={{ fontSize: '2rem', color: '#16C669' }}></i>
@@ -980,13 +1144,21 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                                         </label>
                                     </div>
                                     <div className="col-6">
-                                        <label className={`payment-card ${formData.paymentMethod === 'especes' ? 'selected' : ''}`}>
+                                        <label className={`payment-card ${formData.paymentMethod === 'especes' ? 'selected' : ''}`}
+                                               style={{
+                                                   display: 'block',
+                                                   border: '2px solid ' + (formData.paymentMethod === 'especes' ? '#16C669' : '#D7EADF'),
+                                                   borderRadius: '8px',
+                                                   cursor: 'pointer',
+                                                   transition: 'all 0.2s'
+                                               }}>
                                             <input
                                                 type="radio"
                                                 name="paymentMethod"
                                                 value="especes"
                                                 checked={formData.paymentMethod === 'especes'}
                                                 onChange={handleInputChange}
+                                                style={{ display: 'none' }}
                                             />
                                             <div className="text-center p-3">
                                                 <i className="bi bi-cash-stack" style={{ fontSize: '2rem', color: '#16C669' }}></i>
@@ -998,12 +1170,13 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                                 </div>
                             </div>
 
-                            {/* Coordonnées bancaires (si virement) */}
+                            {/* IBAN si virement */}
                             {formData.paymentMethod === 'virement' && (
                                 <>
                                     <div className="col-12">
-                                        <div className="alert alert-light">
-                                            <i className="bi bi-shield-check"></i> Vos coordonnées bancaires sont sécurisées et utilisées uniquement pour le paiement.
+                                        <div className="alert alert-warning">
+                                            <i className="bi bi-exclamation-triangle"></i> <strong>Important</strong>
+                                            <br />Le virement sera effectué <strong>après validation de l'état</strong> par notre transporteur.
                                         </div>
                                     </div>
 
@@ -1019,87 +1192,20 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                                             value={formData.iban}
                                             onChange={handleInputChange}
                                             placeholder="FR76 1234 5678 9012 3456 7890 123"
+                                            maxLength="34"
                                             required={formData.paymentMethod === 'virement'}
                                         />
-                                    </div>
-
-                                    <div className="col-12">
-                                        <label htmlFor="accountHolder" className="form-label">
-                                            Titulaire du compte <span className="text-danger">*</span>
-                                        </label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="accountHolder"
-                                            name="accountHolder"
-                                            value={formData.accountHolder}
-                                            onChange={handleInputChange}
-                                            placeholder="Prénom Nom"
-                                            required={formData.paymentMethod === 'virement'}
-                                        />
+                                        <div className="form-text">
+                                            <i className="bi bi-info-circle"></i> Format français : FR + 25 chiffres (27 caractères)
+                                        </div>
+                                        {formData.iban && !validateIBAN(formData.iban) && (
+                                            <div className="text-danger small mt-1">
+                                                <i className="bi bi-exclamation-triangle"></i> IBAN invalide
+                                            </div>
+                                        )}
                                     </div>
                                 </>
                             )}
-
-                            {/* Disponibilités */}
-                            <div className="col-12 col-md-6">
-                                <label htmlFor="preferredDate" className="form-label">
-                                    Date souhaitée pour l'enlèvement <span className="text-soft">(optionnel)</span>
-                                </label>
-                                <input
-                                    type="date"
-                                    className="form-control"
-                                    id="preferredDate"
-                                    name="preferredDate"
-                                    value={formData.preferredDate}
-                                    onChange={handleInputChange}
-                                    min={new Date().toISOString().split('T')[0]}
-                                />
-                            </div>
-
-                            <div className="col-12 col-md-6">
-                                <label className="form-label">
-                                    Créneaux horaires préférés <span className="text-soft">(optionnel)</span>
-                                </label>
-                                <div className="d-flex flex-column gap-2">
-                                    <div className="form-check">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            id="slot-matin"
-                                            checked={formData.timeSlots.includes('matin')}
-                                            onChange={() => handleTimeSlotChange('matin')}
-                                        />
-                                        <label className="form-check-label" htmlFor="slot-matin">
-                                            Matin (9h-12h)
-                                        </label>
-                                    </div>
-                                    <div className="form-check">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            id="slot-apres-midi"
-                                            checked={formData.timeSlots.includes('apres-midi')}
-                                            onChange={() => handleTimeSlotChange('apres-midi')}
-                                        />
-                                        <label className="form-check-label" htmlFor="slot-apres-midi">
-                                            Après-midi (14h-18h)
-                                        </label>
-                                    </div>
-                                    <div className="form-check">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            id="slot-flexible"
-                                            checked={formData.timeSlots.includes('flexible')}
-                                            onChange={() => handleTimeSlotChange('flexible')}
-                                        />
-                                        <label className="form-check-label" htmlFor="slot-flexible">
-                                            Flexible
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
 
                             {/* Soumission */}
                             <div className="col-12">
@@ -1124,7 +1230,7 @@ export default function BuybackForm({ apiEndpoint = '/api/buyback-requests', pho
                             <div className="col-12">
                                 <div className="alert alert-light">
                                     <small>
-                                        <i className="bi bi-shield-check"></i> Vos données sont protégées et utilisées uniquement pour traiter votre demande de rachat.
+                                        <i className="bi bi-shield-check"></i> Vos données sont protégées et utilisées uniquement pour traiter votre demande.
                                     </small>
                                 </div>
                             </div>

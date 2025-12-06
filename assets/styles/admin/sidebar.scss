@@ -239,6 +239,62 @@
 }
 
 /* =========================================================
+   MENU BADGES (COMPTEURS)
+   ========================================================= */
+.menu-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 7px;
+    margin-left: auto;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+    border-radius: 11px;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    box-shadow: 0 2px 6px rgba(255, 107, 107, 0.3);
+    animation: pulse-badge 2s ease-in-out infinite;
+
+    &.menu-badge-success {
+        background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+        box-shadow: 0 2px 6px rgba($primary, 0.3);
+    }
+
+    &.menu-badge-warning {
+        background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
+        box-shadow: 0 2px 6px rgba(255, 165, 0, 0.3);
+    }
+
+    &.menu-badge-info {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
+    }
+}
+
+@keyframes pulse-badge {
+    0%, 100% {
+        box-shadow: 0 2px 6px rgba(255, 107, 107, 0.3);
+    }
+    50% {
+        box-shadow: 0 2px 10px rgba(255, 107, 107, 0.6);
+    }
+}
+
+// Ajustement des items de menu pour bien positionner le badge
+.menu-item {
+    .menu-label {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+/* =========================================================
    RESPONSIVE
    ========================================================= */
 @media (max-width: 768px) {

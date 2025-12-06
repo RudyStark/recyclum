@@ -1,0 +1,264 @@
+{% extends 'admin/base_layout.html.twig' %}
+{% block body_class 'admin-index-pro' %}
+
+{% block content_title %}{% endblock %}
+{% block page_actions %}{% endblock %}
+{% block content_header_wrapper %}{% endblock %}
+
+{% block main %}
+    <div class="index-container">
+        {# HERO HEADER #}
+        <div class="index-hero">
+            <div class="index-hero-content">
+                <div class="index-hero-icon">
+                    <i class="fa fa-shopping-cart"></i>
+                </div>
+                <div>
+                    <h1 class="index-hero-title">Demandes de rachat</h1>
+                    <p class="index-hero-subtitle">Gérez les demandes de rachat d'électroménager</p>
+                </div>
+            </div>
+        </div>
+
+        {# STATS CARDS #}
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-warning">
+                    <i class="fa fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.pending }}</div>
+                    <div class="stat-label">En attente</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-success">
+                    <i class="fa fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.validated }}</div>
+                    <div class="stat-label">Validées</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-info">
+                    <i class="fa fa-truck"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.collected }}</div>
+                    <div class="stat-label">Collectées</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-primary">
+                    <i class="fa fa-euro-sign"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.total_estimated|number_format(0, ',', ' ') }}€</div>
+                    <div class="stat-label">Total estimé</div>
+                </div>
+            </div>
+        </div>
+
+        {# TABLEAU DEMANDES #}
+        <div class="data-table-card" data-controller="admin--toggle">
+            <div class="data-table-header">
+                <h2>Liste des demandes</h2>
+                <div class="data-table-actions">
+                    <button class="btn-outline" data-action="click->admin--toggle#toggleFilters">
+                        <i class="fa fa-filter"></i>
+                        Filtres
+                    </button>
+                </div>
+            </div>
+
+            {# PANNEAU FILTRES #}
+            <div class="filters-panel" data-admin--toggle-target="panel" style="display: none;">
+                <form method="get" class="filters-form">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label for="search">Recherche</label>
+                            <input type="text" id="search" name="search" class="form-control" placeholder="Nom, email, marque, modèle..." value="{{ filters.search }}">
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="status">Statut</label>
+                            <select id="status" name="status" class="form-control">
+                                <option value="">Tous les statuts</option>
+                                <option value="pending" {% if filters.status == 'pending' %}selected{% endif %}>En attente</option>
+                                <option value="validated" {% if filters.status == 'validated' %}selected{% endif %}>Validée</option>
+                                <option value="collected" {% if filters.status == 'collected' %}selected{% endif %}>Collectée</option>
+                                <option value="paid" {% if filters.status == 'paid' %}selected{% endif %}>Payée</option>
+                                <option value="cancelled" {% if filters.status == 'cancelled' %}selected{% endif %}>Annulée</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="category">Catégorie</label>
+                            <select id="category" name="category" class="form-control">
+                                <option value="">Toutes les catégories</option>
+                                <option value="lave-linge" {% if filters.category == 'lave-linge' %}selected{% endif %}>Lave-linge</option>
+                                <option value="refrigerateur" {% if filters.category == 'refrigerateur' %}selected{% endif %}>Réfrigérateur</option>
+                                <option value="four" {% if filters.category == 'four' %}selected{% endif %}>Four</option>
+                                <option value="lave-vaisselle" {% if filters.category == 'lave-vaisselle' %}selected{% endif %}>Lave-vaisselle</option>
+                                <option value="seche-linge" {% if filters.category == 'seche-linge' %}selected{% endif %}>Sèche-linge</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button type="submit" class="btn-filter-apply">
+                            <i class="fa fa-check"></i>
+                            Appliquer les filtres
+                        </button>
+                        <a href="?" class="btn-filter-reset">
+                            <i class="fa fa-times"></i>
+                            Réinitialiser
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th width="60">ID</th>
+                        <th width="150">Date</th>
+                        <th>Client</th>
+                        <th width="150">Catégorie</th>
+                        <th>Marque / Modèle</th>
+                        <th width="120">Estimation</th>
+                        <th width="130">Statut</th>
+                        <th width="200" class="text-end">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for request in requests %}
+                        <tr>
+                            <td class="fw-bold">#{{ request.id }}</td>
+                            <td>
+                                <div>{{ request.createdAt|date('d/m/Y') }}</div>
+                                <div class="small text-muted">{{ request.createdAt|date('H:i') }}</div>
+                            </td>
+                            <td>
+                                <div class="fw-semibold">{{ request.fullName }}</div>
+                                <div class="small text-muted">{{ request.email }}</div>
+                            </td>
+                            <td>
+                                {% set category_colors = {
+                                    'lave-linge': '#3498db',
+                                    'refrigerateur': '#1abc9c',
+                                    'four': '#e74c3c',
+                                    'lave-vaisselle': '#9b59b6',
+                                    'seche-linge': '#f39c12',
+                                    'cuisiniere': '#e67e22',
+                                    'micro-ondes': '#95a5a6',
+                                    'cave-a-vin': '#8e44ad',
+                                    'hotte': '#34495e',
+                                    'petit-electromenager': '#16a085'
+                                } %}
+                                {% set color = category_colors[request.category] ?? '#7f8c8d' %}
+                                <span class="badge" style="background-color: {{ color }}; color: white; padding: 5px 10px; border-radius: 12px; font-size: 11px;">
+                                    {{ request.categoryLabel }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="fw-semibold">{{ request.brand|capitalize }}</div>
+                                <div class="small text-muted">{{ request.model ?? 'N/A' }}</div>
+                            </td>
+                            <td class="fw-bold text-success">
+                                {{ request.estimatedPrice|number_format(0, ',', ' ') }} €
+                            </td>
+                            <td>
+                                {% set status_config = {
+                                    'pending': { 'label': 'En attente', 'color': '#f39c12', 'icon': 'fa-clock' },
+                                    'validated': { 'label': 'Validée', 'color': '#3498db', 'icon': 'fa-check' },
+                                    'collected': { 'label': 'Collectée', 'color': '#9b59b6', 'icon': 'fa-truck' },
+                                    'paid': { 'label': 'Payée', 'color': '#27ae60', 'icon': 'fa-euro-sign' },
+                                    'cancelled': { 'label': 'Annulée', 'color': '#95a5a6', 'icon': 'fa-times' }
+                                } %}
+                                {% set config = status_config[request.status] ?? status_config['pending'] %}
+                                <span class="badge" style="background-color: {{ config.color }}; color: white; padding: 6px 10px; border-radius: 12px; font-size: 11px; display: inline-flex; align-items: center; gap: 6px;">
+                                    <i class="fa {{ config.icon }}"></i>
+                                    {{ config.label }}
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <div class="action-buttons">
+                                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\BuybackRequestCrudController').setAction('showRequest').setEntityId(request.id).generateUrl() }}" class="btn-action btn-action-edit" title="Voir">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <form method="post" action="{{ path('admin_buyback_request_delete', {id: request.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette demande ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ request.id) }}">
+                                        <button type="submit" class="btn-action btn-action-delete" title="Supprimer">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center py-5">
+                                <div class="empty-state">
+                                    <i class="fa fa-inbox"></i>
+                                    <h3>Aucune demande</h3>
+                                    <p>Aucune demande de rachat pour le moment</p>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {# PAGINATION #}
+            {% if total_pages > 1 %}
+                <div class="pagination-wrapper">
+                    <div class="pagination-info">
+                        Affichage de {{ (current_page - 1) * per_page + 1 }} à {{ min(current_page * per_page, total_items) }} sur {{ total_items }} résultats
+                    </div>
+                    <nav class="pagination-nav">
+                        <ul class="pagination">
+                            {% if current_page > 1 %}
+                                <li class="page-item">
+                                    <a href="?page={{ current_page - 1 }}" class="page-link">
+                                        <i class="fa fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% for page in 1..total_pages %}
+                                {% if page == current_page %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page }}</span>
+                                    </li>
+                                {% elseif page == 1 or page == total_pages or (page >= current_page - 2 and page <= current_page + 2) %}
+                                    <li class="page-item">
+                                        <a href="?page={{ page }}" class="page-link">{{ page }}</a>
+                                    </li>
+                                {% elseif page == current_page - 3 or page == current_page + 3 %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if current_page < total_pages %}
+                                <li class="page-item">
+                                    <a href="?page={{ current_page + 1 }}" class="page-link">
+                                        <i class="fa fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
