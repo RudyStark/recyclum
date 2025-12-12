@@ -36,10 +36,10 @@ class BuybackRequest
 
     // === ÉTAT DE L'APPAREIL ===
     #[ORM\Column(length: 50)]
-    private ?string $functionalCondition = null; // perfect, working, minor_issues, major_issues, not_working
+    private ?string $functionalCondition = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $aestheticCondition = null; // excellent, good, fair, poor, very_poor
+    private ?string $aestheticCondition = null;
 
     #[ORM\Column]
     private ?bool $hasAllAccessories = true;
@@ -47,14 +47,14 @@ class BuybackRequest
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $defectsDescription = null;
 
-    // === PHOTOS ===
-    #[ORM\Column(length: 255, nullable: true)]
+    // === PHOTOS (Base64) ===
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $photo1 = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $photo2 = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $photo3 = null;
 
     // === COORDONNÉES CLIENT ===
@@ -79,26 +79,33 @@ class BuybackRequest
     #[ORM\Column(length: 100)]
     private ?string $city = null;
 
-    // === PAIEMENT ===
+    // === MODE DE PAIEMENT (Recyclum paie le client) ===
     #[ORM\Column(length: 20)]
-    private ?string $paymentMethod = null; // virement, cheque, especes
+    private ?string $paymentMethod = null; // virement, especes
 
     #[ORM\Column(length: 34, nullable: true)]
     private ?string $iban = null;
 
-    // === ESTIMATION ===
+    // === PRIX ===
     #[ORM\Column(nullable: true)]
     private ?int $estimatedPrice = null;
-
-    // === STATUT ===
-    #[ORM\Column(length: 50)]
-    private ?string $status = 'pending'; // pending, validated, collected, paid, cancelled
 
     #[ORM\Column(nullable: true)]
     private ?int $finalPrice = null;
 
+    // === WORKFLOW ===
+    #[ORM\Column(length: 50)]
+    private ?string $status = 'pending';
+    // Statuts: pending, validated, refused, appointment_scheduled, awaiting_collection, collected, paid, cancelled
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $notes = null;
+    private ?string $refusalReason = null;
+
+    #[ORM\Column(length: 64, nullable: true)]
+    private ?string $appointmentToken = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $adminNotes = null;
 
     // === DATES ===
     #[ORM\Column]
@@ -413,7 +420,6 @@ class BuybackRequest
     {
         return match($this->paymentMethod) {
             'virement' => 'Virement bancaire',
-            'cheque' => 'Chèque',
             'especes' => 'Espèces',
             default => 'Non spécifié'
         };
@@ -449,6 +455,25 @@ class BuybackRequest
         return number_format($this->estimatedPrice, 0, ',', ' ') . ' €';
     }
 
+    public function getFinalPrice(): ?int
+    {
+        return $this->finalPrice;
+    }
+
+    public function setFinalPrice(?int $finalPrice): static
+    {
+        $this->finalPrice = $finalPrice;
+        return $this;
+    }
+
+    public function getFinalPriceFormatted(): string
+    {
+        if (!$this->finalPrice) {
+            return 'Non défini';
+        }
+        return number_format($this->finalPrice, 0, ',', ' ') . ' €';
+    }
+
     public function getStatus(): ?string
     {
         return $this->status;
@@ -463,34 +488,48 @@ class BuybackRequest
     public function getStatusLabel(): string
     {
         return match($this->status) {
-            'pending' => 'En attente',
-            'validated' => 'Validée',
-            'collected' => 'Collectée',
-            'paid' => 'Payée',
+            'pending' => 'En attente d\'être rappelé',
+            'validated' => 'Devis validé',
+            'refused' => 'Refusée',
+            'appointment_scheduled' => 'RDV planifié',
+            'awaiting_collection' => 'En attente de récupération',
+            'collected' => 'Appareil récupéré',
+            'paid' => 'Client payé',
             'cancelled' => 'Annulée',
             default => 'Inconnu'
         };
     }
 
-    public function getFinalPrice(): ?int
+    public function getRefusalReason(): ?string
     {
-        return $this->finalPrice;
+        return $this->refusalReason;
     }
 
-    public function setFinalPrice(?int $finalPrice): static
+    public function setRefusalReason(?string $refusalReason): static
     {
-        $this->finalPrice = $finalPrice;
+        $this->refusalReason = $refusalReason;
         return $this;
     }
 
-    public function getNotes(): ?string
+    public function getAppointmentToken(): ?string
     {
-        return $this->notes;
+        return $this->appointmentToken;
     }
 
-    public function setNotes(?string $notes): static
+    public function setAppointmentToken(?string $appointmentToken): static
     {
-        $this->notes = $notes;
+        $this->appointmentToken = $appointmentToken;
+        return $this;
+    }
+
+    public function getAdminNotes(): ?string
+    {
+        return $this->adminNotes;
+    }
+
+    public function setAdminNotes(?string $adminNotes): static
+    {
+        $this->adminNotes = $adminNotes;
         return $this;
     }
 
@@ -499,20 +538,120 @@ class BuybackRequest
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    // === MÉTHODES HELPER WORKFLOW ===
+
+    /**
+     * Vérifie si l'appareil est un gros électroménager nécessitant un enlèvement
+     */
+    public function isLargeAppliance(): bool
     {
-        $this->updatedAt = $updatedAt;
-        return $this;
+        $largeCategories = [
+            'lave-linge',
+            'refrigerateur',
+            'four',
+            'lave-vaisselle',
+            'seche-linge',
+            'cuisiniere',
+            'cave-a-vin'
+        ];
+        return in_array($this->category, $largeCategories);
+    }
+
+    /**
+     * Vérifie si un enlèvement à domicile est nécessaire
+     */
+    public function needsHomePickup(): bool
+    {
+        return $this->isLargeAppliance();
+    }
+
+    /**
+     * Retourne la classe CSS du badge selon le statut
+     */
+    public function getStatusBadgeColor(): string
+    {
+        return match($this->status) {
+            'pending' => '#f39c12',
+            'validated' => '#3498db',
+            'refused' => '#e74c3c',
+            'appointment_scheduled' => '#9b59b6',
+            'awaiting_collection' => '#16a085',
+            'collected' => '#27ae60',
+            'paid' => '#16C669',
+            'cancelled' => '#95a5a6',
+            default => '#7f8c8d'
+        };
+    }
+
+    /**
+     * Retourne l'icône Font Awesome selon le statut
+     */
+    public function getStatusIcon(): string
+    {
+        return match($this->status) {
+            'pending' => 'fa-clock',
+            'validated' => 'fa-check-circle',
+            'refused' => 'fa-times-circle',
+            'appointment_scheduled' => 'fa-calendar-check',
+            'awaiting_collection' => 'fa-box',
+            'collected' => 'fa-truck',
+            'paid' => 'fa-euro-sign',
+            'cancelled' => 'fa-ban',
+            default => 'fa-question-circle'
+        };
+    }
+
+    /**
+     * Vérifie si la demande peut être validée
+     */
+    public function canBeValidated(): bool
+    {
+        return $this->status === 'pending';
+    }
+
+    /**
+     * Vérifie si la demande peut être refusée
+     */
+    public function canBeRefused(): bool
+    {
+        return $this->status === 'pending';
+    }
+
+    /**
+     * Vérifie si un RDV peut être planifié (gros électro uniquement)
+     */
+    public function canScheduleAppointment(): bool
+    {
+        return $this->status === 'validated' && $this->needsHomePickup();
+    }
+
+    /**
+     * Vérifie si la demande peut être marquée comme collectée
+     */
+    public function canMarkAsCollected(): bool
+    {
+        return in_array($this->status, ['appointment_scheduled', 'awaiting_collection']);
+    }
+
+    /**
+     * Vérifie si le client peut être marqué comme payé
+     */
+    public function canMarkAsPaid(): bool
+    {
+        return $this->status === 'collected';
+    }
+
+    /**
+     * Génère un token unique pour le lien de prise de RDV
+     */
+    public function generateAppointmentToken(): string
+    {
+        $this->appointmentToken = bin2hex(random_bytes(32));
+        return $this->appointmentToken;
     }
 }

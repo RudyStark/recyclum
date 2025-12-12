@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 40px 30px; text-align: center; border-radius: 12px 12px 0 0; }
+        .content { background: white; padding: 40px 30px; border: 1px solid #e6edf2; border-top: none; }
+        .estimation-box { background: linear-gradient(135deg, rgba(22, 198, 105, 0.1) 0%, rgba(22, 198, 105, 0.05) 100%); border: 2px solid #16C669; border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0; }
+        .price { font-size: 40px; font-weight: 900; color: #16C669; margin: 12px 0; }
+        .info-section { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e6edf2; }
+        .btn { display: inline-block; background: #16C669; color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 700; margin: 20px 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔔 Nouvelle demande de rachat</h1>
+        <p style="margin: 8px 0 0 0; font-size: 16px; opacity: 0.95;">Demande #{{ request.id }}</p>
+    </div>
+
+    <div class="content">
+        <div class="estimation-box">
+            <div style="font-size: 14px; color: #6c7783; margin-bottom: 8px;">💰 Estimation calculée</div>
+            <div class="price">{{ request.estimatedPrice|number_format(0, ',', ' ') }} €</div>
+        </div>
+
+        <div class="info-section">
+            <h3 style="margin-top: 0; color: #1a2332;">👤 Client</h3>
+            <div class="info-row">
+                <span style="color: #6c7783;">Nom</span>
+                <strong>{{ request.fullName }}</strong>
+            </div>
+            <div class="info-row">
+                <span style="color: #6c7783;">Email</span>
+                <strong>{{ request.email }}</strong>
+            </div>
+            <div class="info-row">
+                <span style="color: #6c7783;">Téléphone</span>
+                <strong>{{ request.phone }}</strong>
+            </div>
+            <div class="info-row">
+                <span style="color: #6c7783;">Adresse</span>
+                <strong>{{ request.fullAddress }}</strong>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3 style="margin-top: 0; color: #1a2332;">📺 Appareil</h3>
+            <div class="info-row">
+                <span style="color: #6c7783;">Catégorie</span>
+                <strong>{{ request.categoryLabel }}</strong>
+            </div>
+            <div class="info-row">
+                <span style="color: #6c7783;">Marque</span>
+                <strong>{{ request.brand|capitalize }}</strong>
+            </div>
+            <div class="info-row">
+                <span style="color: #6c7783;">Modèle</span>
+                <strong>{{ request.model }}</strong>
+            </div>
+            <div class="info-row">
+                <span style="color: #6c7783;">Année</span>
+                <strong>{{ request.purchaseYear }}</strong>
+            </div>
+            <div class="info-row">
+                <span style="color: #6c7783;">Facture</span>
+                <strong>{{ request.isHasInvoice ? '✓ Oui (+10%)' : '✗ Non' }}</strong>
+            </div>
+            <div class="info-row">
+                <span style="color: #6c7783;">État fonctionnel</span>
+                <strong>{{ request.functionalConditionLabel }}</strong>
+            </div>
+            <div class="info-row">
+                <span style="color: #6c7783;">État esthétique</span>
+                <strong>{{ request.aestheticConditionLabel }}</strong>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3 style="margin-top: 0; color: #1a2332;">💳 Paiement souhaité par le client</h3>
+            <div class="info-row">
+                <span style="color: #6c7783;">Mode</span>
+                <strong>{{ request.paymentMethodLabel }}</strong>
+            </div>
+            {% if request.iban %}
+                <div class="info-row">
+                    <span style="color: #6c7783;">IBAN client</span>
+                    <strong style="font-family: 'Courier New', monospace;">{{ request.iban }}</strong>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if request.needsHomePickup %}
+            <div style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b; padding: 16px; border-radius: 8px; margin: 24px 0;">
+                <strong style="color: #92400e;">🚚 Enlèvement à domicile requis</strong><br>
+                <span style="color: #6c7783; font-size: 14px;">Cet appareil nécessite un RDV d'enlèvement après validation.</span>
+            </div>
+        {% else %}
+            <div style="background: rgba(34, 197, 94, 0.1); border-left: 4px solid #22c55e; padding: 16px; border-radius: 8px; margin: 24px 0;">
+                <strong style="color: #15803d;">🏪 Dépôt en magasin</strong><br>
+                <span style="color: #6c7783; font-size: 14px;">Le client pourra apporter l'appareil directement en magasin.</span>
+            </div>
+        {% endif %}
+
+        <div style="text-align: center; margin-top: 32px;">
+            <a href="{{ viewUrl }}" class="btn">Voir la demande complète</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

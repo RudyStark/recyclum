@@ -11,7 +11,7 @@
         <nav aria-label="breadcrumb" class="mb-3">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\BuybackRequestCrudController').setAction('index').generateUrl() }}">
+                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\BuybackRequestCrudController').setAction('requestIndex').generateUrl() }}">
                         <i class="fa fa-shopping-cart"></i> Demandes de rachat
                     </a>
                 </li>
@@ -44,18 +44,10 @@
                         <div class="row g-3">
                             <div class="col-6">
                                 <label class="form-label">Statut</label>
-                                {% set status_config = {
-                                    'pending': { 'label': 'En attente', 'color': '#f39c12', 'icon': 'fa-clock' },
-                                    'validated': { 'label': 'Validée', 'color': '#3498db', 'icon': 'fa-check' },
-                                    'collected': { 'label': 'Collectée', 'color': '#9b59b6', 'icon': 'fa-truck' },
-                                    'paid': { 'label': 'Payée', 'color': '#27ae60', 'icon': 'fa-euro-sign' },
-                                    'cancelled': { 'label': 'Annulée', 'color': '#95a5a6', 'icon': 'fa-times' }
-                                } %}
-                                {% set config = status_config[request.status] ?? status_config['pending'] %}
                                 <div>
-                                    <span class="badge" style="background-color: {{ config.color }}; color: white; padding: 8px 14px; border-radius: 12px; font-size: 13px; display: inline-flex; align-items: center; gap: 8px;">
-                                        <i class="fa {{ config.icon }}"></i>
-                                        {{ config.label }}
+                                    <span class="badge" style="background-color: {{ request.statusBadgeColor }}; color: white; padding: 8px 14px; border-radius: 12px; font-size: 13px; display: inline-flex; align-items: center; gap: 8px;">
+                                        <i class="fa {{ request.statusIcon }}"></i>
+                                        {{ request.statusLabel }}
                                     </span>
                                 </div>
                             </div>
@@ -248,6 +240,206 @@
                         </div>
                     </div>
                 </div>
+                {# ✅ HISTORIQUE TIMELINE - POSITION FINALE #}
+                <div class="form-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <i class="fa fa-history"></i> Historique de la demande
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="timeline">
+                            {# ÉTAPE 1 : DEMANDE CRÉÉE #}
+                            <div class="timeline-item {% if request.status != 'pending' %}completed{% endif %}">
+                                <div class="timeline-marker">
+                                    <i class="fa fa-check"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">Demande créée</div>
+                                    <div class="timeline-date">{{ request.createdAt|date('d/m/Y à H:i') }}</div>
+                                    <div class="timeline-details">
+                                        <span class="timeline-badge">{{ request.categoryLabel }}</span>
+                                        <span class="timeline-badge">{{ request.brand|capitalize }} {{ request.model }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {# ÉTAPE 2 : VALIDÉE OU REFUSÉE #}
+                            {% if request.status == 'validated' or request.status == 'appointment_scheduled' or request.status == 'awaiting_collection' or request.status == 'collected' or request.status == 'paid' %}
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker">
+                                        <i class="fa fa-check-circle"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Demande validée</div>
+                                        <div class="timeline-date">{{ request.updatedAt|date('d/m/Y à H:i') }}</div>
+                                        <div class="timeline-details">
+                                            {% if request.finalPrice %}
+                                                <span class="timeline-badge timeline-badge-success">
+                                                    <i class="fa fa-euro-sign"></i> {{ request.finalPrice|number_format(0, ',', ' ') }} €
+                                                </span>
+                                            {% endif %}
+                                            {% if request.needsHomePickup() %}
+                                                <span class="timeline-badge timeline-badge-info">
+                                                    <i class="fa fa-truck"></i> Enlèvement requis
+                                                </span>
+                                            {% else %}
+                                                <span class="timeline-badge timeline-badge-info">
+                                                    <i class="fa fa-store"></i> Dépôt magasin
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elseif request.status == 'refused' %}
+                                <div class="timeline-item completed timeline-item-refused">
+                                    <div class="timeline-marker">
+                                        <i class="fa fa-times-circle"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Demande refusée</div>
+                                        <div class="timeline-date">{{ request.updatedAt|date('d/m/Y à H:i') }}</div>
+                                        {% if request.refusalReason %}
+                                            <div class="timeline-details" style="margin-top: 0.5rem;">
+                                                <div style="background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding: 0.75rem; border-radius: 4px; font-size: 0.875rem; color: #7f1d1d;">
+                                                    <strong>Motif :</strong> {{ request.refusalReason }}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="timeline-item pending">
+                                    <div class="timeline-marker">
+                                        <i class="fa fa-clock"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">En attente de validation</div>
+                                        <div class="timeline-date">Réponse sous 24h</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {# ÉTAPE 3 : RDV PLANIFIÉ (si gros électro) #}
+                            {% if request.status == 'appointment_scheduled' or request.status == 'collected' or request.status == 'paid' %}
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker">
+                                        <i class="fa fa-calendar-check"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Rendez-vous planifié</div>
+                                        {% if appointment %}
+                                            <div class="timeline-date">{{ appointment.fullDateTime }}</div>
+                                            <div class="timeline-details">
+                                                <span class="timeline-badge timeline-badge-primary">
+                                                    <i class="fa fa-map-marker-alt"></i> {{ request.city }}
+                                                </span>
+                                            </div>
+                                        {% else %}
+                                            <div class="timeline-date">Date à confirmer</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% elseif request.status == 'awaiting_collection' %}
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker">
+                                        <i class="fa fa-box"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">En attente de dépôt</div>
+                                        <div class="timeline-date">Magasin ouvert Lun-Sam</div>
+                                        <div class="timeline-details">
+                                            <span class="timeline-badge timeline-badge-info">
+                                                <i class="fa fa-store"></i> À apporter en magasin
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elseif request.status == 'validated' and request.needsHomePickup() %}
+                                <div class="timeline-item pending">
+                                    <div class="timeline-marker">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Planification du RDV</div>
+                                        <div class="timeline-date">En attente du client</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {# ÉTAPE 4 : COLLECTÉ #}
+                            {% if request.status == 'collected' or request.status == 'paid' %}
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker">
+                                        <i class="fa fa-truck"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Appareil récupéré</div>
+                                        <div class="timeline-date">{{ request.updatedAt|date('d/m/Y à H:i') }}</div>
+                                        <div class="timeline-details">
+                                            <span class="timeline-badge timeline-badge-success">
+                                                <i class="fa fa-check"></i> En stock
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elseif request.status == 'appointment_scheduled' or request.status == 'awaiting_collection' %}
+                                <div class="timeline-item pending">
+                                    <div class="timeline-marker">
+                                        <i class="fa fa-truck"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Récupération</div>
+                                        <div class="timeline-date">À venir</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {# ÉTAPE 5 : PAYÉ #}
+                            {% if request.status == 'paid' %}
+                                <div class="timeline-item completed timeline-item-success">
+                                    <div class="timeline-marker">
+                                        <i class="fa fa-euro-sign"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Client payé</div>
+                                        <div class="timeline-date">{{ request.updatedAt|date('d/m/Y à H:i') }}</div>
+                                        <div class="timeline-details">
+                                            <span class="timeline-badge timeline-badge-success">
+                                                <i class="fa fa-check-circle"></i>
+                                                {{ request.finalPrice ? request.finalPrice : request.estimatedPrice }} €
+                                                {% if request.paymentMethod == 'virement' %}(Virement){% else %}(Espèces){% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elseif request.status == 'collected' %}
+                                <div class="timeline-item pending">
+                                    <div class="timeline-marker">
+                                        <i class="fa fa-euro-sign"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Paiement du client</div>
+                                        <div class="timeline-date">À effectuer</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {# ANNULÉE #}
+                            {% if request.status == 'cancelled' %}
+                                <div class="timeline-item completed timeline-item-cancelled">
+                                    <div class="timeline-marker">
+                                        <i class="fa fa-ban"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Demande annulée</div>
+                                        <div class="timeline-date">{{ request.updatedAt|date('d/m/Y à H:i') }}</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {# SIDEBAR #}
@@ -278,43 +470,182 @@
                     </div>
                 </div>
 
-                {# ACTIONS RAPIDES #}
+                {# ACTIONS WORKFLOW #}
                 <div class="form-panel mb-4">
                     <div class="panel-header">
                         <h2 class="panel-title">
-                            <i class="fa fa-bolt"></i> Actions rapides
+                            <i class="fa fa-tasks"></i> Gestion du workflow
                         </h2>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" data-controller="admin--buyback-actions" data-admin--buyback-actions-request-id-value="{{ request.id }}" data-admin--buyback-actions-current-status-value="{{ request.status }}">
+
+                        {# DROPDOWN CHANGEMENT DE STATUT #}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Changer le statut</label>
+                            <select class="form-select" data-action="change->admin--buyback-actions#changeStatus" data-admin--buyback-actions-target="statusSelect">
+                                <option value="">-- Sélectionner une action --</option>
+
+                                {% if request.canBeValidated() %}
+                                    <option value="validate">✓ Valider la demande</option>
+                                    <option value="refuse">✗ Refuser la demande</option>
+                                {% endif %}
+
+                                {% if request.status == 'validated' and not request.needsHomePickup() %}
+                                    <option value="awaiting_collection">📦 En attente dépôt magasin</option>
+                                {% endif %}
+
+                                {% if request.canMarkAsCollected() %}
+                                    <option value="collected">🚚 Marquer comme collecté</option>
+                                {% endif %}
+
+                                {% if request.canMarkAsPaid() %}
+                                    <option value="paid">💰 Marquer comme payé</option>
+                                {% endif %}
+
+                                {% if request.status not in ['cancelled', 'refused', 'paid'] %}
+                                    <option value="cancel">🚫 Annuler la demande</option>
+                                {% endif %}
+                            </select>
+                        </div>
+
+                        {# ALERTE SI GROS ÉLECTRO VALIDÉ #}
+                        {% if request.status == 'validated' and request.needsHomePickup() %}
+                            <div class="alert alert-info" style="background: rgba(59, 130, 246, 0.1); border: 2px solid #3B82F6; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                                <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                                    <i class="fa fa-calendar-check" style="color: #3B82F6; font-size: 1.25rem; margin-top: 2px;"></i>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 700; color: #1E40AF; margin-bottom: 0.5rem;">Enlèvement requis</div>
+                                        <div style="font-size: 0.875rem; color: #1E3A8A; margin-bottom: 0.75rem;">
+                                            Le client doit choisir un créneau d'enlèvement
+                                        </div>
+                                        {% if request.appointmentToken %}
+                                            <a href="{{ url('buyback_appointment_calendar', {token: request.appointmentToken}) }}"
+                                               class="btn btn-sm btn-primary"
+                                               target="_blank"
+                                               style="background: #3B82F6; border: none; font-size: 0.8rem; padding: 0.5rem 0.75rem;">
+                                                <i class="fa fa-external-link-alt"></i> Lien calendrier client
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {# INFORMATIONS RDV SI PLANIFIÉ #}
+                        {% if request.status == 'appointment_scheduled' and appointment %}
+                            <div class="alert mb-3" style="background: linear-gradient(135deg, rgba(22, 198, 105, 0.1) 0%, rgba(22, 198, 105, 0.05) 100%); border: 2px solid #16C669; border-radius: 12px; padding: 0; overflow: hidden; margin-bottom: 1rem;">
+                                {# HEADER #}
+                                <div style="background: linear-gradient(135deg, #16C669 0%, #12A85A 100%); color: white; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.75rem;">
+                                    <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <i class="fa fa-calendar-check" style="font-size: 1.125rem;"></i>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 800; font-size: 1rem; margin-bottom: 2px;">Rendez-vous confirmé</div>
+                                        <div style="font-size: 0.8rem; opacity: 0.9;">Enlèvement à domicile</div>
+                                    </div>
+                                </div>
+
+                                {# BODY #}
+                                <div style="padding: 1.25rem;">
+                                    {# DATE ET HEURE #}
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                        <div>
+                                            <div style="font-size: 0.75rem; color: #6c7783; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.375rem;">📅 Date</div>
+                                            <div style="font-weight: 700; color: #1a2332; font-size: 0.9rem;">{{ appointment.formattedDate }}</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 0.75rem; color: #6c7783; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.375rem;">🕐 Heure</div>
+                                            <div style="font-weight: 700; color: #1a2332; font-size: 0.9rem;">{{ appointment.appointmentTime }}</div>
+                                        </div>
+                                    </div>
+
+                                    {# ADRESSE #}
+                                    <div style="margin-bottom: 1rem;">
+                                        <div style="font-size: 0.75rem; color: #6c7783; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.375rem;">📍 Adresse</div>
+                                        <div style="font-weight: 600; color: #1a2332; font-size: 0.875rem; line-height: 1.4;">
+                                            {{ request.address }}<br>
+                                            {{ request.postalCode }} {{ request.city }}
+                                        </div>
+                                    </div>
+
+                                    {# MONTANT #}
+                                    <div style="background: rgba(22, 198, 105, 0.08); border: 2px dashed #16C669; border-radius: 8px; padding: 0.875rem; text-align: center;">
+                                        <div style="font-size: 0.75rem; color: #0F5132; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">💰 Montant à payer au client</div>
+                                        <div style="font-weight: 900; color: #16C669; font-size: 1.5rem;">
+                                            {{ request.finalPrice ? request.finalPrice : request.estimatedPrice }} €
+                                        </div>
+                                        <div style="font-size: 0.75rem; color: #146C43; margin-top: 0.25rem;">
+                                            {% if request.paymentMethod == 'virement' %}
+                                                Virement bancaire après enlèvement
+                                            {% else %}
+                                                Espèces sur place
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    {# NOTES RDV SI EXISTENT #}
+                                    {% if appointment.notes %}
+                                        <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(59, 130, 246, 0.05); border-left: 3px solid #3B82F6; border-radius: 4px;">
+                                            <div style="font-size: 0.75rem; color: #1E40AF; font-weight: 600; margin-bottom: 0.375rem;">📝 Notes RDV</div>
+                                            <div style="font-size: 0.8rem; color: #1E3A8A;">{{ appointment.notes }}</div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                {# FOOTER #}
+                                <div style="background: rgba(22, 198, 105, 0.05); padding: 0.875rem 1.25rem; border-top: 1px solid rgba(22, 198, 105, 0.2); display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fa fa-info-circle" style="color: #16C669; font-size: 0.875rem;"></i>
+                                    <div style="font-size: 0.75rem; color: #0F5132; line-height: 1.4;">
+                                        Pensez à appeler le client la veille pour confirmer
+                                    </div>
+                                </div>
+                            </div>
+                        {% elseif request.status == 'appointment_scheduled' and not appointment %}
+                            {# FALLBACK SI PAS DE RDV TROUVÉ #}
+                            <div class="alert alert-warning" style="background: rgba(245, 158, 11, 0.1); border: 2px solid #f59e0b; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                                <div style="font-weight: 700; color: #92400e; margin-bottom: 0.5rem;">
+                                    <i class="fa fa-exclamation-triangle"></i> RDV non trouvé
+                                </div>
+                                <div style="font-size: 0.875rem; color: #78350f;">
+                                    Le statut indique un RDV planifié mais aucun rendez-vous n'a été trouvé en base de données.
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <hr style="margin: 1.5rem 0;">
+
+                        {# ACTIONS RAPIDES CONTACT #}
                         <div class="d-grid gap-2">
-                            <a href="mailto:{{ request.email }}" class="btn btn-outline-primary">
+                            <a href="mailto:{{ request.email }}" class="btn btn-outline-primary btn-sm">
                                 <i class="fa fa-envelope"></i> Envoyer un email
                             </a>
-                            <a href="tel:{{ request.phone }}" class="btn btn-outline-success">
+                            <a href="tel:{{ request.phone }}" class="btn btn-outline-success btn-sm">
                                 <i class="fa fa-phone"></i> Appeler le client
                             </a>
-                            <button class="btn btn-outline-secondary" onclick="window.print()">
-                                <i class="fa fa-print"></i> Imprimer
-                            </button>
                         </div>
                     </div>
                 </div>
 
-                {# NOTES #}
+                {# NOTES ÉDITABLES #}
                 <div class="form-panel">
                     <div class="panel-header">
                         <h2 class="panel-title">
                             <i class="fa fa-sticky-note"></i> Notes internes
                         </h2>
                     </div>
-                    <div class="panel-body">
-                        {% if request.notes %}
-                            <textarea class="form-control" rows="5" readonly>{{ request.notes }}</textarea>
-                        {% else %}
-                            <div class="text-center text-muted py-3">
-                                <i class="fa fa-file-o"></i> Aucune note
-                            </div>
-                        {% endif %}
+                    <div class="panel-body" data-controller="admin--buyback-notes" data-admin--buyback-notes-request-id-value="{{ request.id }}">
+                        <textarea
+                            class="form-control"
+                            rows="5"
+                            placeholder="Ajouter des notes internes..."
+                            data-admin--buyback-notes-target="textarea"
+                            data-action="blur->admin--buyback-notes#save">{{ request.adminNotes }}</textarea>
+
+                        <div class="mt-2" data-admin--buyback-notes-target="saveStatus" style="display: none;">
+                            <small class="text-success">
+                                <i class="fa fa-check"></i> Sauvegardé
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -322,7 +653,7 @@
 
         {# FOOTER ACTIONS #}
         <div class="form-actions mt-4">
-            <a href="{{ ea_url().setController('App\\Controller\\Admin\\BuybackRequestCrudController').setAction('index').generateUrl() }}" class="btn btn-outline-secondary">
+            <a href="{{ ea_url().setController('App\\Controller\\Admin\\BuybackRequestCrudController').setAction('requestIndex').generateUrl() }}" class="btn btn-outline-secondary">
                 <i class="fa fa-arrow-left"></i> Retour à la liste
             </a>
             <div>
@@ -332,6 +663,271 @@
                         <i class="fa fa-trash"></i> Supprimer
                     </button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    {# ========================================
+       MODALES
+       ======================================== #}
+
+    {# MODALE VALIDATION #}
+    <div class="modal fade" id="validateModal" tabindex="-1" data-controller="admin--buyback-validate-modal" data-admin--buyback-validate-modal-request-id-value="{{ request.id }}" data-admin--buyback-validate-modal-estimated-price-value="{{ request.estimatedPrice }}">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 16px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                <div class="modal-header" style="background: linear-gradient(135deg, #16C669 0%, #12A85A 100%); color: white; border-radius: 16px 16px 0 0; padding: 1.5rem;">
+                    <h5 class="modal-title" style="font-weight: 800; font-size: 1.25rem;">
+                        <i class="fa fa-check-circle"></i> Valider la demande
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="padding: 2rem;">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Prix estimé de rachat</label>
+                        <div style="background: linear-gradient(135deg, rgba(22, 198, 105, 0.1) 0%, rgba(22, 198, 105, 0.05) 100%); border: 2px solid #16C669; border-radius: 12px; padding: 1.5rem; text-align: center;">
+                            <div style="font-size: 0.875rem; color: #0F5132; margin-bottom: 0.5rem;">💰 Nous payons au client</div>
+                            <div style="font-size: 2.5rem; font-weight: 900; color: #16C669;">
+                                {{ request.estimatedPrice|number_format(0, ',', ' ') }} €
+                            </div>
+                            <div style="font-size: 0.75rem; color: #146C43; margin-top: 0.5rem;">Prix estimé - sera confirmé sur place</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Message personnalisé (optionnel)</label>
+                        <textarea
+                            class="form-control"
+                            rows="4"
+                            placeholder="Ajoutez un message qui sera envoyé au client par email..."
+                            data-admin--buyback-validate-modal-target="messageInput"></textarea>
+                        <small class="text-muted">Ce message sera inclus dans l'email de validation</small>
+                    </div>
+
+                    <div class="alert alert-info" style="background: rgba(59, 130, 246, 0.1); border: 2px solid #3B82F6; border-radius: 8px; margin-bottom: 0;">
+                        <div style="display: flex; gap: 0.75rem;">
+                            <i class="fa fa-info-circle" style="color: #3B82F6; font-size: 1.25rem; margin-top: 2px;"></i>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 700; color: #1E40AF; font-size: 0.875rem; margin-bottom: 0.25rem;">Que se passe-t-il ensuite ?</div>
+                                <ul style="font-size: 0.8rem; color: #1E3A8A; margin: 0; padding-left: 1.25rem;">
+                                    {% if request.needsHomePickup() %}
+                                        <li>Le client recevra un lien pour choisir un créneau d'enlèvement</li>
+                                        <li>Le transporteur confirmera le prix final sur place</li>
+                                        <li>Vous pourrez ajuster le prix lors de la collecte si nécessaire</li>
+                                    {% else %}
+                                        <li>Le client recevra les instructions pour déposer l'appareil en magasin</li>
+                                        <li>Vous confirmerez le prix final lors du dépôt</li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #e5e7eb; padding: 1.25rem;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fa fa-times"></i> Annuler
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        data-action="click->admin--buyback-validate-modal#submit"
+                        data-admin--buyback-validate-modal-target="submitBtn"
+                        style="background: linear-gradient(135deg, #16C669 0%, #12A85A 100%); border: none; font-weight: 700;">
+                        <i class="fa fa-check"></i> Valider la demande
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# MODALE REFUS #}
+    <div class="modal fade" id="refuseModal" tabindex="-1" data-controller="admin--buyback-refuse-modal" data-admin--buyback-refuse-modal-request-id-value="{{ request.id }}">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 16px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                <div class="modal-header" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border-radius: 16px 16px 0 0; padding: 1.5rem;">
+                    <h5 class="modal-title" style="font-weight: 800; font-size: 1.25rem;">
+                        <i class="fa fa-times-circle"></i> Refuser la demande
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="padding: 2rem;">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Motif du refus <span class="text-danger">*</span></label>
+                        <textarea
+                            class="form-control"
+                            rows="5"
+                            placeholder="Expliquez pourquoi vous refusez cette demande..."
+                            data-admin--buyback-refuse-modal-target="reasonInput"
+                            required></textarea>
+                        <small class="text-muted">Ce message sera envoyé au client par email</small>
+                    </div>
+
+                    <div class="alert alert-warning" style="background: rgba(245, 158, 11, 0.1); border: 2px solid #f59e0b; border-radius: 8px; margin-bottom: 0;">
+                        <div style="display: flex; gap: 0.75rem;">
+                            <i class="fa fa-exclamation-triangle" style="color: #f59e0b; font-size: 1.25rem; margin-top: 2px;"></i>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 700; color: #92400e; font-size: 0.875rem; margin-bottom: 0.25rem;">Alternatives proposées au client</div>
+                                <ul style="font-size: 0.8rem; color: #78350f; margin: 0; padding-left: 1.25rem;">
+                                    <li>Service de réparation Recyclum</li>
+                                    <li>Catalogue de produits reconditionnés</li>
+                                    <li>Diagnostic gratuit de l'appareil</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #e5e7eb; padding: 1.25rem;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fa fa-times"></i> Annuler
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-danger"
+                        data-action="click->admin--buyback-refuse-modal#submit"
+                        data-admin--buyback-refuse-modal-target="submitBtn"
+                        style="font-weight: 700;">
+                        <i class="fa fa-times-circle"></i> Confirmer le refus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# MODALE PAIEMENT #}
+    <div class="modal fade" id="paymentModal" tabindex="-1" data-controller="admin--buyback-payment-modal" data-admin--buyback-payment-modal-request-id-value="{{ request.id }}" data-admin--buyback-payment-modal-final-price-value="{{ request.finalPrice ?? request.estimatedPrice }}">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 16px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                <div class="modal-header" style="background: linear-gradient(135deg, #16C669 0%, #12A85A 100%); color: white; border-radius: 16px 16px 0 0; padding: 1.5rem;">
+                    <h5 class="modal-title" style="font-weight: 800; font-size: 1.25rem;">
+                        <i class="fa fa-euro-sign"></i> Confirmer le paiement
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="padding: 2rem;">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Montant payé <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input
+                                type="number"
+                                class="form-control"
+                                value="{{ request.finalPrice ?? request.estimatedPrice }}"
+                                min="0"
+                                data-admin--buyback-payment-modal-target="amountInput"
+                                style="font-size: 1.5rem; font-weight: 800; text-align: right;">
+                            <span class="input-group-text" style="background: rgba(22, 198, 105, 0.1); border-left: none; font-weight: 800; color: #16C669; font-size: 1.25rem;">€</span>
+                        </div>
+                        <small class="text-muted">Prix validé : {{ request.finalPrice ?? request.estimatedPrice }} €</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Mode de paiement <span class="text-danger">*</span></label>
+                        <select class="form-select" data-admin--buyback-payment-modal-target="methodSelect" style="font-weight: 600;">
+                            <option value="virement" {% if request.paymentMethod == 'virement' %}selected{% endif %}>💳 Virement bancaire</option>
+                            <option value="especes" {% if request.paymentMethod == 'especes' %}selected{% endif %}>💵 Espèces</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Note (optionnel)</label>
+                        <textarea
+                            class="form-control"
+                            rows="3"
+                            placeholder="Ex: Virement effectué le..."
+                            data-admin--buyback-payment-modal-target="noteInput"></textarea>
+                    </div>
+
+                    <div class="alert alert-success" style="background: rgba(22, 198, 105, 0.1); border: 2px solid #16C669; border-radius: 8px; margin-bottom: 0;">
+                        <div style="display: flex; gap: 0.75rem;">
+                            <i class="fa fa-check-circle" style="color: #16C669; font-size: 1.25rem; margin-top: 2px;"></i>
+                            <div style="flex: 1; font-size: 0.875rem; color: #0F5132;">
+                                <strong>Finalisation :</strong> Cette action clôture la demande. Le client sera notifié du paiement.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #e5e7eb; padding: 1.25rem;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fa fa-times"></i> Annuler
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        data-action="click->admin--buyback-payment-modal#submit"
+                        data-admin--buyback-payment-modal-target="submitBtn"
+                        style="background: linear-gradient(135deg, #16C669 0%, #12A85A 100%); border: none; font-weight: 700;">
+                        <i class="fa fa-check"></i> Confirmer le paiement
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# MODALE COLLECTE #}
+    <div class="modal fade" id="collectedModal" tabindex="-1" data-controller="admin--buyback-collected-modal" data-admin--buyback-collected-modal-request-id-value="{{ request.id }}" data-admin--buyback-collected-modal-estimated-price-value="{{ request.estimatedPrice }}">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 16px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                <div class="modal-header" style="background: linear-gradient(135deg, #16C669 0%, #12A85A 100%); color: white; border-radius: 16px 16px 0 0; padding: 1.5rem;">
+                    <h5 class="modal-title" style="font-weight: 800; font-size: 1.25rem;">
+                        <i class="fa fa-truck"></i> Confirmer la collecte
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="padding: 2rem;">
+                    <div class="alert alert-warning" style="background: rgba(245, 158, 11, 0.1); border: 2px solid #f59e0b; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <div style="display: flex; gap: 0.75rem;">
+                            <i class="fa fa-exclamation-triangle" style="color: #f59e0b; font-size: 1.25rem; margin-top: 2px;"></i>
+                            <div style="flex: 1; font-size: 0.875rem; color: #78350f;">
+                                <strong>Important :</strong> Confirmez le prix après vérification de l'état réel de l'appareil. Vous pouvez ajuster le prix si l'état ne correspond pas à la description.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Prix confirmé après vérification <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input
+                                type="number"
+                                class="form-control"
+                                value="{{ request.estimatedPrice }}"
+                                min="0"
+                                data-admin--buyback-collected-modal-target="priceInput"
+                                style="font-size: 1.25rem; font-weight: 700;">
+                            <span class="input-group-text" style="background: rgba(22, 198, 105, 0.1); border-left: none; font-weight: 800; color: #16C669; font-size: 1rem;">€</span>
+                        </div>
+                        <small class="text-muted">Prix estimé initial : {{ request.estimatedPrice }} €</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Note de vérification (optionnel)</label>
+                        <textarea
+                            class="form-control"
+                            rows="3"
+                            placeholder="Ex: État conforme, accessoires complets..."
+                            data-admin--buyback-collected-modal-target="noteInput"></textarea>
+                        <small class="text-muted">Notez tout ajustement de prix ou problème constaté</small>
+                    </div>
+
+                    <div class="alert alert-success" style="background: rgba(22, 198, 105, 0.1); border: 2px solid #16C669; border-radius: 8px; margin-bottom: 0;">
+                        <div style="display: flex; gap: 0.75rem;">
+                            <i class="fa fa-check-circle" style="color: #16C669; font-size: 1.25rem; margin-top: 2px;"></i>
+                            <div style="flex: 1; font-size: 0.875rem; color: #0F5132;">
+                                <strong>Prochaine étape :</strong> Une fois collecté, vous pourrez procéder au paiement du client avec le prix confirmé.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #e5e7eb; padding: 1.25rem;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fa fa-times"></i> Annuler
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        data-action="click->admin--buyback-collected-modal#submit"
+                        data-admin--buyback-collected-modal-target="submitBtn"
+                        style="background: linear-gradient(135deg, #16C669 0%, #12A85A 100%); border: none; font-weight: 700;">
+                        <i class="fa fa-check"></i> Confirmer la collecte
+                    </button>
+                </div>
             </div>
         </div>
     </div>

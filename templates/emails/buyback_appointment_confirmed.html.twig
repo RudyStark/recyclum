@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 40px 30px; text-align: center; border-radius: 12px 12px 0 0; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: 900; }
+        .content { background: white; padding: 40px 30px; border: 1px solid #e6edf2; border-top: none; }
+        .appointment-box { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 12px; padding: 24px; margin: 24px 0; }
+        .info-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(59, 130, 246, 0.2); }
+        .info-row:last-child { border-bottom: none; }
+        .payment-box { background: rgba(34, 197, 94, 0.1); border-left: 4px solid #22c55e; padding: 16px; border-radius: 8px; margin: 24px 0; }
+        .warning-box { background: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b; padding: 16px; border-radius: 8px; margin: 24px 0; }
+        .footer { text-align: center; padding: 30px; color: #6c7783; font-size: 14px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>✅ Rendez-vous confirmé !</h1>
+        <p style="margin: 8px 0 0 0; font-size: 16px; opacity: 0.95;">Enlèvement planifié</p>
+    </div>
+
+    <div class="content">
+        <p>Bonjour <strong>{{ request.fullName }}</strong>,</p>
+
+        <p>Votre rendez-vous d'enlèvement a été confirmé avec succès !</p>
+
+        <div class="appointment-box">
+            <h3 style="margin: 0 0 16px 0; color: #1e40af; font-size: 18px;">📅 Détails du rendez-vous</h3>
+            <div class="info-row">
+                <span style="color: #3b82f6; font-size: 20px; width: 24px; flex-shrink: 0;">📆</span>
+                <div>
+                    <strong>Date :</strong> {{ appointment.formattedDate }}
+                </div>
+            </div>
+            <div class="info-row">
+                <span style="color: #3b82f6; font-size: 20px; width: 24px; flex-shrink: 0;">🕐</span>
+                <div>
+                    <strong>Heure :</strong> {{ appointment.appointmentTime }}
+                </div>
+            </div>
+            <div class="info-row">
+                <span style="color: #3b82f6; font-size: 20px; width: 24px; flex-shrink: 0;">📍</span>
+                <div>
+                    <strong>Adresse :</strong><br>
+                    {{ request.fullAddress }}
+                </div>
+            </div>
+            <div class="info-row">
+                <span style="color: #3b82f6; font-size: 20px; width: 24px; flex-shrink: 0;">📦</span>
+                <div>
+                    <strong>Appareil :</strong> {{ request.brand|capitalize }} {{ request.model }}
+                </div>
+            </div>
+            <div class="info-row">
+                <span style="color: #3b82f6; font-size: 20px; width: 24px; flex-shrink: 0;">💰</span>
+                <div>
+                    <strong>Montant estimé :</strong> {{ request.estimatedPrice|number_format(0, ',', ' ') }} €
+                    <div style="font-size: 12px; color: #6c7783; margin-top: 4px;">Prix confirmé après vérification sur place</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <strong style="color: #92400e;">⚠️ Important</strong><br>
+            <span style="color: #78350f; font-size: 14px;">
+                Le montant de <strong>{{ request.estimatedPrice|number_format(0, ',', ' ') }} €</strong> est une <strong>estimation</strong>. Notre transporteur confirmera le prix final après vérification de l'état réel de l'appareil et des accessoires.
+            </span>
+        </div>
+
+        <div class="payment-box">
+            <strong style="color: #15803d;">💵 Paiement</strong><br>
+            <span style="color: #6c7783; font-size: 14px;">
+                {% if request.paymentMethod == 'virement' %}
+                    Vous recevrez le virement du <strong>montant confirmé</strong> sous 48h après récupération de l'appareil.<br>
+                    <strong>N'oubliez pas votre RIB !</strong>
+                {% else %}
+                    Vous recevrez le <strong>montant confirmé</strong> en espèces lors de l'enlèvement.<br>
+                    <strong>Préparez votre pièce d'identité !</strong>
+                {% endif %}
+            </span>
+        </div>
+
+        <h3 style="color: #1a2332; font-size: 18px; margin-top: 32px;">📋 Préparation</h3>
+        <ul style="color: #6c7783;">
+            <li><strong>Débranchez</strong> l'appareil la veille</li>
+            <li><strong>Videz-le</strong> complètement (si applicable : frigo, lave-linge, etc.)</li>
+            <li><strong>Dégagez l'accès</strong> pour faciliter l'enlèvement</li>
+            <li><strong>Préparez tous les accessoires mentionnés</strong> (câbles, télécommande, etc.)</li>
+            <li><strong>Préparez</strong> :
+                <ul>
+                    <li>Pièce d'identité (obligatoire)</li>
+                    {% if request.paymentMethod == 'virement' %}
+                        <li>RIB pour le virement</li>
+                    {% endif %}
+                    {% if request.isHasInvoice %}
+                        <li>Facture d'achat originale (bonus +10% appliqué)</li>
+                    {% endif %}
+                </ul>
+            </li>
+        </ul>
+
+        <div style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; padding: 16px; border-radius: 8px; margin: 24px 0;">
+            <strong style="color: #1e40af;">ℹ️ Bon à savoir</strong><br>
+            <span style="color: #6c7783; font-size: 14px;">
+                • Notre équipe vous appellera la veille pour confirmer<br>
+                • Durée estimée : 15-30 minutes<br>
+                • En cas d'empêchement, prévenez-nous au plus vite<br>
+                • Le prix final peut être ajusté si l'état diffère de votre description
+            </span>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 2px solid #e6edf2;">
+            <p style="color: #6c7783; font-size: 14px; margin-bottom: 8px;">Besoin de modifier votre RDV ?</p>
+            <p style="margin: 0;"><strong>📧 contact@recyclum.fr</strong></p>
+            <p style="margin: 8px 0 0 0;"><strong>📞 01 43 07 63 63</strong></p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p style="margin: 0;">Recyclum - Électroménager reconditionné</p>
+        <p style="margin: 8px 0 0 0; font-size: 12px;">Demande de rachat #{{ request.id }}</p>
+    </div>
+</div>
+</body>
+</html>
