@@ -66,12 +66,14 @@ class BuybackRequestRepository extends ServiceEntityRepository
      */
     public function getTotalToPay(): int
     {
-        return (int) $this->createQueryBuilder('b')
-            ->select('SUM(b.finalPrice)')
+        $result = $this->createQueryBuilder('b')
+            ->select('COALESCE(SUM(b.finalPrice), 0) as total')
             ->where('b.status = :status')
             ->setParameter('status', 'collected')
             ->getQuery()
-            ->getSingleScalarResult() ?? 0;
+            ->getSingleScalarResult();
+
+        return (int) $result;
     }
 
     /**
@@ -82,15 +84,17 @@ class BuybackRequestRepository extends ServiceEntityRepository
         $startOfMonth = new \DateTimeImmutable('first day of this month 00:00:00');
         $endOfMonth = new \DateTimeImmutable('last day of this month 23:59:59');
 
-        return (int) $this->createQueryBuilder('b')
-            ->select('SUM(b.finalPrice)')
+        $result = $this->createQueryBuilder('b')
+            ->select('COALESCE(SUM(b.finalPrice), 0) as total')
             ->where('b.status = :status')
             ->andWhere('b.updatedAt BETWEEN :start AND :end')
             ->setParameter('status', 'paid')
             ->setParameter('start', $startOfMonth)
             ->setParameter('end', $endOfMonth)
             ->getQuery()
-            ->getSingleScalarResult() ?? 0;
+            ->getSingleScalarResult();
+
+        return (int) $result;
     }
 
     /**
@@ -141,5 +145,67 @@ class BuybackRequestRepository extends ServiceEntityRepository
         // Cette méthode nécessite une jointure avec BuybackAppointment
         // Pour l'instant, on compte juste les demandes en statut appointment_scheduled
         return $this->count(['status' => 'appointment_scheduled']);
+    }
+
+    /**
+     * Compte les demandes de rachat actives (en cours de traitement)
+     */
+    public function countActiveRequests(): int
+    {
+        return (int) $this->createQueryBuilder('b')
+            ->select('COUNT(b.id)')
+            ->where('b.status IN (:statuses)')
+            ->setParameter('statuses', ['pending', 'validated', 'appointment_scheduled', 'awaiting_collection', 'collected'])
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * Compte les demandes en attente de validation
+     */
+    public function countPendingValidation(): int
+    {
+        return $this->count(['status' => 'pending']);
+    }
+
+    /**
+     * Récupère les dernières demandes de rachat
+     */
+    public function getRecentRequests(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('b')
+            ->orderBy('b.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Statistiques des rachats par statut (pour graphique)
+     */
+    public function getBuybacksByStatus(): array
+    {
+        $results = $this->createQueryBuilder('b')
+            ->select('b.status, COUNT(b.id) as count')
+            ->groupBy('b.status')
+            ->getQuery()
+            ->getResult();
+
+        $stats = [
+            'pending' => 0,
+            'validated' => 0,
+            'appointment_scheduled' => 0,
+            'awaiting_collection' => 0,
+            'collected' => 0,
+            'paid' => 0,
+            'refused' => 0,
+            'cancelled' => 0,
+        ];
+
+        foreach ($results as $result) {
+            $stats[$result['status']] = (int) $result['count'];
+        }
+
+        return $stats;
     }
 }
