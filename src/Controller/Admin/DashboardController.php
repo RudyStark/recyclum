@@ -2,21 +2,14 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\ApplianceModel;
-use App\Entity\Brand;
 use App\Entity\BuybackRequest;
-use App\Entity\Category;
 use App\Entity\Product;
-use App\Entity\ProductImage;
 use App\Entity\RepairRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
-use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
@@ -32,34 +25,60 @@ class DashboardController extends AbstractDashboardController
 
     public function index(): Response
     {
-        // Calcul des compteurs pour le menu
-        $pendingRepairCount = $this->entityManager
-            ->getRepository(RepairRequest::class)
-            ->count(['status' => 'pending']);
+        // Repositories
+        $productRepo = $this->entityManager->getRepository(Product::class);
+        $buybackRepo = $this->entityManager->getRepository(BuybackRequest::class);
+        $repairRepo = $this->entityManager->getRepository(RepairRequest::class);
 
-        $totalModelsCount = $this->entityManager
-            ->getRepository(ApplianceModel::class)
-            ->count(['isActive' => true]);
+        // ===== KPIs =====
+        $stats = [
+            'total_products' => $productRepo->countPublished(), // Produits disponibles à la vente
+            'active_buybacks' => $buybackRepo->countActiveRequests(), // Rachats en cours
+            'active_repairs' => $repairRepo->countActiveRepairs(), // Réparations en cours
+            'to_pay_amount' => $buybackRepo->getTotalToPay(), // Montant à payer (rachats collectés)
+            'pending_buybacks' => $buybackRepo->countPendingValidation(), // Rachats à valider
+            'pending_repairs' => $repairRepo->countPendingRepairs(), // Réparations à traiter
+            'urgent_repairs' => $repairRepo->countUrgentPending(), // Réparations urgentes
+        ];
 
-        $pendingBuybackCount = $this->entityManager
-            ->getRepository(BuybackRequest::class)
-            ->count(['status' => 'pending']);
+        // ===== GRAPHIQUES =====
+        // Rachats par statut
+        $buybacksByStatus = $buybackRepo->getBuybacksByStatus();
+        $buybacksData = [
+            'labels' => ['En attente', 'Validé', 'RDV planifié', 'Collecté', 'Payé'],
+            'data' => [
+                $buybacksByStatus['pending'],
+                $buybacksByStatus['validated'],
+                $buybacksByStatus['appointment_scheduled'] + $buybacksByStatus['awaiting_collection'],
+                $buybacksByStatus['collected'],
+                $buybacksByStatus['paid'],
+            ],
+        ];
 
-        // Statistiques pour le dashboard
-        $totalProducts = $this->entityManager->getRepository(Product::class)->count([]);
-        $totalRepairs = $this->entityManager->getRepository(RepairRequest::class)->count([]);
-        $totalBuybacks = $this->entityManager->getRepository(BuybackRequest::class)->count([]);
+        // Réparations par statut
+        $repairsByStatus = $repairRepo->getRepairsByStatus();
+        $repairsData = [
+            'labels' => ['En attente', 'Contacté', 'Planifié', 'Terminé'],
+            'data' => [
+                $repairsByStatus['pending'],
+                $repairsByStatus['contacted'],
+                $repairsByStatus['scheduled'],
+                $repairsByStatus['completed'],
+            ],
+        ];
 
-        return $this->render('admin/dashboard.html.twig', [
-            // Compteurs pour le menu
-            'pending_repair_count' => $pendingRepairCount,
-            'total_models_count' => $totalModelsCount,
-            'pending_buyback_count' => $pendingBuybackCount,
+        // ===== ACTIVITÉ RÉCENTE =====
+        $recentProducts = $productRepo->getRecentProducts(5);
+        $recentBuybacks = $buybackRepo->getRecentRequests(5);
+        $recentRepairs = $repairRepo->getRecentRepairs(5);
 
-            // Stats pour le dashboard
-            'total_products' => $totalProducts,
-            'total_repairs' => $totalRepairs,
-            'total_buybacks' => $totalBuybacks,
+        return $this->render('admin/dashboard/index.html.twig', [
+            'stats' => $stats,
+            'buybacks_data' => $buybacksData,
+            'repairs_data' => $repairsData,
+            'recent_products' => $recentProducts,
+            'recent_buybacks' => $recentBuybacks,
+            'recent_repairs' => $recentRepairs,
         ]);
     }
 

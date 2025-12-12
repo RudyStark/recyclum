@@ -136,4 +136,35 @@ class ProductRepository extends ServiceEntityRepository
             default => $qb->orderBy('p.createdAt', 'DESC'), // date_desc
         };
     }
+
+    /**
+     * Compte le nombre total de produits
+     */
+    public function countTotal(): int
+    {
+        return (int) $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * Compte le nombre de produits publiés
+     */
+    public function countPublished(): int
+    {
+        return $this->count(['isPublished' => true]);
+    }
+
+    /**
+     * Récupère les derniers produits ajoutés
+     */
+    public function getRecentProducts(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

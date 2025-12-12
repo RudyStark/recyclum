@@ -1,0 +1,335 @@
+{% extends 'admin/base_layout.html.twig' %}
+{% block body_class 'admin-dashboard' %}
+
+{% block content_title %}{% endblock %}
+{% block page_actions %}{% endblock %}
+{% block content_header_wrapper %}{% endblock %}
+
+{% block main %}
+    <div class="dashboard-container" data-controller="admin--dashboard-stats">
+        {# HERO HEADER #}
+        <div class="dashboard-hero">
+            <div class="dashboard-hero-content">
+                <div class="dashboard-hero-icon">
+                    <i class="fa fa-home"></i>
+                </div>
+                <div>
+                    <h1 class="dashboard-hero-title">Tableau de bord</h1>
+                    <p class="dashboard-hero-subtitle">Vue d'ensemble de votre activité Recyclum</p>
+                </div>
+            </div>
+        </div>
+
+        {# KPIs CARDS #}
+        <div class="dashboard-stats-grid">
+            {# 1. PRODUITS DISPONIBLES #}
+            <div class="dashboard-stat-card">
+                <div class="stat-icon stat-icon-primary">
+                    <i class="fa fa-box"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.total_products }}</div>
+                    <div class="stat-label">Produits</div>
+                    <div class="stat-sublabel">Disponibles à la vente</div>
+                </div>
+            </div>
+
+            {# 2. RACHATS EN COURS #}
+            <div class="dashboard-stat-card {% if stats.pending_buybacks > 0 %}dashboard-stat-card-info{% endif %}">
+                <div class="stat-icon stat-icon-info">
+                    <i class="fa fa-recycle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.active_buybacks }}</div>
+                    <div class="stat-label">Rachats actifs</div>
+                    <div class="stat-sublabel">{{ stats.pending_buybacks }} à valider</div>
+                </div>
+                {% if stats.pending_buybacks > 0 %}
+                    <div class="stat-badge stat-badge-info">
+                        <i class="fa fa-exclamation-circle"></i>
+                    </div>
+                {% endif %}
+            </div>
+
+            {# 3. RÉPARATIONS EN COURS #}
+            <div class="dashboard-stat-card {% if stats.pending_repairs > 0 %}dashboard-stat-card-warning{% endif %}">
+                <div class="stat-icon stat-icon-warning">
+                    <i class="fa fa-tools"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.active_repairs }}</div>
+                    <div class="stat-label">Réparations</div>
+                    <div class="stat-sublabel">{{ stats.pending_repairs }} en attente</div>
+                </div>
+                {% if stats.pending_repairs > 0 %}
+                    <div class="stat-badge stat-badge-warning">
+                        <i class="fa fa-exclamation-circle"></i>
+                    </div>
+                {% endif %}
+            </div>
+
+            {# 4. À PAYER #}
+            <div class="dashboard-stat-card">
+                <div class="stat-icon stat-icon-success">
+                    <i class="fa fa-euro-sign"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ (stats.to_pay_amount / 100)|number_format(0, ',', ' ') }}€</div>
+                    <div class="stat-label">À payer</div>
+                    <div class="stat-sublabel">Rachats collectés</div>
+                </div>
+            </div>
+        </div>
+
+        {# GRAPHIQUES #}
+        <div class="dashboard-charts-grid">
+            {# GRAPHIQUE 1 : RACHATS PAR STATUT #}
+            <div class="dashboard-chart-card">
+                <div class="chart-card-header">
+                    <h3>
+                        <i class="fa fa-chart-bar"></i>
+                        Rachats par statut
+                    </h3>
+                    <p>Répartition du workflow des rachats</p>
+                </div>
+                <div class="chart-card-body">
+                    {% if buybacks_data.data|length > 0 %}
+                        <canvas
+                            data-admin--dashboard-stats-target="buybacksChart"
+                            data-labels="{{ buybacks_data.labels|json_encode }}"
+                            data-values="{{ buybacks_data.data|json_encode }}"
+                        ></canvas>
+                    {% else %}
+                        <div class="chart-empty-state">
+                            <i class="fa fa-inbox"></i>
+                            <p>Aucune donnée disponible</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# GRAPHIQUE 2 : RÉPARATIONS PAR STATUT #}
+            <div class="dashboard-chart-card">
+                <div class="chart-card-header">
+                    <h3>
+                        <i class="fa fa-chart-pie"></i>
+                        Réparations par statut
+                    </h3>
+                    <p>État d'avancement des réparations</p>
+                </div>
+                <div class="chart-card-body">
+                    {% if repairs_data.data|length > 0 %}
+                        <canvas
+                            data-admin--dashboard-stats-target="repairsChart"
+                            data-labels="{{ repairs_data.labels|json_encode }}"
+                            data-values="{{ repairs_data.data|json_encode }}"
+                        ></canvas>
+                    {% else %}
+                        <div class="chart-empty-state">
+                            <i class="fa fa-inbox"></i>
+                            <p>Aucune donnée disponible</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {# ACTIVITÉ RÉCENTE #}
+        <div class="dashboard-activity-grid">
+            {# COLONNE 1 : RACHATS RÉCENTS #}
+            <div class="dashboard-activity-card">
+                <div class="activity-card-header">
+                    <h3>
+                        <i class="fa fa-recycle"></i>
+                        Rachats récents
+                    </h3>
+                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\BuybackRequestCrudController').setAction('requestIndex').generateUrl() }}" class="btn-view-all">
+                        Voir tout
+                        <i class="fa fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="activity-card-body">
+                    {% if recent_buybacks|length > 0 %}
+                        <div class="activity-list">
+                            {% for buyback in recent_buybacks %}
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fa {{ buyback.statusIcon }}"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">{{ buyback.fullName }}</div>
+                                        <div class="activity-meta">
+                                            {{ buyback.categoryLabel }} - {{ buyback.brand|capitalize }}
+                                        </div>
+                                    </div>
+                                    <div class="activity-status">
+                                        <span class="badge" style="background-color: {{ buyback.statusBadgeColor }}; color: white;">
+                                            {{ buyback.statusLabel }}
+                                        </span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="activity-empty-state">
+                            <i class="fa fa-inbox"></i>
+                            <p>Aucune demande récente</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# COLONNE 2 : RÉPARATIONS RÉCENTES #}
+            <div class="dashboard-activity-card">
+                <div class="activity-card-header">
+                    <h3>
+                        <i class="fa fa-tools"></i>
+                        Réparations récentes
+                    </h3>
+                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\RepairRequestCrudController').setAction('index').generateUrl() }}" class="btn-view-all">
+                        Voir tout
+                        <i class="fa fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="activity-card-body">
+                    {% if recent_repairs|length > 0 %}
+                        <div class="activity-list">
+                            {% for repair in recent_repairs %}
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fa fa-wrench"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">
+                                            {{ repair.fullName }}
+                                            {% if repair.urgency %}
+                                                <span class="badge badge-urgent">URGENT</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="activity-meta">
+                                            {{ repair.categoryLabel }} - {{ repair.issue }}
+                                        </div>
+                                    </div>
+                                    <div class="activity-status">
+                                        {% set status_colors = {
+                                            'pending': '#f39c12',
+                                            'contacted': '#3498db',
+                                            'scheduled': '#9b59b6',
+                                            'completed': '#27ae60',
+                                            'cancelled': '#95a5a6'
+                                        } %}
+                                        {% set color = status_colors[repair.status] ?? '#7f8c8d' %}
+                                        <span class="badge" style="background-color: {{ color }}; color: white;">
+                                            {{ repair.statusLabel }}
+                                        </span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="activity-empty-state">
+                            <i class="fa fa-inbox"></i>
+                            <p>Aucune réparation récente</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# COLONNE 3 : ALERTES #}
+            <div class="dashboard-activity-card">
+                <div class="activity-card-header">
+                    <h3>
+                        <i class="fa fa-bell"></i>
+                        Alertes & Actions
+                    </h3>
+                </div>
+                <div class="activity-card-body">
+                    <div class="alert-list">
+                        {# ALERTE RACHATS EN ATTENTE #}
+                        {% if stats.pending_buybacks > 0 %}
+                            <div class="alert-item alert-info">
+                                <div class="alert-icon">
+                                    <i class="fa fa-recycle"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Rachats à valider</div>
+                                    <div class="alert-text">{{ stats.pending_buybacks }} demande{{ stats.pending_buybacks > 1 ? 's' : '' }} de rachat en attente de validation</div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {# ALERTE RÉPARATIONS EN ATTENTE #}
+                        {% if stats.pending_repairs > 0 %}
+                            <div class="alert-item alert-warning">
+                                <div class="alert-icon">
+                                    <i class="fa fa-tools"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Réparations en attente</div>
+                                    <div class="alert-text">{{ stats.pending_repairs }} demande{{ stats.pending_repairs > 1 ? 's' : '' }} de réparation à traiter</div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {# ALERTE RÉPARATIONS URGENTES #}
+                        {% if stats.urgent_repairs > 0 %}
+                            <div class="alert-item alert-danger">
+                                <div class="alert-icon">
+                                    <i class="fa fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Réparations urgentes</div>
+                                    <div class="alert-text">{{ stats.urgent_repairs }} réparation{{ stats.urgent_repairs > 1 ? 's' : '' }} urgente{{ stats.urgent_repairs > 1 ? 's' : '' }} non traitée{{ stats.urgent_repairs > 1 ? 's' : '' }}</div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {# ALERTE RACHATS À PAYER #}
+                        {% if stats.to_pay_amount > 0 %}
+                            <div class="alert-item alert-success">
+                                <div class="alert-icon">
+                                    <i class="fa fa-euro-sign"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Paiements en attente</div>
+                                    <div class="alert-text">{{ (stats.to_pay_amount / 100)|number_format(0, ',', ' ') }}€ à verser aux clients</div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {# SI AUCUNE ALERTE #}
+                        {% if stats.pending_buybacks == 0 and stats.pending_repairs == 0 and stats.urgent_repairs == 0 and stats.to_pay_amount == 0 %}
+                            <div class="alert-empty-state">
+                                <i class="fa fa-check-circle"></i>
+                                <p>Tout est à jour !</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# ACTIONS RAPIDES #}
+        <div class="dashboard-quick-actions">
+            <h3>Actions rapides</h3>
+            <div class="quick-actions-grid">
+                <a href="{{ ea_url().setController('App\\Controller\\Admin\\ProductCrudController').setAction('new').generateUrl() }}" class="quick-action-btn quick-action-primary">
+                    <i class="fa fa-plus-circle"></i>
+                    <span>Ajouter un produit</span>
+                </a>
+                <a href="{{ ea_url().setController('App\\Controller\\Admin\\BuybackRequestCrudController').setAction('requestIndex').generateUrl() }}" class="quick-action-btn quick-action-info">
+                    <i class="fa fa-recycle"></i>
+                    <span>Gérer les rachats</span>
+                </a>
+                <a href="{{ ea_url().setController('App\\Controller\\Admin\\RepairRequestCrudController').setAction('repairRequestIndex').generateUrl() }}" class="quick-action-btn quick-action-warning">
+                    <i class="fa fa-tools"></i>
+                    <span>Gérer les réparations</span>
+                </a>
+                <a href="{{ ea_url().setController('App\\Controller\\Admin\\ProductCrudController').setAction('index').generateUrl() }}" class="quick-action-btn quick-action-success">
+                    <i class="fa fa-boxes"></i>
+                    <span>Voir le catalogue</span>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
