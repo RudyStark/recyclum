@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/api')]
 class BuybackRequestController extends AbstractController
@@ -17,11 +18,12 @@ class BuybackRequestController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private BuybackCalculator $calculator,
-        private EmailService $emailService
+        private EmailService $emailService,
+        private UrlGeneratorInterface $urlGenerator
     ) {}
 
     /**
-     * 🔍 NOUVEAU : Recherche de modèles pour l'autocomplete
+     * 🔍 Recherche de modèles pour l'autocomplete
      */
     #[Route('/buyback/search-models', name: 'api_buyback_search_models', methods: ['GET'])]
     public function searchModels(Request $request): JsonResponse
@@ -54,7 +56,7 @@ class BuybackRequestController extends AbstractController
     }
 
     /**
-     * Création d'une demande de rachat
+     * 📝 Création d'une demande de rachat
      */
     #[Route('/buyback-requests', name: 'api_buyback_request_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
@@ -96,7 +98,6 @@ class BuybackRequestController extends AbstractController
                     ], 400);
                 }
 
-                // Validation format IBAN français (commence par FR et 27 caractères)
                 $iban = str_replace(' ', '', strtoupper($data['iban']));
                 if (!preg_match('/^FR[0-9]{25}$/', $iban)) {
                     return $this->json([
@@ -119,7 +120,7 @@ class BuybackRequestController extends AbstractController
                 ], 400);
             }
 
-            // 🆕 CALCUL AVEC LE NOUVEAU SYSTÈME
+            // Calcul de l'estimation
             $estimatedPrice = $this->calculator->calculatePrice($data);
 
             // Créer l'entité
@@ -147,15 +148,30 @@ class BuybackRequestController extends AbstractController
             $buybackRequest->setPaymentMethod($data['paymentMethod']);
             $buybackRequest->setIban($data['iban'] ?? null);
             $buybackRequest->setEstimatedPrice($estimatedPrice);
-            $buybackRequest->setNotes($data['notes'] ?? null);
+            $buybackRequest->setStatus('pending');
 
             // Sauvegarder
             $this->entityManager->persist($buybackRequest);
             $this->entityManager->flush();
 
-            // TODO: Emails de confirmation
-            // $this->emailService->sendBuybackRequestClientConfirmation($buybackRequest);
-            // $this->emailService->sendBuybackRequestAdminNotification($buybackRequest);
+            // ✅ ENVOI DES EMAILS
+            try {
+                // Email au client
+                $this->emailService->sendBuybackRequestClientConfirmation($buybackRequest);
+
+                // Email à l'admin avec lien vers la demande
+                $viewUrl = $this->urlGenerator->generate(
+                    'admin_buyback_request_show',
+                    ['id' => $buybackRequest->getId()],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                );
+                $this->emailService->sendBuybackRequestAdminNotification($buybackRequest, $viewUrl);
+
+            } catch (\Exception $e) {
+                // Log l'erreur mais ne bloque pas la création
+                // Le système de notification dashboard prendra le relais
+                error_log('Erreur envoi email rachat: ' . $e->getMessage());
+            }
 
             return $this->json([
                 'success' => true,
@@ -174,7 +190,7 @@ class BuybackRequestController extends AbstractController
     }
 
     /**
-     * Estimation rapide sans sauvegarde
+     * 💰 Estimation rapide sans sauvegarde
      */
     #[Route('/buyback-estimate', name: 'api_buyback_estimate', methods: ['POST'])]
     public function estimate(Request $request): JsonResponse
@@ -186,7 +202,6 @@ class BuybackRequestController extends AbstractController
                 return $this->json(['success' => false, 'error' => 'Données invalides'], 400);
             }
 
-            // 🆕 CALCUL AVEC LE NOUVEAU SYSTÈME
             $estimatedPrice = $this->calculator->calculatePrice($data);
 
             return $this->json([

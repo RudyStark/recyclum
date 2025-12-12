@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #16C669 0%, #12A85A 100%); color: white; padding: 40px 30px; text-align: center; border-radius: 12px 12px 0 0; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: 900; }
+        .content { background: white; padding: 40px 30px; border: 1px solid #e6edf2; border-top: none; }
+        .estimation-box { background: linear-gradient(135deg, rgba(22, 198, 105, 0.1) 0%, rgba(22, 198, 105, 0.05) 100%); border: 2px solid #16C669; border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0; }
+        .price { font-size: 48px; font-weight: 900; color: #16C669; margin: 12px 0; }
+        .alert { background: #FFF3CD; border: 1px solid #FFE69C; padding: 16px; border-radius: 8px; margin: 20px 0; color: #856404; }
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+        .info-label { font-weight: 600; color: #6c7783; }
+        .footer { text-align: center; padding: 30px; color: #6c7783; font-size: 14px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>✅ Estimation reçue !</h1>
+        <p style="margin: 8px 0 0 0; font-size: 16px; opacity: 0.95;">Merci pour votre demande de rachat</p>
+    </div>
+
+    <div class="content">
+        <p>Bonjour <strong>{{ request.fullName }}</strong>,</p>
+
+        <p>Nous avons bien reçu votre demande de rachat pour votre <strong>{{ request.brand|capitalize }} {{ request.model }}</strong>.</p>
+
+        <div class="estimation-box">
+            <div style="font-size: 14px; color: #6c7783; margin-bottom: 8px;">💰 Estimation initiale</div>
+            <div class="price">{{ request.estimatedPrice|number_format(0, ',', ' ') }} €</div>
+            <div style="font-size: 13px; color: #6c7783; margin-top: 8px;">Basée sur les informations fournies</div>
+        </div>
+
+        <div class="alert">
+            <strong>⚠️ Prix définitif après validation</strong><br>
+            Notre équipe va étudier votre dossier et vous recontactera sous <strong>24 heures</strong> pour confirmer le prix final et organiser la suite.
+        </div>
+
+        <h3 style="color: #1a2332; font-size: 18px; margin-top: 32px;">📋 Récapitulatif de votre demande</h3>
+
+        <div class="info-row">
+            <span class="info-label">Appareil</span>
+            <span>{{ request.categoryLabel }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Marque & Modèle</span>
+            <span>{{ request.brand|capitalize }} {{ request.model }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Année d'achat</span>
+            <span>{{ request.purchaseYear }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">État fonctionnel</span>
+            <span>{{ request.functionalConditionLabel }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">État esthétique</span>
+            <span>{{ request.aestheticConditionLabel }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Mode de paiement souhaité</span>
+            <span>{{ request.paymentMethodLabel }}</span>
+        </div>
+
+        {% if request.needsHomePickup %}
+            <div style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; padding: 16px; border-radius: 8px; margin: 24px 0;">
+                <strong style="color: #1e40af;">🚚 Enlèvement à domicile</strong><br>
+                <span style="color: #6c7783; font-size: 14px;">Votre appareil nécessite un enlèvement gratuit à domicile. Nous organiserons un rendez-vous après validation.</span>
+            </div>
+        {% else %}
+            <div style="background: rgba(34, 197, 94, 0.1); border-left: 4px solid #22c55e; padding: 16px; border-radius: 8px; margin: 24px 0;">
+                <strong style="color: #15803d;">🏪 Dépôt en magasin</strong><br>
+                <span style="color: #6c7783; font-size: 14px;">Pour cet appareil, vous pourrez l'apporter directement en magasin après validation du rachat.</span>
+            </div>
+        {% endif %}
+
+        <h3 style="color: #1a2332; font-size: 18px; margin-top: 32px;">📞 Prochaines étapes</h3>
+        <ol style="color: #6c7783; padding-left: 20px;">
+            <li style="margin-bottom: 12px;">Notre équipe étudie votre demande</li>
+            <li style="margin-bottom: 12px;">Vous recevez une confirmation sous 24h par email</li>
+            {% if request.needsHomePickup %}
+                <li style="margin-bottom: 12px;">Nous organisons ensemble un rendez-vous d'enlèvement</li>
+            {% else %}
+                <li style="margin-bottom: 12px;">Vous apportez l'appareil en magasin</li>
+            {% endif %}
+            <li style="margin-bottom: 12px;">Nous vous payons {% if request.paymentMethod == 'virement' %}par virement{% else %}en espèces{% endif %}</li>
+        </ol>
+
+        <div style="text-align: center; margin-top: 32px;">
+            <p style="color: #6c7783; font-size: 14px; margin-bottom: 8px;">Des questions ?</p>
+            <p style="margin: 0;"><strong>📧 contact@recyclum.fr</strong></p>
+            <p style="margin: 8px 0 0 0;"><strong>📞 01 43 07 63 63</strong></p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p style="margin: 0;">Recyclum - Électroménager reconditionné</p>
+        <p style="margin: 8px 0 0 0; font-size: 12px;">Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
+    </div>
+</div>
+</body>
+</html>

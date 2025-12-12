@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #16C669 0%, #12A85A 100%); color: white; padding: 40px 30px; text-align: center; border-radius: 12px 12px 0 0; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: 900; }
+        .content { background: white; padding: 40px 30px; border: 1px solid #e6edf2; border-top: none; }
+        .price-box { background: linear-gradient(135deg, rgba(22, 198, 105, 0.1) 0%, rgba(22, 198, 105, 0.05) 100%); border: 2px solid #16C669; border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0; }
+        .price { font-size: 48px; font-weight: 900; color: #16C669; margin: 12px 0; }
+        .btn { display: inline-block; background: #16C669; color: white; padding: 16px 40px; text-decoration: none; border-radius: 8px; font-weight: 700; margin: 20px 0; font-size: 16px; }
+        .info-box { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #16C669; }
+        .footer { text-align: center; padding: 30px; color: #6c7783; font-size: 14px; }
+        .shop-info { background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; padding: 16px; border-radius: 8px; margin: 24px 0; }
+        .warning-box { background: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b; padding: 16px; border-radius: 8px; margin: 24px 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>✅ Votre rachat est validé !</h1>
+        <p style="margin: 8px 0 0 0; font-size: 16px; opacity: 0.95;">Félicitations {{ request.firstName }} !</p>
+    </div>
+
+    <div class="content">
+        <p>Bonjour <strong>{{ request.fullName }}</strong>,</p>
+
+        <p>Excellente nouvelle ! Nous confirmons le rachat de votre <strong>{{ request.brand|capitalize }} {{ request.model }}</strong>.</p>
+
+        <div class="price-box">
+            <div style="font-size: 14px; color: #6c7783; margin-bottom: 8px;">💰 Prix estimé</div>
+            <div class="price">{{ request.estimatedPrice|number_format(0, ',', ' ') }} €</div>
+            <div style="font-size: 13px; color: #6c7783; margin-top: 8px;">Sous réserve de vérification de l'état</div>
+        </div>
+
+        <div class="warning-box">
+            <strong style="color: #92400e;">⚠️ Important</strong><br>
+            <span style="color: #78350f; font-size: 14px;">
+                Ce prix est une <strong>estimation</strong>. Le montant final sera confirmé {% if request.needsHomePickup() %}par notre transporteur lors de l'enlèvement{% else %}lors du dépôt en magasin{% endif %}, après vérification de l'état réel et des accessoires.
+            </span>
+        </div>
+
+        {% if customMessage %}
+            <div class="info-box">
+                <strong>📝 Message de notre équipe :</strong><br>
+                <p style="margin: 8px 0 0 0;">{{ customMessage|nl2br }}</p>
+            </div>
+        {% endif %}
+
+        {% if request.needsHomePickup() %}
+            {# GROS ÉLECTROMÉNAGER - LIEN CALENDRIER #}
+            <h3 style="color: #1a2332; font-size: 18px; margin-top: 32px;">🚚 Prochaine étape : Planifier l'enlèvement</h3>
+
+            <p>Votre appareil nécessite un <strong>enlèvement gratuit à domicile</strong>.</p>
+
+            <div style="text-align: center; margin: 32px 0;">
+                <a href="{{ appointmentUrl }}" class="btn">
+                    📅 Choisir ma date d'enlèvement
+                </a>
+            </div>
+
+            <div style="background: rgba(34, 197, 94, 0.1); border-left: 4px solid #22c55e; padding: 16px; border-radius: 8px; margin: 24px 0;">
+                <strong style="color: #15803d;">💵 Paiement</strong><br>
+                <span style="color: #6c7783; font-size: 14px;">
+                    {% if request.paymentMethod == 'virement' %}
+                        Le virement sera effectué après enlèvement et confirmation du prix.
+                    {% else %}
+                        Le paiement en espèces sera effectué lors de l'enlèvement, après vérification.
+                    {% endif %}
+                </span>
+            </div>
+
+        {% else %}
+            {# PETIT ÉLECTROMÉNAGER - DÉPÔT MAGASIN #}
+            <h3 style="color: #1a2332; font-size: 18px; margin-top: 32px;">🏪 Prochaine étape : Apporter en magasin</h3>
+
+            <p>Vous pouvez apporter votre appareil directement à notre magasin :</p>
+
+            <div class="shop-info">
+                <strong style="color: #1e40af;">📍 Recyclum</strong><br>
+                1 Rue de l'Électroménager<br>
+                75012 Paris<br><br>
+                <strong>🕐 Horaires :</strong><br>
+                Lundi - Vendredi : 9h - 18h<br>
+                Samedi : 10h - 17h
+            </div>
+
+            <div style="background: rgba(34, 197, 94, 0.1); border-left: 4px solid #22c55e; padding: 16px; border-radius: 8px; margin: 24px 0;">
+                <strong style="color: #15803d;">💵 Paiement sur place</strong><br>
+                <span style="color: #6c7783; font-size: 14px;">
+                    {% if request.paymentMethod == 'virement' %}
+                        Vous recevrez le virement sous 48h après vérification et dépôt.<br>
+                        Pensez à apporter votre RIB !
+                    {% else %}
+                        Vous recevrez le paiement en espèces après vérification sur place.<br>
+                        Pensez à apporter une pièce d'identité !
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+
+        <h3 style="color: #1a2332; font-size: 18px; margin-top: 32px;">📋 À ne pas oublier</h3>
+        <ul style="color: #6c7783;">
+            {% if request.needsHomePickup() %}
+                <li>Débranchez l'appareil avant notre venue</li>
+                <li>Videz-le complètement (si applicable)</li>
+                <li>Dégagez l'accès pour faciliter l'enlèvement</li>
+            {% else %}
+                <li>Nettoyez l'appareil</li>
+                <li>Emballez-le si possible</li>
+            {% endif %}
+            <li>Pièce d'identité obligatoire</li>
+            {% if request.paymentMethod == 'virement' %}
+                <li>RIB pour le virement</li>
+            {% endif %}
+            {% if request.isHasInvoice %}
+                <li>Facture d'achat (bonus +10% déjà appliqué)</li>
+            {% endif %}
+            <li><strong>Tous les accessoires mentionnés</strong> (câbles, télécommande, etc.)</li>
+        </ul>
+
+        <div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 2px solid #e6edf2;">
+            <p style="color: #6c7783; font-size: 14px; margin-bottom: 8px;">Des questions ?</p>
+            <p style="margin: 0;"><strong>📧 contact@recyclum.fr</strong></p>
+            <p style="margin: 8px 0 0 0;"><strong>📞 01 43 07 63 63</strong></p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p style="margin: 0;">Recyclum - Électroménager reconditionné</p>
+        <p style="margin: 8px 0 0 0; font-size: 12px;">Demande de rachat #{{ request.id }}</p>
+    </div>
+</div>
+</body>
+</html>

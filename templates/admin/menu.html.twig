@@ -91,13 +91,10 @@
                 {% endif %}
             </a>
 
-            <a href="{{ ea_url().setController('App\\Controller\\Admin\\BuybackRequestCrudController').setAction('index').generateUrl() }}"
+            <a href="{{ ea_url().setController('App\\Controller\\Admin\\BuybackRequestCrudController').setAction('requestIndex').generateUrl() }}"
                class="menu-item {% if app.request.query.get('crudControllerFqcn') == 'App\\Controller\\Admin\\BuybackRequestCrudController' %}active{% endif %}">
                 <i class="fa fa-shopping-cart menu-icon"></i>
                 <span class="menu-label">Demandes de rachat</span>
-                {% if pending_buyback_count is defined and pending_buyback_count > 0 %}
-                    <span class="menu-badge">{{ pending_buyback_count }}</span>
-                {% endif %}
             </a>
         </div>
 
@@ -116,7 +113,7 @@
     <div class="sidebar-footer">
         <div class="sidebar-version">
             <i class="fa fa-code"></i>
-            Version 1.0.0 par RV Agency
+            Version 1.0.0 par Nio Creative Studio
         </div>
     </div>
 </nav>

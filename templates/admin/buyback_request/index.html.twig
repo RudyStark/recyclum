@@ -22,43 +22,83 @@
 
         {# STATS CARDS #}
         <div class="stats-grid">
-            <div class="stat-card">
+            {# 1. ACTION REQUISE #}
+            <div class="stat-card stat-card-urgent">
                 <div class="stat-icon stat-icon-warning">
-                    <i class="fa fa-clock"></i>
+                    <i class="fa fa-bell"></i>
                 </div>
                 <div class="stat-content">
-                    <div class="stat-value">{{ stats.pending }}</div>
-                    <div class="stat-label">En attente</div>
+                    <div class="stat-value">{{ stats.awaiting_action }}</div>
+                    <div class="stat-label">Action requise</div>
+                    <div class="stat-sublabel">En attente validation</div>
+                </div>
+                {% if stats.awaiting_action > 0 %}
+                    <div class="stat-badge">
+                        <i class="fa fa-exclamation-circle"></i>
+                    </div>
+                {% endif %}
+            </div>
+
+            {# 2. À PAYER #}
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-danger">
+                    <i class="fa fa-wallet"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ stats.to_pay_amount|number_format(0, ',', ' ') }}€</div>
+                    <div class="stat-label">À payer</div>
+                    <div class="stat-sublabel">
+                        {% if stats.to_pay_count > 0 %}
+                            {{ stats.to_pay_count }} client{{ stats.to_pay_count > 1 ? 's' : '' }}
+                        {% else %}
+                            Aucun client en attente
+                        {% endif %}
+                    </div>
                 </div>
             </div>
 
+            {# 3. PAYÉ CE MOIS #}
             <div class="stat-card">
                 <div class="stat-icon stat-icon-success">
                     <i class="fa fa-check-circle"></i>
                 </div>
                 <div class="stat-content">
-                    <div class="stat-value">{{ stats.validated }}</div>
-                    <div class="stat-label">Validées</div>
+                    <div class="stat-value">{{ stats.paid_this_month_amount|number_format(0, ',', ' ') }}€</div>
+                    <div class="stat-label">Payé ce mois</div>
+                    <div class="stat-sublabel">
+                        {% if stats.paid_this_month_count > 0 %}
+                            {{ stats.paid_this_month_count }} client{{ stats.paid_this_month_count > 1 ? 's' : '' }} réglé{{ stats.paid_this_month_count > 1 ? 's' : '' }}
+                        {% else %}
+                            Aucun paiement ce mois
+                        {% endif %}
+                    </div>
                 </div>
             </div>
 
+            {# 4. PERFORMANCE #}
             <div class="stat-card">
                 <div class="stat-icon stat-icon-info">
-                    <i class="fa fa-truck"></i>
+                    <i class="fa fa-chart-line"></i>
                 </div>
                 <div class="stat-content">
-                    <div class="stat-value">{{ stats.collected }}</div>
-                    <div class="stat-label">Collectées</div>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon stat-icon-primary">
-                    <i class="fa fa-euro-sign"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-value">{{ stats.total_estimated|number_format(0, ',', ' ') }}€</div>
-                    <div class="stat-label">Total estimé</div>
+                    <div class="stat-value stat-value-with-trend">
+                        {{ stats.validation_rate }}%
+                        {% if stats.validation_rate >= 80 %}
+                            <span class="stat-trend-inline stat-trend-up">
+                    <i class="fa fa-arrow-up"></i>
+                </span>
+                        {% elseif stats.validation_rate >= 60 %}
+                            <span class="stat-trend-inline stat-trend-neutral">
+                    <i class="fa fa-minus"></i>
+                </span>
+                        {% else %}
+                            <span class="stat-trend-inline stat-trend-down">
+                    <i class="fa fa-arrow-down"></i>
+                </span>
+                        {% endif %}
+                    </div>
+                    <div class="stat-label">Performance</div>
+                    <div class="stat-sublabel">Taux validation</div>
                 </div>
             </div>
         </div>

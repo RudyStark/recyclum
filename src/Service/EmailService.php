@@ -4,6 +4,8 @@ namespace App\Service;
 
 use App\Entity\RepairRequest;
 use App\Entity\RepairAppointment;
+use App\Entity\BuybackRequest;
+use App\Entity\BuybackAppointment;
 use Brevo\Client\Api\TransactionalEmailsApi;
 use Brevo\Client\Configuration;
 use Brevo\Client\Model\SendSmtpEmail;
@@ -196,5 +198,115 @@ class EmailService
     {
         // TODO: Template à créer + pièce jointe
         // emails/invoice.html.twig
+    }
+
+    // ========================================================================
+// EMAILS DEMANDES DE RACHAT
+// ========================================================================
+
+    /**
+     * Confirmation au client après soumission de sa demande de rachat
+     */
+    public function sendBuybackRequestClientConfirmation(BuybackRequest $buybackRequest): void
+    {
+        $htmlContent = $this->twig->render('emails/buyback_client_confirmation.html.twig', [
+            'request' => $buybackRequest,
+        ]);
+
+        $this->sendEmail(
+            $buybackRequest->getEmail(),
+            $buybackRequest->getFullName(),
+            'Demande de rachat reçue - Recyclum',
+            $htmlContent
+        );
+    }
+
+    /**
+     * Notification admin quand nouvelle demande de rachat soumise
+     */
+    public function sendBuybackRequestAdminNotification(BuybackRequest $buybackRequest, string $viewUrl): void
+    {
+        $htmlContent = $this->twig->render('emails/buyback_admin_notification.html.twig', [
+            'request' => $buybackRequest,
+            'viewUrl' => $viewUrl,
+        ]);
+
+        $this->sendEmail(
+            $this->adminEmail,
+            'Admin Recyclum',
+            '🔔 Nouvelle demande de rachat - #' . $buybackRequest->getId(),
+            $htmlContent
+        );
+    }
+
+    /**
+     * Email de validation avec lien calendrier (gros électro) ou message magasin (petit électro)
+     */
+    public function sendBuybackValidationEmail(BuybackRequest $buybackRequest, ?string $appointmentUrl = null, ?string $customMessage = null): void
+    {
+        $htmlContent = $this->twig->render('emails/buyback_validated.html.twig', [
+            'request' => $buybackRequest,
+            'appointmentUrl' => $appointmentUrl,
+            'customMessage' => $customMessage,
+        ]);
+
+        $this->sendEmail(
+            $buybackRequest->getEmail(),
+            $buybackRequest->getFullName(),
+            '✅ Votre rachat est validé - Recyclum',
+            $htmlContent
+        );
+    }
+
+    /**
+     * Email de refus
+     */
+    public function sendBuybackRefusalEmail(BuybackRequest $buybackRequest): void
+    {
+        $htmlContent = $this->twig->render('emails/buyback_refused.html.twig', [
+            'request' => $buybackRequest,
+        ]);
+
+        $this->sendEmail(
+            $buybackRequest->getEmail(),
+            $buybackRequest->getFullName(),
+            'Réponse à votre demande de rachat - Recyclum',
+            $htmlContent
+        );
+    }
+
+    /**
+     * Confirmation RDV d'enlèvement
+     */
+    public function sendBuybackAppointmentConfirmation(BuybackRequest $buybackRequest, BuybackAppointment $appointment): void
+    {
+        $htmlContent = $this->twig->render('emails/buyback_appointment_confirmed.html.twig', [
+            'request' => $buybackRequest,
+            'appointment' => $appointment,
+        ]);
+
+        $this->sendEmail(
+            $buybackRequest->getEmail(),
+            $buybackRequest->getFullName(),
+            '✅ Rendez-vous d\'enlèvement confirmé - Recyclum',
+            $htmlContent
+        );
+    }
+
+    /**
+     * Email après collecte (si virement) : paiement en cours
+     */
+    public function sendBuybackPaymentProcessing(BuybackRequest $buybackRequest): void
+    {
+        $htmlContent = $this->twig->render('emails/buyback_payment_processing.html.twig', [
+            'request' => $buybackRequest,
+        ]);
+
+        $this->sendEmail(
+            $buybackRequest->getEmail(),
+            $buybackRequest->getFullName(),
+            '💰 Votre paiement est en cours - Recyclum',
+            $htmlContent
+        );
     }
 }

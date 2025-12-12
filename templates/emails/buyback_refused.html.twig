@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #6c757d 0%, #495057 100%); color: white; padding: 40px 30px; text-align: center; border-radius: 12px 12px 0 0; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: 900; }
+        .content { background: white; padding: 40px 30px; border: 1px solid #e6edf2; border-top: none; }
+        .info-box { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #6c757d; }
+        .alternatives-box { background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; padding: 16px; border-radius: 8px; margin: 24px 0; }
+        .footer { text-align: center; padding: 30px; color: #6c7783; font-size: 14px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Réponse à votre demande</h1>
+        <p style="margin: 8px 0 0 0; font-size: 16px; opacity: 0.95;">Demande #{{ request.id }}</p>
+    </div>
+
+    <div class="content">
+        <p>Bonjour <strong>{{ request.fullName }}</strong>,</p>
+
+        <p>Merci pour votre demande de rachat concernant votre <strong>{{ request.brand|capitalize }} {{ request.model }}</strong>.</p>
+
+        <p>Après étude de votre dossier, nous ne sommes malheureusement pas en mesure d'accepter le rachat de cet appareil pour le moment.</p>
+
+        {% if request.refusalReason %}
+            <div class="info-box">
+                <strong>📝 Raison :</strong><br>
+                <p style="margin: 8px 0 0 0;">{{ request.refusalReason|nl2br }}</p>
+            </div>
+        {% endif %}
+
+        <div class="alternatives-box">
+            <strong style="color: #1e40af;">💡 Alternatives</strong><br>
+            <p style="margin: 12px 0 8px 0; color: #6c7783;">Nous vous proposons d'autres solutions :</p>
+            <ul style="margin: 8px 0 0 0; padding-left: 20px; color: #6c7783;">
+                <li>Consultez nos <strong>services de réparation</strong></li>
+                <li>Découvrez notre <strong>catalogue de produits reconditionnés</strong></li>
+                <li>Contactez-nous pour un <strong>diagnostic gratuit</strong></li>
+            </ul>
+        </div>
+
+        <p>Nous restons à votre disposition pour toute question ou pour vous accompagner dans vos projets.</p>
+
+        <div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 2px solid #e6edf2;">
+            <p style="color: #6c7783; font-size: 14px; margin-bottom: 8px;">Besoin d'aide ?</p>
+            <p style="margin: 0;"><strong>📧 contact@recyclum.fr</strong></p>
+            <p style="margin: 8px 0 0 0;"><strong>📞 01 43 07 63 63</strong></p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p style="margin: 0;">Recyclum - Électroménager reconditionné</p>
+        <p style="margin: 8px 0 0 0; font-size: 12px;">Demande de rachat #{{ request.id }}</p>
+    </div>
+</div>
+</body>
+</html>
