@@ -90,38 +90,10 @@
     }
 }
 
-/* HEADER ADMIN */
-.admin-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 2rem;
-    background: white;
-    border-bottom: 1px solid $border;
-    position: sticky;
-    top: 0;
-    z-index: 100; // ← AUGMENTÉ pour être au-dessus du bandeau
-}
-
-.admin-header-left {
-    h1 {
-        margin: 0;
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: $text;
-    }
-}
-
-.admin-header-right {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
 /* DROPDOWN NOTIFICATIONS (CLOCHE) */
 .notification-dropdown {
     position: relative;
-    z-index: 101; // ← AUGMENTÉ pour être cliquable
+    z-index: 101;
 }
 
 .notification-bell {
@@ -133,11 +105,11 @@
     cursor: pointer;
     padding: 0.5rem;
     transition: color 0.2s;
-    z-index: 102; // ← AUGMENTÉ
-    display: flex; // ← AJOUT pour meilleure zone de clic
+    z-index: 102;
+    display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 44px; // ← Zone de clic minimale
+    min-width: 44px;
     min-height: 44px;
 
     &:hover {
@@ -147,7 +119,7 @@
 
 .notification-bell-badge {
     position: absolute;
-    top: 4px; // ← AJUSTÉ
+    top: 4px;
     right: 4px;
     background: #ef4444;
     color: white;
@@ -158,21 +130,21 @@
     min-width: 16px;
     text-align: center;
     box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
-    pointer-events: none; // ← IMPORTANT : le badge ne bloque pas les clics
+    pointer-events: none;
 }
 
 .notification-dropdown-menu {
     position: absolute;
-    top: calc(100% + 8px); // ← Espace sous la cloche
-    right: -80px; // ← DÉCALÉ VERS LA DROITE pour être bien aligné
+    top: calc(100% + 12px); // ← Augmenté pour laisser place à la flèche
+    right: 0;
     background: white;
     border: 1px solid $border;
-    border-radius: 12px; // ← Arrondi plus prononcé
+    border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-    width: 420px; // ← LÉGÈREMENT PLUS LARGE
+    width: min(420px, calc(100vw - 280px));
     max-height: 600px;
-    overflow-y: auto;
-    z-index: 1000; // ← TRÈS HAUT pour être au-dessus de tout
+    overflow: visible; // ← IMPORTANT : change de "auto" à "visible"
+    z-index: 1000;
     display: none;
     opacity: 0;
     transform: translateY(-10px);
@@ -184,19 +156,27 @@
         transform: translateY(0);
     }
 
-    // Petite flèche pointant vers la cloche
+    // FLÈCHE POINTANT VERS LA CLOCHE
     &::before {
         content: '';
         position: absolute;
-        top: -8px;
-        right: 90px; // ← Position de la flèche (ajustée avec le décalage)
-        width: 16px;
-        height: 16px;
+        top: -9px; // ← Position au-dessus du dropdown
+        right: 16px; // ← Alignée avec la cloche
+        width: 18px;
+        height: 18px;
         background: white;
         border-left: 1px solid $border;
         border-top: 1px solid $border;
         transform: rotate(45deg);
+        z-index: 1001; // ← Au-dessus du dropdown
     }
+}
+
+/* WRAPPER INTERNE pour le scroll (pour ne pas couper la flèche) */
+.notification-dropdown-content {
+    max-height: 600px;
+    overflow-y: auto;
+    border-radius: 12px;
 }
 
 .notification-dropdown-header {
@@ -208,6 +188,11 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    background: white;
+    border-radius: 12px 12px 0 0; // ← Arrondi en haut
+    position: sticky;
+    top: 0;
+    z-index: 10;
 
     i {
         color: $primary;
@@ -225,9 +210,11 @@
 
     &:last-child {
         border-bottom: none;
+        border-radius: 0 0 12px 12px; // ← Arrondi en bas
     }
 }
 
+/* Le reste reste identique... */
 .notification-item-header {
     display: flex;
     align-items: flex-start;
@@ -304,6 +291,38 @@
         font-size: 2rem;
         margin-bottom: 0.5rem;
         color: #d1d5db;
+    }
+}
+
+/* Custom scrollbar */
+.notification-dropdown-content {
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba($primary, 0.2);
+        border-radius: 3px;
+
+        &:hover {
+            background: rgba($primary, 0.3);
+        }
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .notification-dropdown-menu {
+        width: calc(100vw - 2rem);
+        right: -1rem;
+
+        &::before {
+            right: calc(50% - 9px);
+        }
     }
 }
 
