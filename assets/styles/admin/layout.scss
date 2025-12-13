@@ -10,7 +10,13 @@
 .admin-main-content {
     flex: 1;
     margin-left: 260px;
-    background: $bg;
+
+    /* VERSION PROFESSIONNELLE - Gradient gris avec accent vert */
+    background:
+        radial-gradient(circle at top right, rgba(22, 198, 105, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+        linear-gradient(135deg, #F8FAFB 0%, #FFFFFF 50%, #F5F9F8 100%);
+
     min-height: 100vh;
 }
 
@@ -42,3 +48,181 @@ body.ea {
         }
     }
 }
+
+/* =========================================================
+   ADMIN HEADER - EFFET GLASS VISIBLE
+   ========================================================= */
+
+.admin-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 0.875rem 2rem;
+
+    /* EFFET GLASS RENFORCÉ */
+    background: rgba(255, 255, 255, 0.75) !important; /* Plus transparent */
+    backdrop-filter: blur(24px) saturate(180%) !important; /* Blur augmenté */
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+
+    /* Bordure verte visible */
+    border-bottom: 1px solid rgba(22, 198, 105, 0.15) !important;
+
+    /* Ombre prononcée */
+    box-shadow:
+        0 2px 4px rgba(15, 20, 24, 0.06),
+        0 8px 16px rgba(22, 198, 105, 0.12) !important;
+
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+/* Titre */
+.admin-header h1,
+.admin-header-left h1 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0F1418;
+    letter-spacing: -0.015em;
+}
+
+/* Partie droite */
+.admin-header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* =========================================================
+   HEADER SEARCH BAR
+   ========================================================= */
+
+.header-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(22, 198, 105, 0.12);
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    min-width: 260px;
+
+    i.fa-search {
+        font-size: 0.875rem;
+        color: #94A3B8;
+        transition: color 0.2s ease;
+    }
+
+    &:focus-within {
+        background: white;
+        border-color: rgba(22, 198, 105, 0.3);
+        box-shadow: 0 4px 12px rgba(22, 198, 105, 0.12);
+
+        i.fa-search {
+            color: #16C669;
+        }
+    }
+}
+
+.header-search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 0.875rem;
+    color: #0F1418;
+    font-weight: 500;
+
+    &::placeholder {
+        color: #94A3B8;
+        font-weight: 400;
+    }
+}
+
+.header-search-kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    background: rgba(15, 20, 24, 0.06);
+    border: 1px solid rgba(15, 20, 24, 0.08);
+    border-radius: 4px;
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: #64748B;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Responsive : cache la searchbar sur mobile */
+@media (max-width: 768px) {
+    .header-search {
+        display: none;
+    }
+}
+
+/* Wrapper notification */
+.notification-icon {
+    position: relative;
+}
+
+/* Bouton cloche */
+.notification-bell {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(22, 198, 105, 0.15);
+    cursor: pointer;
+    transition: all 0.25s ease;
+
+    i {
+        font-size: 1.125rem;
+        color: #64748B;
+    }
+
+    .notification-badge {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #EF4444, #DC2626);
+        color: white;
+        font-size: 0.625rem;
+        font-weight: 700;
+        border-radius: 9px;
+        border: 2px solid white;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    &:hover {
+        background: white;
+        border-color: rgba(22, 198, 105, 0.3);
+        box-shadow: 0 4px 12px rgba(22, 198, 105, 0.2);
+
+        i {
+            color: #16C669;
+        }
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.95); opacity: 0.8; }
+}
+

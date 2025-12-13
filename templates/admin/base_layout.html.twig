@@ -20,15 +20,113 @@
 {% set notifications = get_notifications() %}
 {% set notificationCount = get_notification_count() %}
 
-<div class="admin-layout-wrapper">
-    {# SIDEBAR CUSTOM #}
+<div class="admin-layout-wrapper" data-turbo="false">
+
+    {# ===================================== #}
+    {# SIDEBAR CUSTOM                       #}
+    {# ===================================== #}
     {% block sidebar %}
         {% include 'admin/menu.html.twig' %}
     {% endblock %}
 
-    {# CONTENU PRINCIPAL #}
+    {# ===================================== #}
+    {# CONTENU PRINCIPAL                    #}
+    {# ===================================== #}
     <div class="admin-main-content">
-        {# BANDEAU NOTIFICATIONS PRIORITAIRES #}
+
+        {# ===================================== #}
+        {# HEADER AVEC EFFET GLASS PRO          #}
+        {# ===================================== #}
+        {% block admin_header %}
+            <div class="admin-header">
+                <div class="admin-header-left">
+                    <h1>{% block header_title %}Dashboard{% endblock %}</h1>
+                </div>
+
+                <div class="admin-header-right">
+
+                    {# BARRE DE RECHERCHE GLOBALE #}
+                    <div class="header-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Rechercher..." class="header-search-input">
+                        <kbd class="header-search-kbd">⌘K</kbd>
+                    </div>
+
+                    {# ===================================== #}
+                    {# CLOCHE NOTIFICATIONS                 #}
+                    {# ===================================== #}
+                    <div class="notification-icon" data-controller="admin--notifications-dropdown">
+                        <button class="notification-bell" data-action="click->admin--notifications-dropdown#toggle">
+                            <i class="fas fa-bell"></i>
+                            {% if notificationCount > 0 %}
+                                <span class="notification-badge">{{ notificationCount }}</span>
+                            {% endif %}
+                        </button>
+
+                        {# DROPDOWN MENU NOTIFICATIONS #}
+                        <div class="notification-dropdown-menu" data-admin--notifications-dropdown-target="menu">
+                            <div class="notification-dropdown-content">
+                                <div class="notification-dropdown-header">
+                                    <i class="fas fa-bell"></i> Notifications
+                                    {% if notificationCount > 0 %}
+                                        <span style="color: #16C669; font-weight: 800;">({{ notificationCount }})</span>
+                                    {% endif %}
+                                </div>
+
+                                {% if notifications is empty %}
+                                    <div class="notification-empty">
+                                        <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
+                                        Aucune notification
+                                    </div>
+                                {% else %}
+                                    {% for notification in notifications %}
+                                        <div class="notification-dropdown-item">
+                                            <div class="notification-item-header">
+                                                <div class="notification-item-icon" style="background: {{ notification.color }};">
+                                                    <i class="fas {{ notification.icon }}"></i>
+                                                </div>
+                                                <div class="notification-item-content">
+                                                    <h5 class="notification-item-title">{{ notification.title }}</h5>
+                                                    <p class="notification-item-message">{{ notification.message }}</p>
+
+                                                    {% if notification.items is defined and notification.items is not empty %}
+                                                        <ul class="notification-item-list">
+                                                            {% for item in notification.items|slice(0, 3) %}
+                                                                <li>
+                                                                    <a href="{{ item.url }}" class="notification-item-link">
+                                                                        <strong>{{ item.customer }}</strong> - {{ item.appliance }}
+                                                                        {% if item.price is defined %}
+                                                                            ({{ item.price }}€)
+                                                                        {% elseif item.date is defined %}
+                                                                            - {{ item.date }}
+                                                                        {% endif %}
+                                                                    </a>
+                                                                </li>
+                                                            {% endfor %}
+                                                            {% if notification.items|length > 3 %}
+                                                                <li style="text-align: center; padding-top: 0.5rem;">
+                                                                    <a href="{{ notification.url }}" class="notification-item-link">
+                                                                        Voir tout ({{ notification.items|length }})
+                                                                    </a>
+                                                                </li>
+                                                            {% endif %}
+                                                        </ul>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+
+        {# ===================================== #}
+        {# BANDEAU NOTIFICATIONS PRIORITAIRES   #}
+        {# ===================================== #}
         {% block notification_banner %}
             {% if notifications is not empty %}
                 {% for notification in notifications %}
@@ -55,88 +153,9 @@
             {% endif %}
         {% endblock %}
 
-        {# HEADER AVEC CLOCHE NOTIFICATIONS #}
-        {% block admin_header %}
-            <div class="admin-header">
-                <div class="admin-header-left">
-                    <h1>{% block header_title %}Dashboard{% endblock %}</h1>
-                </div>
-
-                <div class="admin-header-right">
-                    {# CLOCHE NOTIFICATIONS #}
-                    <div class="notification-dropdown" data-controller="admin--notifications-dropdown">
-                        <button class="notification-bell" data-action="click->admin--notifications-dropdown#toggle">
-                            <i class="fas fa-bell"></i>
-                            {% if notificationCount > 0 %}
-                                <span class="notification-bell-badge">{{ notificationCount }}</span>
-                            {% endif %}
-                        </button>
-
-                        <div class="notification-dropdown-menu" data-admin--notifications-dropdown-target="menu">
-                            <div class="notification-dropdown-header">
-                                <i class="fas fa-bell"></i> Notifications
-                                {% if notificationCount > 0 %}
-                                    <span style="color: #16C669; font-weight: 800;">({{ notificationCount }})</span>
-                                {% endif %}
-                            </div>
-
-                            {% if notifications is empty %}
-                                <div class="notification-empty">
-                                    <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
-                                    Aucune notification
-                                </div>
-                            {% else %}
-                                {% for notification in notifications %}
-                                    <div class="notification-dropdown-item">
-                                        <div class="notification-item-header">
-                                            <div class="notification-item-icon" style="background: {{ notification.color }};">
-                                                <i class="fas {{ notification.icon }}"></i>
-                                            </div>
-                                            <div class="notification-item-content">
-                                                <h5 class="notification-item-title">{{ notification.title }}</h5>
-                                                <p class="notification-item-message">{{ notification.message }}</p>
-
-                                                {% if notification.items is defined and notification.items is not empty %}
-                                                    <ul class="notification-item-list">
-                                                        {% for item in notification.items|slice(0, 3) %}
-                                                            <li>
-                                                                <a href="{{ item.url }}" class="notification-item-link">
-                                                                    <strong>{{ item.customer }}</strong> - {{ item.appliance }}
-                                                                    {% if item.price is defined %}
-                                                                        ({{ item.price }}€)
-                                                                    {% elseif item.date is defined %}
-                                                                        - {{ item.date }}
-                                                                    {% endif %}
-                                                                </a>
-                                                            </li>
-                                                        {% endfor %}
-                                                        {% if notification.items|length > 3 %}
-                                                            <li style="text-align: center; padding-top: 0.5rem;">
-                                                                <a href="{{ notification.url }}" class="notification-item-link">
-                                                                    Voir tout ({{ notification.items|length }})
-                                                                </a>
-                                                            </li>
-                                                        {% endif %}
-                                                    </ul>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    {# USER INFO #}
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fa fa-user-circle" style="font-size: 1.5rem; color: #6b7280;"></i>
-                        <span style="color: #6b7280; font-size: 0.875rem;">{{ app.user.email|split('@')[0] }}</span>
-                    </div>
-                </div>
-            </div>
-        {% endblock %}
-
-        {# CONTENU #}
+        {# ===================================== #}
+        {# CONTENU PRINCIPAL DES PAGES          #}
+        {# ===================================== #}
         {% block wrapper %}
             {% block content %}
                 {% block main %}{% endblock %}
@@ -146,6 +165,7 @@
 </div>
 
 {% block configured_body_contents %}{% endblock %}
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 {% block configured_javascripts %}
     {{ encore_entry_script_tags('admin') }}
