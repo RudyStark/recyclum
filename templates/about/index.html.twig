@@ -1,0 +1,430 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}À propos — Recyclum, les artisans de l'électroménager{% endblock %}
+{% block meta_description %}Recyclum, entreprise parisienne spécialisée dans le reconditionnement d'électroménager depuis 2019. Découvrez notre engagement écologique et notre savoir-faire au 146 Av. Daumesnil, Paris 12.{% endblock %}
+
+{% block body %}
+
+    {# === HERO À PROPOS === #}
+    <section class="hero-modern about-hero-modern full-bleed">
+        <div class="container py-5">
+            <div class="row align-items-center g-4 g-lg-5">
+                <div class="col-12 col-lg-6">
+                    <div class="hero-badge mb-3">
+                        <i class="bi bi-recycle"></i>
+                        <span>Depuis 2019</span>
+                    </div>
+                    <h1 class="display-5 fw-bold mb-3 text-white">Les artisans de l'électroménager</h1>
+                    <p class="lead mb-4" style="color: rgba(255,255,255,0.85);">
+                        Recyclum, c'est l'histoire d'une passion pour l'électroménager et d'un engagement profond
+                        pour l'économie circulaire. Basés à Paris 12<sup>e</sup>, nous redonnons vie aux appareils
+                        pour équiper votre maison au prix juste, l'esprit tranquille.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="{{ path('catalog_index') }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-shop"></i> Voir nos produits
+                        </a>
+                        <a href="/contact" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-envelope"></i> Nous contacter
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="hero-visual-wrapper">
+                        <div class="hero-visual-card">
+                            <img src="{{ asset('assets/images/about-workshop.jpg') }}"
+                                 alt="Atelier Recyclum"
+                                 class="hero-visual-img"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="hero-visual-fallback" style="display: none;">
+                                <i class="bi bi-tools"></i>
+                                <span>Notre atelier</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === NOTRE HISTOIRE === #}
+    <section class="container py-5">
+        <div class="about-section-histoire">
+            <div class="row g-5">
+                <div class="col-12 col-lg-5">
+                    <div class="section-label mb-3">
+                        <i class="bi bi-book"></i>
+                        <span>Notre histoire</span>
+                    </div>
+                    <h2 class="h3 fw-bold mb-3">Une entreprise familiale au cœur de Paris</h2>
+                    <p class="text-soft">
+                        Fondée en <strong>octobre 2019</strong> par Nacereddine Benadjaoub, Recyclum est née d'une
+                        conviction : l'électroménager mérite une seconde chance. Installés au <strong>146 avenue Daumesnil</strong>
+                        dans le 12<sup>e</sup> arrondissement de Paris, nous sommes devenus une référence locale pour
+                        le reconditionnement et la réparation d'appareils électroménagers.
+                    </p>
+                </div>
+                <div class="col-12 col-lg-7">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker">2019</div>
+                            <div class="timeline-content">
+                                <h3 class="h6 fw-bold">Création de Recyclum</h3>
+                                <p class="small text-soft mb-0">
+                                    Ouverture de notre boutique avenue Daumesnil avec une mission claire :
+                                    démocratiser l'électroménager reconditionné.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">2020</div>
+                            <div class="timeline-content">
+                                <h3 class="h6 fw-bold">Lancement du service réparation</h3>
+                                <p class="small text-soft mb-0">
+                                    Extension de nos services avec un atelier de réparation professionnel,
+                                    disponible 7j/7.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">2023</div>
+                            <div class="timeline-content">
+                                <h3 class="h6 fw-bold">Service rachat & enlèvement</h3>
+                                <p class="small text-soft mb-0">
+                                    Mise en place d'un système de rachat et d'enlèvement à domicile pour
+                                    simplifier le recyclage.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">2025</div>
+                            <div class="timeline-content">
+                                <h3 class="h6 fw-bold">Présence en ligne</h3>
+                                <p class="small text-soft mb-0">
+                                    Lancement de notre plateforme web pour faciliter vos achats et demandes
+                                    de service.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === NOS VALEURS === #}
+    <section class="about-section-values py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-label mb-3 justify-content-center">
+                    <i class="bi bi-heart-fill"></i>
+                    <span>Nos valeurs</span>
+                </div>
+                <h2 class="h3 fw-bold">Ce qui nous anime au quotidien</h2>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="value-card h-100">
+                        <div class="value-icon">
+                            <i class="bi bi-recycle"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">Écologie</h3>
+                        <p class="text-soft small mb-0">
+                            Réduire les déchets électroniques en donnant une seconde vie aux appareils.
+                            Chaque produit reconditionné, c'est moins de pollution.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="value-card h-100">
+                        <div class="value-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">Qualité</h3>
+                        <p class="text-soft small mb-0">
+                            Chaque appareil est minutieusement testé, nettoyé et garanti 6 mois.
+                            Nous ne vendons que ce que nous utiliserions nous-mêmes.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="value-card h-100">
+                        <div class="value-icon">
+                            <i class="bi bi-cash-coin"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">Prix justes</h3>
+                        <p class="text-soft small mb-0">
+                            Des prix accessibles sans compromis sur la qualité. L'électroménager
+                            reconditionné ne devrait pas être un luxe.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="value-card h-100">
+                        <div class="value-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">Proximité</h3>
+                        <p class="text-soft small mb-0">
+                            Une équipe locale à votre écoute. Service personnalisé, conseils d'experts
+                            et disponibilité 7j/7.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === NOTRE EXPERTISE === #}
+    <section class="about-section-expertise py-5">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-12 col-lg-6">
+                    <div class="section-label mb-3">
+                        <i class="bi bi-gear-fill"></i>
+                        <span>Notre expertise</span>
+                    </div>
+                    <h2 class="h3 fw-bold mb-4">Un savoir-faire artisanal</h2>
+
+                    <div class="expertise-list">
+                        <div class="expertise-item">
+                            <div class="expertise-number">01</div>
+                            <div class="expertise-content">
+                                <h3 class="h6 fw-bold mb-1">Diagnostic professionnel</h3>
+                                <p class="text-soft small mb-0">
+                                    Analyse complète de chaque appareil avec des outils de pointe pour
+                                    détecter les moindres défaillances.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="expertise-item">
+                            <div class="expertise-number">02</div>
+                            <div class="expertise-content">
+                                <h3 class="h6 fw-bold mb-1">Reconditionnement minutieux</h3>
+                                <p class="text-soft small mb-0">
+                                    Remplacement des pièces usées, nettoyage en profondeur et remise
+                                    à neuf esthétique.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="expertise-item">
+                            <div class="expertise-number">03</div>
+                            <div class="expertise-content">
+                                <h3 class="h6 fw-bold mb-1">Tests de performance</h3>
+                                <p class="text-soft small mb-0">
+                                    Vérification rigoureuse du fonctionnement sur tous les programmes
+                                    et modes d'utilisation.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="expertise-item">
+                            <div class="expertise-number">04</div>
+                            <div class="expertise-content">
+                                <h3 class="h6 fw-bold mb-1">Garantie 6 mois</h3>
+                                <p class="text-soft small mb-0">
+                                    Une garantie complète pour votre tranquillité d'esprit.
+                                    Nous assumons la qualité de notre travail.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="bi bi-boxes"></i>
+                            </div>
+                            <div class="stat-number">1000+</div>
+                            <div class="stat-label">Appareils reconditionnés</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="bi bi-tools"></i>
+                            </div>
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">Réparations effectuées</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <div class="stat-number">6 mois</div>
+                            <div class="stat-label">Garantie incluse</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="bi bi-calendar-check"></i>
+                            </div>
+                            <div class="stat-number">7j/7</div>
+                            <div class="stat-label">Disponibilité service</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === NOTRE ENGAGEMENT ÉCOLOGIQUE === #}
+    <section class="eco-commitment full-bleed">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10">
+                    <div class="eco-commitment-card">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-12 col-md-4 text-center text-md-start">
+                                <div class="eco-icon">
+                                    <i class="bi bi-globe-americas"></i>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-8">
+                                <h2 class="h4 fw-bold mb-3">Notre engagement écologique</h2>
+                                <p class="mb-3">
+                                    Chaque année, des millions de tonnes d'appareils électroménagers finissent
+                                    en décharge. Chez Recyclum, nous luttons contre ce gaspillage en
+                                    reconditionnant les appareils encore fonctionnels.
+                                </p>
+                                <ul class="eco-list">
+                                    <li><i class="bi bi-check-circle-fill"></i> Réduction de 70% de l'empreinte carbone vs. neuf</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Économie de ressources naturelles précieuses</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Lutte contre l'obsolescence programmée</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Recyclage responsable des pièces irrécupérables</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === NOTRE BOUTIQUE === #}
+    <section class="container py-5 surface-1">
+        <div class="text-center mb-5">
+            <div class="section-label mb-3 justify-content-center">
+                <i class="bi bi-shop"></i>
+                <span>Nous trouver</span>
+            </div>
+            <h2 class="h3 fw-bold mb-2">Venez nous rencontrer</h2>
+            <p class="text-soft">Au cœur du 12<sup>e</sup> arrondissement de Paris</p>
+        </div>
+
+        <div class="row g-4 g-lg-5">
+            <div class="col-12 col-lg-6">
+                <div class="shop-info-card h-100">
+                    <h3 class="h5 fw-bold mb-4">Informations pratiques</h3>
+
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="fw-semibold">Adresse</div>
+                            <div class="text-soft">146 Avenue Daumesnil<br>75012 Paris</div>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="bi bi-telephone-fill"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="fw-semibold">Téléphone</div>
+                            <div><a href="tel:+33143076363" class="link-primary">01 43 07 63 63</a></div>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="bi bi-clock-fill"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="fw-semibold">Horaires</div>
+                            <div class="text-soft">
+                                Lundi – Dimanche<br>
+                                9h00 – 19h00
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="bi bi-p-circle-fill"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="fw-semibold">Parking à proximité</div>
+                            <div class="text-soft">
+                                Parking Reuilly Diderot<br>
+                                <small>30 Ter Rue De Reuilly (700m)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=146+Avenue+Daumesnil,75012+Paris"
+                           target="_blank"
+                           rel="noopener"
+                           class="btn btn-primary">
+                            <i class="bi bi-map"></i> Itinéraire
+                        </a>
+                        <a href="/contact" class="btn btn-outline-primary">
+                            <i class="bi bi-envelope"></i> Contact
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="map-container">
+                    <iframe
+                        title="Google Map Recyclum"
+                        class="map-embed"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps?q=146%20Avenue%20Daumesnil%2C%2075012%20Paris&output=embed">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# === CTA FINALE === #}
+    <section class="cta-section full-bleed">
+        <div class="container py-5">
+            <div class="cta-card">
+                <div class="row align-items-center g-4">
+                    <div class="col-12 col-lg-8">
+                        <h2 class="h3 fw-bold mb-2">Prêt à franchir le pas ?</h2>
+                        <p class="text-soft mb-0">
+                            Découvrez nos appareils reconditionnés ou faites-nous confiance pour
+                            réparer le vôtre. L'électroménager responsable commence ici.
+                        </p>
+                    </div>
+                    <div class="col-12 col-lg-4 text-lg-end">
+                        <div class="d-flex flex-column flex-sm-row flex-lg-column gap-2">
+                            <a href="{{ path('catalog_index') }}" class="btn btn-primary btn-lg">
+                                <i class="bi bi-shop"></i> Notre catalogue
+                            </a>
+                            <a href="/reparation" class="btn btn-outline-light btn-lg">
+                                <i class="bi bi-tools"></i> Réparation
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
