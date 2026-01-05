@@ -1,0 +1,658 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}FAQ — Questions fréquentes | Recyclum{% endblock %}
+{% block meta_description %}Toutes les réponses à vos questions sur l'achat d'électroménager reconditionné, la réparation, le rachat et nos services chez Recyclum Paris 12.{% endblock %}
+
+{% block body %}
+    {# SVG Clip Paths #}
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <clipPath id="diagonal-clip" clipPathUnits="objectBoundingBox">
+                <polygon points="0 0, 1 0, 1 0.95, 0 1"/>
+            </clipPath>
+            <clipPath id="diagonal-clip-reverse" clipPathUnits="objectBoundingBox">
+                <polygon points="0 0.05, 1 0, 1 1, 0 1"/>
+            </clipPath>
+        </defs>
+    </svg>
+    {# =========================================================
+   WRAPPER STIMULUS - SPLIT SCREEN DESIGN
+   ========================================================= #}
+    <div data-controller="faq-search">
+
+        {# === HERO SPLIT SCREEN === #}
+        <div class="faq-hero-split">
+
+            {# PARTIE GAUCHE - RECHERCHE #}
+            <div class="faq-search-panel">
+                <div class="hero-badge">
+                    <i class="bi bi-question-circle"></i>
+                    <span>Foire aux questions</span>
+                </div>
+
+                <h1>Comment pouvons-nous vous aider ?</h1>
+
+                <p class="lead">
+                    Trouvez rapidement des réponses à vos questions sur nos produits, services et garanties.
+                </p>
+
+                {# Barre de recherche #}
+                <div class="faq-search-wrapper">
+                    <div class="faq-search-box">
+                        <i class="bi bi-search"></i>
+                        <input type="text"
+                               data-faq-search-target="input"
+                               data-action="input->faq-search#search"
+                               class="faq-search-input"
+                               placeholder="Rechercher une question..."
+                               autocomplete="off">
+                    </div>
+                </div>
+            </div>
+
+            {# PARTIE DROITE - RÉSULTATS #}
+            <div class="faq-results-panel">
+                <div class="faq-results-content">
+
+                    {# CONTENEUR POUR LES INFOS DE RÉSULTATS #}
+                    <div id="faq-results-info"></div>
+
+                    {# CATÉGORIES COMPACTES #}
+                    <div data-faq-search-target="categories">
+                        <div class="faq-categories-compact">
+                            <a href="#general" class="faq-category-chip">
+                                <i class="bi bi-info-circle"></i>
+                                <span>Général</span>
+                            </a>
+                            <a href="#achat" class="faq-category-chip">
+                                <i class="bi bi-cart-check"></i>
+                                <span>Achat</span>
+                            </a>
+                            <a href="#produits" class="faq-category-chip">
+                                <i class="bi bi-box-seam"></i>
+                                <span>Produits</span>
+                            </a>
+                            <a href="#reparation" class="faq-category-chip">
+                                <i class="bi bi-tools"></i>
+                                <span>Réparation</span>
+                            </a>
+                            <a href="#rachat" class="faq-category-chip">
+                                <i class="bi bi-cash-coin"></i>
+                                <span>Rachat</span>
+                            </a>
+                            <a href="#garantie" class="faq-category-chip">
+                                <i class="bi bi-shield-check"></i>
+                                <span>Garantie</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    {# CONTENEUR POUR LE MESSAGE "AUCUN RÉSULTAT" #}
+                    <div id="faq-no-results-container"></div>
+
+                    {# === QUESTIONS GÉNÉRALES === #}
+                    <section id="general" class="faq-section" data-faq-search-target="section">
+                        <div class="section-label">
+                            <i class="bi bi-info-circle"></i>
+                            <span>Questions générales</span>
+                        </div>
+                        <h2>À propos de Recyclum</h2>
+
+                        <div class="faq-accordion">
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-gen-1">
+                                    <span class="faq-question-text">Qui est Recyclum et depuis quand existez-vous ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-gen-1" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Recyclum est une entreprise parisienne fondée en octobre 2019 par Nacereddine Benadjaoub.
+                                        Spécialisée dans le reconditionnement d'électroménager, nous sommes installés au 146 avenue Daumesnil
+                                        dans le 12ᵉ arrondissement de Paris. Notre mission : donner une seconde vie aux appareils électroménagers
+                                        pour rendre l'équipement domestique accessible à tous tout en réduisant l'impact environnemental.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-gen-2">
+                                    <span class="faq-question-text">Où se trouve votre boutique ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-gen-2" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Notre boutique est située au <strong>146 Avenue Daumesnil, 75012 Paris</strong>, près du métro Daumesnil (ligne 6 et 8).
+                                        Nous sommes ouverts du lundi au dimanche de 9h à 19h. Un parking (Reuilly Diderot) se trouve à 700m.
+                                        <div class="mt-3">
+                                            <a href="/a-propos" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-map"></i> Voir le plan d'accès
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-gen-3">
+                                    <span class="faq-question-text">Quels sont vos horaires d'ouverture ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-gen-3" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        <strong>Du lundi au dimanche : 9h00 – 19h00</strong><br>
+                                        Nous sommes disponibles 7 jours sur 7 pour vous accueillir en boutique ou par téléphone au 01 43 07 63 63.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-gen-4">
+                                    <span class="faq-question-text">Comment puis-je vous contacter ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-gen-4" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        <ul class="faq-contact-list">
+                                            <li><i class="bi bi-telephone-fill"></i> <strong>Téléphone :</strong> <a href="tel:+33143076363">01 43 07 63 63</a></li>
+                                            <li><i class="bi bi-shop"></i> <strong>En boutique :</strong> 146 Av. Daumesnil, 75012 Paris</li>
+                                            <li><i class="bi bi-envelope"></i> <strong>Formulaire :</strong> <a href="/contact">Page contact</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-gen-5">
+                                    <span class="faq-question-text">Livrez-vous en dehors de Paris ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-gen-5" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Oui ! Nous livrons principalement en Île-de-France (Paris et proche banlieue).
+                                        Pour les livraisons plus éloignées, contactez-nous pour étudier la faisabilité et obtenir un devis personnalisé.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {# === ACHAT & COMMANDE === #}
+                    <section id="achat" class="faq-section" data-faq-search-target="section">
+                        <div class="section-label">
+                            <i class="bi bi-cart-check"></i>
+                            <span>Achat & Commande</span>
+                        </div>
+                        <h2>Commander chez Recyclum</h2>
+
+                        <div class="faq-accordion">
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-achat-1">
+                                    <span class="faq-question-text">Comment passer commande sur le site ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-achat-1" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Parcourez notre catalogue, sélectionnez le produit souhaité et cliquez sur "Demander ce produit".
+                                        Remplissez le formulaire de contact avec vos coordonnées. Notre équipe vous recontactera sous 24h
+                                        pour finaliser votre commande et convenir d'un créneau de livraison.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-achat-2">
+                                    <span class="faq-question-text">Quels sont les modes de paiement acceptés ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-achat-2" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Nous acceptons :
+                                        <ul class="mt-2">
+                                            <li>Carte bancaire (en boutique et par téléphone)</li>
+                                            <li>Espèces (en boutique uniquement)</li>
+                                            <li>Virement bancaire</li>
+                                            <li>Chèque</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-achat-3">
+                                    <span class="faq-question-text">Quel est le délai de livraison ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-achat-3" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Pour Paris et proche banlieue : <strong>24 à 48h</strong> selon disponibilité.<br>
+                                        Pour l'Île-de-France : <strong>2 à 5 jours</strong>.<br>
+                                        Nous vous proposons plusieurs créneaux pour convenir de la livraison à domicile.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-achat-4">
+                                    <span class="faq-question-text">Proposez-vous l'installation des appareils ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-achat-4" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Oui ! Nous assurons la livraison ET l'installation de vos appareils (branchement, mise en place).
+                                        Ce service est inclus pour Paris et proche banlieue. Un supplément peut s'appliquer pour les zones plus éloignées.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-achat-5">
+                                    <span class="faq-question-text">Puis-je réserver un produit avant de l'acheter ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-achat-5" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Oui, contactez-nous par téléphone ou via le formulaire. Nous pouvons réserver un produit pendant 48h
+                                        moyennant un acompte de 30%. Venez le voir en boutique ou finalisez la commande à distance.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {# === PRODUITS & RECONDITIONNEMENT === #}
+                    <section id="produits" class="faq-section" data-faq-search-target="section">
+                        <div class="section-label">
+                            <i class="bi bi-box-seam"></i>
+                            <span>Produits</span>
+                        </div>
+                        <h2>Reconditionnement & qualité</h2>
+
+                        <div class="faq-accordion">
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-prod-1">
+                                    <span class="faq-question-text">Qu'est-ce qu'un produit reconditionné ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-prod-1" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Un produit reconditionné est un appareil d'occasion qui a été intégralement testé, nettoyé et remis en état
+                                        par nos techniciens. Les pièces défectueuses sont remplacées par des pièces d'origine ou compatibles.
+                                        L'appareil fonctionne comme un neuf et bénéficie de notre <strong>garantie 6 mois</strong>.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-prod-2">
+                                    <span class="faq-question-text">Quels types d'appareils vendez-vous ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-prod-2" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Nous proposons un large choix d'électroménager reconditionné :
+                                        <ul class="mt-2">
+                                            <li>Réfrigérateurs et congélateurs</li>
+                                            <li>Lave-linge et sèche-linge</li>
+                                            <li>Lave-vaisselle</li>
+                                            <li>Fours, plaques de cuisson, micro-ondes</li>
+                                            <li>Petits appareils (cafetières, mixeurs, etc.)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-prod-3">
+                                    <span class="faq-question-text">Comment sont testés vos appareils ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-prod-3" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Chaque appareil suit un processus rigoureux en 4 étapes :
+                                        <ol class="mt-2">
+                                            <li><strong>Diagnostic complet</strong> avec outils professionnels</li>
+                                            <li><strong>Reconditionnement</strong> : remplacement des pièces usées</li>
+                                            <li><strong>Nettoyage en profondeur</strong> intérieur et extérieur</li>
+                                            <li><strong>Tests de performance</strong> sur tous les programmes</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-prod-4">
+                                    <span class="faq-question-text">Quelle est la classe énergétique des appareils ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-prod-4" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        La classe énergétique est indiquée sur chaque fiche produit. Nous proposons principalement
+                                        des appareils de classe A à A+++. Les anciens modèles peuvent avoir des classes inférieures,
+                                        mais restent économiques à l'usage comparé à l'achat d'un neuf.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-prod-5">
+                                    <span class="faq-question-text">Les appareils ont-ils des traces d'usure ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-prod-5" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Les appareils sont d'occasion : de légères traces d'usage (micro-rayures, petits chocs) peuvent être présentes
+                                        mais n'affectent pas le fonctionnement. Nous indiquons l'état cosmétique sur chaque fiche produit.
+                                        L'intérieur et les pièces techniques sont remis à neuf.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {# === RÉPARATION === #}
+                    <section id="reparation" class="faq-section" data-faq-search-target="section">
+                        <div class="section-label">
+                            <i class="bi bi-tools"></i>
+                            <span>Réparation</span>
+                        </div>
+                        <h2>Service de réparation 7j/7</h2>
+
+                        <div class="faq-accordion">
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-rep-1">
+                                    <span class="faq-question-text">Quels appareils pouvez-vous réparer ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-rep-1" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Nous réparons tous types d'électroménager : lave-linge, sèche-linge, lave-vaisselle, réfrigérateurs,
+                                        fours, plaques de cuisson, micro-ondes, etc. Toutes marques (Bosch, Siemens, Miele, Samsung, LG, etc.).
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-rep-2">
+                                    <span class="faq-question-text">Comment prendre rendez-vous pour une réparation ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-rep-2" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Trois options :
+                                        <ol class="mt-2">
+                                            <li><strong>En ligne</strong> : Remplissez le <a href="/reparation">formulaire de réparation</a></li>
+                                            <li><strong>Par téléphone</strong> : Appelez le 01 43 07 63 63</li>
+                                            <li><strong>En boutique</strong> : Venez directement au 146 Av. Daumesnil</li>
+                                        </ol>
+                                        Nous vous recontacterons sous 24h pour convenir d'un rendez-vous.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-rep-3">
+                                    <span class="faq-question-text">Quel est le coût d'une réparation ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-rep-3" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        <strong>Diagnostic gratuit en atelier.</strong><br>
+                                        Après diagnostic, nous vous communiquons un devis détaillé (main d'œuvre + pièces).
+                                        Vous décidez ensuite de procéder ou non à la réparation. Aucun frais si vous refusez le devis.
+                                        <div class="alert alert-info mt-3">
+                                            <i class="bi bi-info-circle"></i> Intervention à domicile : forfait déplacement de 49€ (gratuit si réparation effectuée).
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-rep-4">
+                                    <span class="faq-question-text">Quel est le délai de réparation ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-rep-4" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Cela dépend de la panne et de la disponibilité des pièces :
+                                        <ul class="mt-2">
+                                            <li><strong>Réparation simple</strong> : 24 à 48h</li>
+                                            <li><strong>Commande de pièces</strong> : 3 à 7 jours</li>
+                                            <li><strong>Pièces rares</strong> : jusqu'à 15 jours</li>
+                                        </ul>
+                                        Nous vous tenons informé à chaque étape.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-rep-5">
+                                    <span class="faq-question-text">Les réparations sont-elles garanties ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-rep-5" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Oui ! Toutes nos réparations sont garanties <strong>3 mois</strong> (pièces et main d'œuvre).
+                                        Si la même panne réapparaît pendant cette période, nous intervenons gratuitement.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {# === RACHAT === #}
+                    <section id="rachat" class="faq-section" data-faq-search-target="section">
+                        <div class="section-label">
+                            <i class="bi bi-cash-coin"></i>
+                            <span>Rachat</span>
+                        </div>
+                        <h2>Vendre votre électroménager</h2>
+
+                        <div class="faq-accordion">
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-rachat-1">
+                                    <span class="faq-question-text">Quels appareils rachetez-vous ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-rachat-1" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Nous rachetons tous les gros appareils électroménagers en état de fonctionnement ou réparables :
+                                        <ul class="mt-2">
+                                            <li>Lave-linge, sèche-linge, lave-vaisselle</li>
+                                            <li>Réfrigérateurs, congélateurs, combinés</li>
+                                            <li>Fours, plaques de cuisson, hottes</li>
+                                            <li>Micro-ondes haut de gamme</li>
+                                        </ul>
+                                        Les appareils doivent avoir moins de 10 ans et être de marques reconnues.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-rachat-2">
+                                    <span class="faq-question-text">Comment obtenir une estimation ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-rachat-2" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Remplissez le <a href="/rachat">formulaire de rachat</a> avec :
+                                        <ul class="mt-2">
+                                            <li>Photos de l'appareil (face, étiquette énergétique)</li>
+                                            <li>Marque, modèle, année d'achat</li>
+                                            <li>État général et défauts éventuels</li>
+                                        </ul>
+                                        Nous vous communiquons une estimation sous <strong>24h</strong> par email ou téléphone.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-rachat-3">
+                                    <span class="faq-question-text">Comment se passe l'enlèvement ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-rachat-3" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Une fois le prix convenu :
+                                        <ol class="mt-2">
+                                            <li>Nous fixons un rendez-vous sous 24 à 48h</li>
+                                            <li>Nos techniciens viennent récupérer l'appareil à votre domicile</li>
+                                            <li>Vous êtes payé immédiatement (espèces, chèque ou virement)</li>
+                                        </ol>
+                                        <strong>L'enlèvement est gratuit pour Paris et proche banlieue.</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-rachat-4">
+                                    <span class="faq-question-text">Achetez-vous les appareils en panne ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-rachat-4" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Oui, sous conditions. Si l'appareil est réparable économiquement, nous pouvons le racheter
+                                        à un prix réduit. Envoyez-nous les détails de la panne via le formulaire pour obtenir une estimation.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-rachat-5">
+                                    <span class="faq-question-text">Quel est le prix de rachat moyen ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-rachat-5" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Le prix dépend de la marque, du modèle, de l'âge et de l'état. À titre indicatif :
+                                        <ul class="mt-2">
+                                            <li>Lave-linge récent (< 3 ans) : 100 à 300€</li>
+                                            <li>Réfrigérateur haut de gamme : 150 à 400€</li>
+                                            <li>Lave-vaisselle : 80 à 200€</li>
+                                        </ul>
+                                        Contactez-nous pour une estimation personnalisée.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {# === GARANTIE & SAV === #}
+                    <section id="garantie" class="faq-section" data-faq-search-target="section">
+                        <div class="section-label">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Garantie & SAV</span>
+                        </div>
+                        <h2>Garantie & service après-vente</h2>
+
+                        <div class="faq-accordion">
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-gar-1">
+                                    <span class="faq-question-text">Quelle est la durée de garantie ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-gar-1" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Tous nos appareils reconditionnés bénéficient d'une <strong>garantie de 6 mois</strong>
+                                        pièces et main d'œuvre. Cette garantie couvre les pannes et défauts de fonctionnement
+                                        (hors mauvaise utilisation ou usure normale).
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-gar-2">
+                                    <span class="faq-question-text">Que faire si mon appareil tombe en panne ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-gar-2" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Contactez-nous immédiatement au 01 43 07 63 63 ou via le formulaire de contact.
+                                        Si l'appareil est sous garantie, nous organisons :
+                                        <ul class="mt-2">
+                                            <li>Soit une intervention à domicile (gratuit)</li>
+                                            <li>Soit un échange de l'appareil</li>
+                                            <li>Soit un remboursement complet (si irréparable)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-gar-3">
+                                    <span class="faq-question-text">Puis-je retourner un produit ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-gar-3" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Vous disposez d'un <strong>droit de rétractation de 14 jours</strong> après réception
+                                        (vente à distance uniquement). L'appareil doit être retourné dans son état d'origine,
+                                        non utilisé et dans son emballage. Les frais de retour sont à votre charge.
+                                        <div class="alert alert-warning mt-3">
+                                            <i class="bi bi-exclamation-triangle"></i> Pas de rétractation pour les achats en boutique.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-gar-4">
+                                    <span class="faq-question-text">La garantie couvre-t-elle les accessoires ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-gar-4" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Oui, la garantie couvre l'appareil ET ses accessoires fournis (tuyaux, joints, filtres, etc.).
+                                        Les consommables (ampoules, sacs aspirateur) ne sont pas couverts.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item" data-faq-search-target="item">
+                                <button class="faq-question" type="button" data-bs-toggle="collapse" data-bs-target="#faq-gar-5">
+                                    <span class="faq-question-text">Puis-je prolonger la garantie ?</span>
+                                    <i class="bi bi-chevron-down faq-chevron"></i>
+                                </button>
+                                <div id="faq-gar-5" class="collapse faq-answer">
+                                    <div class="faq-answer-content">
+                                        Actuellement, nous ne proposons pas d'extension de garantie. Cependant, après les 6 mois,
+                                        notre service de réparation reste disponible à tarifs préférentiels pour nos clients.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+
+    </div> {# ← FIN DU WRAPPER STIMULUS #}
+
+    {# === CTA CONTACT === #}
+    <section class="faq-cta-section full-bleed">
+        <div class="container py-5">
+            <div class="faq-cta-card">
+                <div class="row align-items-center g-4">
+                    <div class="col-12 col-lg-8">
+                        <h2 class="h3 fw-bold mb-2">Vous ne trouvez pas votre réponse ?</h2>
+                        <p class="mb-0" style="color: rgba(255,255,255,0.9);">
+                            Notre équipe est à votre disposition pour répondre à toutes vos questions spécifiques.
+                            Contactez-nous par téléphone ou via notre formulaire de contact.
+                        </p>
+                    </div>
+                    <div class="col-12 col-lg-4 text-lg-end">
+                        <div class="d-flex flex-column flex-sm-row flex-lg-column gap-2">
+                            <a href="tel:+33143076363" class="btn btn-light btn-lg">
+                                <i class="bi bi-telephone"></i> 01 43 07 63 63
+                            </a>
+                            <a href="/contact" class="btn btn-outline-light btn-lg">
+                                <i class="bi bi-envelope"></i> Nous écrire
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
