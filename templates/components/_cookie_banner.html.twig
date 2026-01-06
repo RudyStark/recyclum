@@ -1,0 +1,185 @@
+{# Bandeau de consentement cookies - Conforme CNIL/RGPD #}
+<div
+    data-controller="cookie-consent"
+    data-cookie-consent-consent-duration-value="182"
+>
+    {# Bandeau principal #}
+    <div
+        id="cookieConsentBanner"
+        class="cookie-banner"
+        data-cookie-consent-target="banner"
+        aria-hidden="true"
+        role="dialog"
+        aria-labelledby="cookieBannerTitle"
+        aria-describedby="cookieBannerDesc"
+    >
+        <div class="cookie-banner-content">
+            <div class="cookie-banner-icon">
+                <i class="bi bi-cookie"></i>
+            </div>
+            <div class="cookie-banner-text">
+                <h3 id="cookieBannerTitle">🍪 Respect de votre vie privée</h3>
+                <p id="cookieBannerDesc">
+                    Nous utilisons des cookies pour améliorer votre expérience, analyser notre trafic et personnaliser nos services.
+                    Vous pouvez accepter, refuser ou personnaliser vos préférences à tout moment.
+                </p>
+                <a href="{{ path('app_cookies') }}" class="cookie-banner-link" target="_blank">
+                    En savoir plus sur notre politique cookies <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+            <div class="cookie-banner-actions">
+                <button
+                    type="button"
+                    class="btn btn-primary btn-cookie"
+                    data-action="click->cookie-consent#acceptAll"
+                >
+                    <i class="bi bi-check-circle"></i> Accepter tout
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-cookie"
+                    data-action="click->cookie-consent#rejectAll"
+                >
+                    <i class="bi bi-x-circle"></i> Refuser
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-outline-primary btn-cookie"
+                    data-action="click->cookie-consent#customize"
+                >
+                    <i class="bi bi-sliders"></i> Personnaliser
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {# Modal de personnalisation #}
+    <div
+        id="cookieCustomizeModal"
+        class="cookie-modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="cookieModalTitle"
+        aria-hidden="true"
+    >
+        <div class="cookie-modal-dialog">
+            <div class="cookie-modal-content">
+                <div class="cookie-modal-header">
+                    <h4 id="cookieModalTitle">
+                        <i class="bi bi-sliders"></i> Personnaliser mes préférences cookies
+                    </h4>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-action="click->cookie-consent#closeCustomizeModal"
+                        aria-label="Fermer"
+                    ></button>
+                </div>
+                <div class="cookie-modal-body">
+                    <p class="text-muted mb-4">
+                        Choisissez les types de cookies que vous souhaitez autoriser. Les cookies essentiels sont nécessaires au fonctionnement du site et ne peuvent pas être désactivés.
+                    </p>
+
+                    {# Cookies essentiels #}
+                    <div class="cookie-category">
+                        <div class="cookie-category-header">
+                            <div>
+                                <i class="bi bi-gear-fill text-success"></i>
+                                <strong>Cookies essentiels</strong>
+                                <span class="badge bg-success ms-2">Obligatoires</span>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="cookie-essential"
+                                    checked
+                                    disabled
+                                >
+                            </div>
+                        </div>
+                        <p class="cookie-category-desc">
+                            Nécessaires au fonctionnement du site (panier, authentification, sécurité). Ne peuvent pas être désactivés.
+                        </p>
+                    </div>
+
+                    {# Cookies analytiques #}
+                    <div class="cookie-category">
+                        <div class="cookie-category-header">
+                            <div>
+                                <i class="bi bi-graph-up text-primary"></i>
+                                <strong>Cookies analytiques</strong>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="cookie-analytics"
+                                >
+                            </div>
+                        </div>
+                        <p class="cookie-category-desc">
+                            Nous aident à comprendre comment vous utilisez le site pour l'améliorer (Google Analytics).
+                        </p>
+                    </div>
+
+                    {# Cookies marketing #}
+                    <div class="cookie-category">
+                        <div class="cookie-category-header">
+                            <div>
+                                <i class="bi bi-megaphone text-warning"></i>
+                                <strong>Cookies marketing</strong>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="cookie-marketing"
+                                >
+                            </div>
+                        </div>
+                        <p class="cookie-category-desc">
+                            Permettent de vous proposer des publicités personnalisées selon vos centres d'intérêt.
+                        </p>
+                    </div>
+
+                    {# Cookies fonctionnels #}
+                    <div class="cookie-category">
+                        <div class="cookie-category-header">
+                            <div>
+                                <i class="bi bi-sliders text-info"></i>
+                                <strong>Cookies fonctionnels</strong>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="cookie-functional"
+                                >
+                            </div>
+                        </div>
+                        <p class="cookie-category-desc">
+                            Mémorisent vos préférences (langue, affichage) pour améliorer votre expérience.
+                        </p>
+                    </div>
+                </div>
+                <div class="cookie-modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        data-action="click->cookie-consent#closeCustomizeModal"
+                    >
+                        Annuler
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-action="click->cookie-consent#saveCustom"
+                    >
+                        <i class="bi bi-check-circle"></i> Enregistrer mes préférences
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

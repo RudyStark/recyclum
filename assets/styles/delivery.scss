@@ -1,0 +1,835 @@
+/* =========================================================
+   PAGE LIVRAISON - VERSION INFORMATIVE PRO
+   ========================================================= */
+
+/* =========================================================
+   HERO - DESIGN INFORMATIF CLEAN
+   ========================================================= */
+
+.delivery-hero-info {
+    background: linear-gradient(135deg, #1a3333 0%, #2a4444 100%);
+    padding: 6rem 0 5rem;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: -30%;
+        right: -10%;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(#16C669, 0.08) 0%, transparent 60%);
+        border-radius: 50%;
+    }
+
+    @media (max-width: 991.98px) {
+        padding: 4rem 0 3rem;
+    }
+
+    @media (max-width: 575.98px) {
+        padding: 3rem 0 2rem;
+    }
+}
+
+.hero-badge-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(#16C669, 0.15);
+    border: 1px solid rgba(#16C669, 0.3);
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+
+    i {
+        font-size: 1rem;
+        color: #16C669;
+    }
+}
+
+.hero-title-info {
+    font-size: 3.25rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+
+    @media (max-width: 991.98px) {
+        font-size: 2.5rem;
+    }
+
+    @media (max-width: 575.98px) {
+        font-size: 2rem;
+    }
+}
+
+.hero-lead-info {
+    font-size: 1.25rem;
+    color: rgba(white, 0.9);
+    line-height: 1.6;
+    margin: 0;
+
+    @media (max-width: 575.98px) {
+        font-size: 1.0625rem;
+    }
+}
+
+/* =========================================================
+   CARTES INFORMATIVES - GRID 3 COLONNES
+   ========================================================= */
+
+.section-info-cards {
+    padding: 4rem 0;
+    background: white;
+
+    @media (max-width: 575.98px) {
+        padding: 3rem 0;
+    }
+}
+
+.info-card-main {
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    height: 100%;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: #16C669;
+        box-shadow: 0 8px 24px rgba(#16C669, 0.12);
+        transform: translateY(-4px);
+
+        .info-icon {
+            background: linear-gradient(135deg, #16C669 0%, #12A855 100%);
+
+            i {
+                color: white;
+            }
+        }
+    }
+
+    h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #6B7280;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.8125rem;
+    }
+
+    .info-value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #1F2937;
+        margin-bottom: 0.5rem;
+        line-height: 1;
+    }
+
+    .info-detail {
+        font-size: 0.9375rem;
+        color: #6B7280;
+        margin: 0;
+    }
+}
+
+.info-card-main.info-card-featured {
+    border-color: #16C669;
+    border-width: 2px;
+    background: rgba(#16C669, 0.02);
+
+    .info-icon {
+        background: linear-gradient(135deg, #16C669 0%, #12A855 100%);
+
+        i {
+            color: white;
+        }
+    }
+
+    .info-value {
+        color: #16C669;
+    }
+}
+
+.info-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(#16C669, 0.1);
+    border-radius: 14px;
+    transition: all 0.3s ease;
+
+    i {
+        font-size: 2rem;
+        color: #16C669;
+        transition: all 0.3s ease;
+    }
+}
+
+/* =========================================================
+   TITRES DE SECTION
+   ========================================================= */
+
+.section-title-info {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #1F2937;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+
+    @media (max-width: 991.98px) {
+        font-size: 2rem;
+    }
+
+    @media (max-width: 575.98px) {
+        font-size: 1.75rem;
+    }
+}
+
+.section-subtitle-info {
+    font-size: 1.125rem;
+    color: #6B7280;
+    margin: 0;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media (max-width: 575.98px) {
+        font-size: 1rem;
+    }
+}
+
+/* =========================================================
+   SECTION TARIFS - CARDS COMPACTES
+   ========================================================= */
+
+.section-pricing-info {
+    padding: 5rem 0;
+    background: #F8FAFB;
+
+    @media (max-width: 991.98px) {
+        padding: 4rem 0;
+    }
+
+    @media (max-width: 575.98px) {
+        padding: 3rem 0;
+    }
+}
+
+.pricing-info-card {
+    background: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 20px;
+    padding: 2rem;
+    height: 100%;
+    transition: all 0.3s ease;
+    position: relative;
+
+    &:hover {
+        border-color: #16C669;
+        box-shadow: 0 8px 24px rgba(#16C669, 0.12);
+        transform: translateY(-4px);
+    }
+}
+
+.pricing-info-card-premium {
+    border-color: #16C669;
+    border-width: 2px;
+    background: rgba(#16C669, 0.02);
+
+    &:hover {
+        box-shadow: 0 12px 32px rgba(#16C669, 0.15);
+    }
+}
+
+.pricing-info-badge {
+    position: absolute;
+    top: -12px;
+    right: 2rem;
+    background: linear-gradient(135deg, #16C669 0%, #12A855 100%);
+    color: white;
+    padding: 0.375rem 0.875rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 12px rgba(#16C669, 0.3);
+}
+
+.pricing-info-header {
+    text-align: center;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #E5E7EB;
+    margin-bottom: 1.5rem;
+}
+
+.pricing-info-label {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: 1rem;
+}
+
+.pricing-info-price {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #16C669;
+    line-height: 1;
+    letter-spacing: -0.02em;
+
+    @media (max-width: 575.98px) {
+        font-size: 2.5rem;
+    }
+}
+
+.pricing-info-subtitle {
+    font-size: 0.875rem;
+    color: #6B7280;
+    margin-top: 0.5rem;
+}
+
+.pricing-info-description {
+    font-size: 1rem;
+    color: #6B7280;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.pricing-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+        padding: 0.625rem 0;
+        font-size: 0.9375rem;
+        color: #4B5563;
+        position: relative;
+        padding-left: 1.75rem;
+        line-height: 1.5;
+        border-bottom: 1px solid rgba(#E5E7EB, 0.5);
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 1rem;
+            width: 6px;
+            height: 6px;
+            background: #16C669;
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px rgba(#16C669, 0.15);
+        }
+
+        strong {
+            font-weight: 700;
+            color: #1F2937;
+        }
+    }
+}
+
+.info-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: rgba(#3B82F6, 0.05);
+    border: 1px solid rgba(#3B82F6, 0.15);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-top: 2.5rem;
+    font-size: 0.9375rem;
+    color: #1E40AF;
+
+    i {
+        font-size: 1.5rem;
+        color: #3B82F6;
+        flex-shrink: 0;
+        margin-top: 0.125rem;
+    }
+
+    strong {
+        font-weight: 700;
+    }
+}
+
+/* =========================================================
+   PROCESSUS - TIMELINE SIMPLIFIÉE
+   ========================================================= */
+
+.section-process-info {
+    padding: 5rem 0;
+    background: white;
+
+    @media (max-width: 991.98px) {
+        padding: 4rem 0;
+    }
+
+    @media (max-width: 575.98px) {
+        padding: 3rem 0;
+    }
+}
+
+.process-timeline-info {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.process-step {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+
+    &:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: 28px;
+        top: 56px;
+        bottom: -2.5rem;
+        width: 2px;
+        background: linear-gradient(to bottom, #16C669, rgba(#16C669, 0.2));
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 767.98px) {
+        gap: 1.25rem;
+        margin-bottom: 2rem;
+
+        &:not(:last-child)::after {
+            left: 22px;
+            bottom: -2rem;
+        }
+    }
+}
+
+.process-number {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #16C669 0%, #12A855 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 900;
+    box-shadow:
+        0 6px 20px rgba(#16C669, 0.3),
+        0 0 0 4px white,
+        0 0 0 5px rgba(#16C669, 0.2);
+    position: relative;
+    z-index: 2;
+
+    @media (max-width: 767.98px) {
+        width: 44px;
+        height: 44px;
+        font-size: 1.25rem;
+    }
+}
+
+.process-content {
+    flex: 1;
+
+    h3 {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #1F2937;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.01em;
+
+        @media (max-width: 767.98px) {
+            font-size: 1.125rem;
+        }
+    }
+
+    p {
+        font-size: 1rem;
+        color: #6B7280;
+        margin: 0;
+        line-height: 1.6;
+
+        @media (max-width: 767.98px) {
+            font-size: 0.9375rem;
+        }
+    }
+}
+
+/* =========================================================
+   ZONES - GRID COMPACTE
+   ========================================================= */
+
+.section-zones-info {
+    padding: 4rem 0;
+    background: #F8FAFB;
+
+    @media (max-width: 575.98px) {
+        padding: 3rem 0;
+    }
+}
+
+.zones-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    max-width: 800px;
+    margin: 0 auto;
+
+    @media (max-width: 991.98px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 767.98px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 575.98px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.zone-item {
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #1F2937;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: #16C669;
+        background: rgba(#16C669, 0.02);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(#16C669, 0.1);
+
+        .zone-dept {
+            background: linear-gradient(135deg, #16C669 0%, #12A855 100%);
+            color: white;
+        }
+    }
+}
+
+.zone-dept {
+    display: inline-block;
+    background: rgba(#16C669, 0.1);
+    color: #16C669;
+    padding: 0.25rem 0.625rem;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 0.875rem;
+    margin-right: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+/* =========================================================
+   CONDITIONS - CARDS SIMPLES
+   ========================================================= */
+
+.section-conditions-info {
+    padding: 5rem 0;
+    background: white;
+
+    @media (max-width: 991.98px) {
+        padding: 4rem 0;
+    }
+
+    @media (max-width: 575.98px) {
+        padding: 3rem 0;
+    }
+}
+
+.condition-info-card {
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 2rem;
+    height: 100%;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: #16C669;
+        box-shadow: 0 8px 24px rgba(#16C669, 0.1);
+        transform: translateY(-4px);
+
+        .condition-info-icon {
+            background: linear-gradient(135deg, #16C669 0%, #12A855 100%);
+
+            i {
+                color: white;
+            }
+        }
+    }
+
+    h3 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #1F2937;
+        margin-bottom: 1.25rem;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            padding: 0.5rem 0;
+            font-size: 0.9375rem;
+            color: #6B7280;
+            position: relative;
+            padding-left: 1.5rem;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0.875rem;
+                width: 6px;
+                height: 6px;
+                background: #16C669;
+                border-radius: 50%;
+            }
+        }
+    }
+}
+
+.condition-info-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(#16C669, 0.1);
+    border-radius: 12px;
+    margin-bottom: 1.25rem;
+    transition: all 0.3s ease;
+
+    i {
+        font-size: 1.75rem;
+        color: #16C669;
+        transition: all 0.3s ease;
+    }
+}
+
+.info-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: rgba(#F59E0B, 0.05);
+    border: 1px solid rgba(#F59E0B, 0.15);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-top: 2.5rem;
+    font-size: 0.9375rem;
+    color: #92400E;
+
+    i {
+        font-size: 1.5rem;
+        color: #F59E0B;
+        flex-shrink: 0;
+        margin-top: 0.125rem;
+    }
+
+    strong {
+        font-weight: 700;
+    }
+}
+
+/* =========================================================
+   FAQ - ACCORDÉON SIMPLE
+   ========================================================= */
+
+.section-faq-info {
+    padding: 5rem 0;
+    background: #F8FAFB;
+
+    @media (max-width: 991.98px) {
+        padding: 4rem 0;
+    }
+
+    @media (max-width: 575.98px) {
+        padding: 3rem 0;
+    }
+}
+
+.accordion-info {
+    .accordion-item {
+        background: white;
+        border: 1px solid #E5E7EB;
+        border-radius: 12px;
+        margin-bottom: 0.75rem;
+        overflow: hidden;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        &:hover {
+            border-color: rgba(#16C669, 0.3);
+        }
+    }
+
+    .accordion-button {
+        background: transparent;
+        border: none;
+        padding: 1.25rem 1.5rem;
+        font-weight: 700;
+        font-size: 1rem;
+        color: #1F2937;
+        box-shadow: none;
+
+        &:not(.collapsed) {
+            background: rgba(#16C669, 0.04);
+            color: #16C669;
+        }
+
+        &:focus {
+            box-shadow: none;
+        }
+
+        &::after {
+            background-image: none;
+            content: '\F282';
+            font-family: 'bootstrap-icons';
+            font-size: 1.125rem;
+            color: #16C669;
+            transition: transform 0.3s ease;
+        }
+
+        &:not(.collapsed)::after {
+            transform: rotate(180deg);
+        }
+    }
+
+    .accordion-body {
+        padding: 0 1.5rem 1.25rem;
+        color: #6B7280;
+        line-height: 1.7;
+        font-size: 0.9375rem;
+    }
+}
+
+/* =========================================================
+   CTA CONTACT
+   ========================================================= */
+
+.section-cta-info {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #12A855 0%, #16C669 50%, #12A855 100%);
+
+    @media (max-width: 991.98px) {
+        padding: 4rem 0;
+    }
+
+    @media (max-width: 575.98px) {
+        padding: 3rem 0;
+    }
+}
+
+.cta-info-card {
+    background: rgba(white, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(white, 0.2);
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+
+    h2 {
+        font-size: 2rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 1rem;
+
+        @media (max-width: 575.98px) {
+            font-size: 1.75rem;
+        }
+    }
+
+    p {
+        font-size: 1.125rem;
+        color: rgba(white, 0.95);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+
+        @media (max-width: 575.98px) {
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 991.98px) {
+        padding: 2.5rem 2rem;
+    }
+
+    @media (max-width: 575.98px) {
+        padding: 2rem 1.5rem;
+    }
+}
+
+.cta-info-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    .btn {
+        padding: 0.875rem 2rem;
+        font-size: 1.0625rem;
+        font-weight: 700;
+        border-radius: 12px;
+
+        @media (max-width: 575.98px) {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+    }
+
+    .btn-primary {
+        background: white;
+        color: #16C669;
+        border: 2px solid white;
+
+        &:hover {
+            background: #16C669;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(white, 0.3);
+        }
+    }
+
+    .btn-outline-primary {
+        border: 2px solid white;
+        color: white;
+        background: transparent;
+
+        &:hover {
+            background: white;
+            color: #16C669;
+            transform: translateY(-2px);
+        }
+    }
+}

@@ -1,0 +1,372 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livraison & Installation en Île-de-France | Recyclum{% endblock %}
+{% block meta_description %}Découvrez nos services de livraison et d'installation d'électroménager reconditionné en Île-de-France. Tarifs transparents, délais rapides, service professionnel 7j/7.{% endblock %}
+
+{% block body %}
+
+    {# =========================================================
+   HERO HEADER - PAGE INFORMATIVE
+   ========================================================= #}
+    <section class="delivery-hero-info">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10 text-center">
+                    <div class="hero-badge-info">
+                        <i class="bi bi-truck"></i>
+                        <span>Livraison & Installation</span>
+                    </div>
+
+                    <h1 class="hero-title-info">
+                        Service de livraison <br>en Île-de-France
+                    </h1>
+
+                    <p class="hero-lead-info">
+                        Livraison rapide sous 2 à 5 jours avec installation professionnelle. <br>
+                        Service disponible 7j/7 pour tout électroménager reconditionné.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# =========================================================
+   INFORMATIONS ESSENTIELLES - GRID 3 COLONNES
+   ========================================================= #}
+    <section class="section-info-cards">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-12 col-md-4">
+                    <div class="info-card-main">
+                        <div class="info-icon">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <h3>Délai de livraison</h3>
+                        <p class="info-value">2 à 5 jours</p>
+                        <p class="info-detail">Selon disponibilité et planning</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="info-card-main info-card-featured">
+                        <div class="info-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+                        <h3>Zone de couverture</h3>
+                        <p class="info-value">Île-de-France</p>
+                        <p class="info-detail">8 départements couverts</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="info-card-main">
+                        <div class="info-icon">
+                            <i class="bi bi-calendar-week"></i>
+                        </div>
+                        <h3>Disponibilité</h3>
+                        <p class="info-value">7j/7</p>
+                        <p class="info-detail">Créneaux matin et après-midi</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# =========================================================
+   TARIFS - PRÉSENTATION CLAIRE
+   ========================================================= #}
+    <section class="section-pricing-info">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title-info">Tarifs de livraison</h2>
+                <p class="section-subtitle-info">Forfaits valables pour toute l'Île-de-France, sans supplément selon la distance ou l'étage</p>
+            </div>
+
+            <div class="row justify-content-center g-4">
+                <div class="col-12 col-lg-5">
+                    <div class="pricing-info-card">
+                        <div class="pricing-info-header">
+                            <div class="pricing-info-label">Livraison Simple</div>
+                            <div class="pricing-info-price">20€</div>
+                            <div class="pricing-info-subtitle">par appareil</div>
+                        </div>
+                        <div class="pricing-info-description">
+                            Transport et installation dans la pièce de votre choix. Le branchement reste à votre charge.
+                        </div>
+                        <ul class="pricing-info-list">
+                            <li>Transport jusqu'au domicile</li>
+                            <li>Déballage de l'appareil</li>
+                            <li>Installation dans la pièce</li>
+                            <li>Évacuation des emballages</li>
+                            <li>Reprise ancien appareil (gratuit)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-5">
+                    <div class="pricing-info-card pricing-info-card-premium">
+                        <div class="pricing-info-badge">Recommandé</div>
+                        <div class="pricing-info-header">
+                            <div class="pricing-info-label">Livraison + Installation</div>
+                            <div class="pricing-info-price">30€</div>
+                            <div class="pricing-info-subtitle">par appareil</div>
+                        </div>
+                        <div class="pricing-info-description">
+                            Service complet avec branchement, raccordement, mise en service et test. Prêt à l'emploi immédiatement.
+                        </div>
+                        <ul class="pricing-info-list">
+                            <li>Transport jusqu'au domicile</li>
+                            <li>Déballage de l'appareil</li>
+                            <li>Installation dans la pièce</li>
+                            <li><strong>Branchement et raccordement</strong></li>
+                            <li><strong>Mise en service et test</strong></li>
+                            <li><strong>Explications d'utilisation</strong></li>
+                            <li>Évacuation des emballages</li>
+                            <li>Reprise ancien appareil (gratuit)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-note">
+                <i class="bi bi-info-circle"></i>
+                <div>
+                    <strong>Tarif unique pour toute l'Île-de-France</strong> —
+                    Aucun supplément selon la distance. Paris (75), Hauts-de-Seine (92), Seine-Saint-Denis (93), Val-de-Marne (94), Essonne (91), Yvelines (78), Val-d'Oise (95), Seine-et-Marne (77) : même tarif partout.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# =========================================================
+   PROCESSUS - TIMELINE SIMPLE
+   ========================================================= #}
+    <section class="section-process-info">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title-info">Déroulement de la livraison</h2>
+                <p class="section-subtitle-info">Un service simple et transparent en 5 étapes</p>
+            </div>
+
+            <div class="process-timeline-info">
+                <div class="process-step">
+                    <div class="process-number">1</div>
+                    <div class="process-content">
+                        <h3>Commande</h3>
+                        <p>Passez commande en ligne, par téléphone ou en boutique. Indiquez votre formule de livraison souhaitée (20€ ou 30€).</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="process-number">2</div>
+                    <div class="process-content">
+                        <h3>Prise de rendez-vous</h3>
+                        <p>Nous vous contactons sous 24h pour convenir d'un créneau de livraison entre 2 et 5 jours selon disponibilité.</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="process-number">3</div>
+                    <div class="process-content">
+                        <h3>Livraison</h3>
+                        <p>Nos livreurs vous préviennent 1h avant leur arrivée et transportent votre appareil jusqu'à la pièce souhaitée.</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="process-number">4</div>
+                    <div class="process-content">
+                        <h3>Installation (formule 30€)</h3>
+                        <p>Branchement, raccordement, mise en service et test complet. Explications sur l'utilisation de l'appareil.</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="process-number">5</div>
+                    <div class="process-content">
+                        <h3>Reprise & nettoyage</h3>
+                        <p>Reprise gratuite de votre ancien appareil (si demandé) et évacuation de tous les emballages.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# =========================================================
+   ZONES DE LIVRAISON - GRID COMPACTE
+   ========================================================= #}
+    <section class="section-zones-info">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 class="section-title-info">Départements couverts</h2>
+            </div>
+
+            <div class="zones-grid">
+                <div class="zone-item"><span class="zone-dept">75</span> Paris</div>
+                <div class="zone-item"><span class="zone-dept">92</span> Hauts-de-Seine</div>
+                <div class="zone-item"><span class="zone-dept">93</span> Seine-Saint-Denis</div>
+                <div class="zone-item"><span class="zone-dept">94</span> Val-de-Marne</div>
+                <div class="zone-item"><span class="zone-dept">91</span> Essonne</div>
+                <div class="zone-item"><span class="zone-dept">78</span> Yvelines</div>
+                <div class="zone-item"><span class="zone-dept">95</span> Val-d'Oise</div>
+                <div class="zone-item"><span class="zone-dept">77</span> Seine-et-Marne</div>
+            </div>
+        </div>
+    </section>
+
+    {# =========================================================
+   CONDITIONS - TABLEAU SIMPLE
+   ========================================================= #}
+    <section class="section-conditions-info">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title-info">Conditions de livraison</h2>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-md-4">
+                    <div class="condition-info-card">
+                        <div class="condition-info-icon">
+                            <i class="bi bi-door-open"></i>
+                        </div>
+                        <h3>Accès</h3>
+                        <ul>
+                            <li>Ascenseur ou escalier accessible</li>
+                            <li>Portes suffisamment larges</li>
+                            <li>Chemin dégagé</li>
+                            <li>Aucun supplément étage</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="condition-info-card">
+                        <div class="condition-info-icon">
+                            <i class="bi bi-plug"></i>
+                        </div>
+                        <h3>Prérequis installation</h3>
+                        <ul>
+                            <li>Arrivée d'eau accessible (LL/LV)</li>
+                            <li>Évacuation d'eau présente</li>
+                            <li>Prise électrique à proximité</li>
+                            <li>Emplacement préparé</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="condition-info-card">
+                        <div class="condition-info-icon">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <h3>Horaires</h3>
+                        <ul>
+                            <li>Livraison 7j/7</li>
+                            <li>Créneaux matin ou après-midi</li>
+                            <li>Appel 1h avant l'arrivée</li>
+                            <li>Présence obligatoire</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-warning">
+                <i class="bi bi-exclamation-triangle"></i>
+                <div>
+                    <strong>Reprise de l'ancien appareil :</strong>
+                    Gratuite sur demande lors de la commande. L'appareil doit être débranché et accessible le jour de la livraison.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# =========================================================
+   FAQ - COMPACTE
+   ========================================================= #}
+    <section class="section-faq-info">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title-info">Questions fréquentes</h2>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-9">
+                    <div class="accordion accordion-info" id="faqDelivery">
+                        <div class="accordion-item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    Quel est le délai de livraison ?
+                                </button>
+                            </h3>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqDelivery">
+                                <div class="accordion-body">
+                                    Le délai est de 2 à 5 jours selon la disponibilité des produits. Nous vous contactons sous 24h après commande pour convenir d'un créneau.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    Y a-t-il un supplément pour les étages ?
+                                </button>
+                            </h3>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqDelivery">
+                                <div class="accordion-body">
+                                    Non, aucun supplément. Les tarifs sont fixes : 20€ ou 30€ selon la formule choisie.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    La reprise de l'ancien appareil est-elle gratuite ?
+                                </button>
+                            </h3>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqDelivery">
+                                <div class="accordion-body">
+                                    Oui, totalement gratuite. Il suffit de le préciser lors de la commande et de le débrancher avant notre arrivée.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                    Quelle différence entre les deux formules ?
+                                </button>
+                            </h3>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqDelivery">
+                                <div class="accordion-body">
+                                    Formule 20€ : livraison et installation, branchement à votre charge. Formule 30€ : service complet avec branchement, mise en service et test.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# =========================================================
+   CTA CONTACT
+   ========================================================= #}
+    <section class="section-cta-info">
+        <div class="container">
+            <div class="cta-info-card">
+                <h2>Une question sur la livraison ?</h2>
+                <p>Nos équipes sont disponibles pour vous renseigner et organiser votre livraison.</p>
+                <div class="cta-info-actions">
+                    <a href="tel:+33143076363" class="btn btn-primary btn-lg">
+                        <i class="bi bi-telephone"></i> 01 43 07 63 63
+                    </a>
+                    <a href="/contact" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-envelope"></i> Nous écrire
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

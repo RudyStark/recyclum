@@ -1,0 +1,580 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de Cookies | Recyclum{% endblock %}
+{% block meta_description %}Politique de gestion des cookies et traceurs de Recyclum. Comprendre et gérer vos préférences cookies conformément à la réglementation RGPD.{% endblock %}
+
+{% block body %}
+
+    {# =========================================================
+   HERO SIMPLE
+   ========================================================= #}
+    <section class="legal-hero">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8 text-center">
+                    <div class="legal-badge">
+                        <i class="bi bi-cookie"></i>
+                        <span>Gestion des cookies</span>
+                    </div>
+                    <h1>Politique de Cookies</h1>
+                    <p class="legal-intro">Comment nous utilisons les cookies et comment les gérer</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# =========================================================
+   NAVIGATION RAPIDE
+   ========================================================= #}
+    <section class="privacy-nav">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-9">
+                    <div class="privacy-nav-card">
+                        <h3>Navigation rapide</h3>
+                        <div class="privacy-nav-grid">
+                            <a href="#introduction" class="privacy-nav-item">
+                                <i class="bi bi-info-circle"></i>
+                                <span>Introduction</span>
+                            </a>
+                            <a href="#definition" class="privacy-nav-item">
+                                <i class="bi bi-question-circle"></i>
+                                <span>Qu'est-ce qu'un cookie ?</span>
+                            </a>
+                            <a href="#types" class="privacy-nav-item">
+                                <i class="bi bi-list-ul"></i>
+                                <span>Types de cookies</span>
+                            </a>
+                            <a href="#utilisation" class="privacy-nav-item">
+                                <i class="bi bi-graph-up"></i>
+                                <span>Notre utilisation</span>
+                            </a>
+                            <a href="#gestion" class="privacy-nav-item">
+                                <i class="bi bi-sliders"></i>
+                                <span>Gérer vos cookies</span>
+                            </a>
+                            <a href="#opposition" class="privacy-nav-item">
+                                <i class="bi bi-x-circle"></i>
+                                <span>S'opposer</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# =========================================================
+   CONTENU
+   ========================================================= #}
+    <section class="legal-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-9">
+
+                    {# Introduction #}
+                    <div class="legal-section" id="introduction">
+                        <h2>1. Introduction</h2>
+                        <p>Le site Recyclum.fr utilise des cookies et autres technologies de traçage (ci-après "cookies") pour améliorer votre expérience de navigation, analyser notre trafic et personnaliser nos services.</p>
+                        <p>Cette politique vous informe sur l'utilisation des cookies sur notre site conformément à la réglementation en vigueur, notamment le Règlement Général sur la Protection des Données (RGPD) et les recommandations de la CNIL.</p>
+
+                        <div class="privacy-highlight">
+                            <i class="bi bi-shield-check"></i>
+                            <div>
+                                <strong>Votre choix, votre contrôle</strong>
+                                <p>Vous gardez le contrôle total sur les cookies. Vous pouvez à tout moment accepter, refuser ou paramétrer vos préférences via notre bandeau cookies ou les paramètres de votre navigateur.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Définition #}
+                    <div class="legal-section" id="definition">
+                        <h2>2. Qu'est-ce qu'un cookie ?</h2>
+
+                        <div class="cookies-definition-card">
+                            <div class="cookies-definition-icon">
+                                <i class="bi bi-info-circle"></i>
+                            </div>
+                            <div class="cookies-definition-content">
+                                <h3>Définition technique</h3>
+                                <p>Un cookie est un petit fichier texte stocké sur votre appareil (ordinateur, smartphone, tablette) lors de la visite d'un site web. Il permet au site de mémoriser des informations sur votre visite, comme vos préférences de langue, vos identifiants de connexion ou le contenu de votre panier.</p>
+                            </div>
+                        </div>
+
+                        <h3>2.1. Durée de vie des cookies</h3>
+                        <div class="cookies-duration-grid">
+                            <div class="cookies-duration-card">
+                                <div class="cookies-duration-icon">
+                                    <i class="bi bi-clock"></i>
+                                </div>
+                                <h4>Cookies de session</h4>
+                                <p>Temporaires, supprimés automatiquement à la fermeture du navigateur. Utilisés pour maintenir votre session active pendant votre navigation.</p>
+                            </div>
+                            <div class="cookies-duration-card">
+                                <div class="cookies-duration-icon">
+                                    <i class="bi bi-calendar-week"></i>
+                                </div>
+                                <h4>Cookies persistants</h4>
+                                <p>Restent sur votre appareil pendant une durée définie (maximum 13 mois). Utilisés pour mémoriser vos préférences entre plusieurs visites.</p>
+                            </div>
+                        </div>
+
+                        <h3>2.2. Origine des cookies</h3>
+                        <div class="cookies-origin-grid">
+                            <div class="cookies-origin-card">
+                                <h4><i class="bi bi-house"></i> Cookies internes (first-party)</h4>
+                                <p>Déposés directement par Recyclum.fr. Nous en avons le contrôle total.</p>
+                            </div>
+                            <div class="cookies-origin-card">
+                                <h4><i class="bi bi-globe"></i> Cookies tiers (third-party)</h4>
+                                <p>Déposés par des services externes (Google Analytics, réseaux sociaux, etc.). Contrôlés par ces tiers.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Types de cookies #}
+                    <div class="legal-section" id="types">
+                        <h2>3. Types de cookies utilisés</h2>
+                        <p>Nous utilisons différents types de cookies selon leur finalité :</p>
+
+                        {# Cookie strictement nécessaire #}
+                        <div class="cookies-type-card cookies-type-essential">
+                            <div class="cookies-type-header">
+                                <div class="cookies-type-icon">
+                                    <i class="bi bi-gear-fill"></i>
+                                </div>
+                                <div>
+                                    <h3>Cookies strictement nécessaires</h3>
+                                    <span class="cookies-consent-badge cookies-consent-required">Pas de consentement requis</span>
+                                </div>
+                            </div>
+
+                            <p class="cookies-type-description">Ces cookies sont indispensables au fonctionnement du site. Ils ne peuvent pas être désactivés car ils permettent des fonctionnalités de base comme la navigation sécurisée, l'authentification et la gestion du panier.</p>
+
+                            <h4>Exemples d'utilisation :</h4>
+                            <ul>
+                                <li>Maintenir votre session de connexion</li>
+                                <li>Mémoriser les produits dans votre panier</li>
+                                <li>Sécuriser vos transactions</li>
+                                <li>Mémoriser vos préférences de cookies</li>
+                                <li>Répartir la charge sur nos serveurs (load balancing)</li>
+                            </ul>
+
+                            <div class="cookies-tech-table">
+                                <div class="cookies-tech-row cookies-tech-header">
+                                    <div>Nom du cookie</div>
+                                    <div>Finalité</div>
+                                    <div>Durée</div>
+                                </div>
+                                <div class="cookies-tech-row">
+                                    <div><code>PHPSESSID</code></div>
+                                    <div>Identifiant de session</div>
+                                    <div>Session</div>
+                                </div>
+                                <div class="cookies-tech-row">
+                                    <div><code>cart_id</code></div>
+                                    <div>Panier d'achat</div>
+                                    <div>7 jours</div>
+                                </div>
+                                <div class="cookies-tech-row">
+                                    <div><code>cookie_consent</code></div>
+                                    <div>Mémorisation choix cookies</div>
+                                    <div>13 mois</div>
+                                </div>
+                            </div>
+
+                            <p class="cookies-type-legal"><strong>Base légale :</strong> Article 82 de la loi Informatique et Libertés - Exemption de consentement pour les cookies strictement nécessaires.</p>
+                        </div>
+
+                        {# Cookies analytiques #}
+                        <div class="cookies-type-card cookies-type-analytics">
+                            <div class="cookies-type-header">
+                                <div class="cookies-type-icon">
+                                    <i class="bi bi-graph-up"></i>
+                                </div>
+                                <div>
+                                    <h3>Cookies analytiques et de mesure d'audience</h3>
+                                    <span class="cookies-consent-badge cookies-consent-optional">Consentement requis</span>
+                                </div>
+                            </div>
+
+                            <p class="cookies-type-description">Ces cookies nous permettent de comprendre comment les visiteurs utilisent notre site en collectant des informations anonymes sur les pages consultées, le temps passé et les erreurs rencontrées.</p>
+
+                            <h4>Exemples d'utilisation :</h4>
+                            <ul>
+                                <li>Nombre de visiteurs et pages vues</li>
+                                <li>Parcours de navigation sur le site</li>
+                                <li>Temps passé sur chaque page</li>
+                                <li>Taux de rebond et abandon de panier</li>
+                                <li>Sources de trafic (recherche, réseaux sociaux, etc.)</li>
+                                <li>Performance technique du site</li>
+                            </ul>
+
+                            <div class="cookies-service-list">
+                                <div class="cookies-service-item">
+                                    <div class="cookies-service-logo">
+                                        <i class="bi bi-google"></i>
+                                    </div>
+                                    <div class="cookies-service-info">
+                                        <h5>Google Analytics</h5>
+                                        <p>Service de mesure d'audience. Données anonymisées selon configuration GA4.</p>
+                                        <p class="cookies-service-link"><a href="https://policies.google.com/privacy" target="_blank">Politique de confidentialité Google <i class="bi bi-box-arrow-up-right"></i></a></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="cookies-type-legal"><strong>Base légale :</strong> Consentement explicite de l'utilisateur (Article 82 de la loi Informatique et Libertés).</p>
+                        </div>
+
+                        {# Cookies publicitaires #}
+                        <div class="cookies-type-card cookies-type-marketing">
+                            <div class="cookies-type-header">
+                                <div class="cookies-type-icon">
+                                    <i class="bi bi-megaphone-fill"></i>
+                                </div>
+                                <div>
+                                    <h3>Cookies publicitaires et de ciblage</h3>
+                                    <span class="cookies-consent-badge cookies-consent-optional">Consentement requis</span>
+                                </div>
+                            </div>
+
+                            <p class="cookies-type-description">Ces cookies permettent de vous proposer des publicités personnalisées en fonction de vos centres d'intérêt et de mesurer l'efficacité de nos campagnes publicitaires.</p>
+
+                            <h4>Exemples d'utilisation :</h4>
+                            <ul>
+                                <li>Afficher des publicités pertinentes selon vos intérêts</li>
+                                <li>Limiter le nombre de fois où vous voyez une publicité</li>
+                                <li>Mesurer l'efficacité des campagnes publicitaires</li>
+                                <li>Remarketing (vous montrer des produits consultés)</li>
+                                <li>Suivi des conversions après clic sur une publicité</li>
+                            </ul>
+
+                            <div class="cookies-service-list">
+                                <div class="cookies-service-item">
+                                    <div class="cookies-service-logo">
+                                        <i class="bi bi-google"></i>
+                                    </div>
+                                    <div class="cookies-service-info">
+                                        <h5>Google Ads</h5>
+                                        <p>Publicités ciblées et remarketing sur le réseau Google.</p>
+                                        <p class="cookies-service-link"><a href="https://policies.google.com/privacy" target="_blank">Politique de confidentialité Google <i class="bi bi-box-arrow-up-right"></i></a></p>
+                                    </div>
+                                </div>
+
+                                <div class="cookies-service-item">
+                                    <div class="cookies-service-logo">
+                                        <i class="bi bi-facebook"></i>
+                                    </div>
+                                    <div class="cookies-service-info">
+                                        <h5>Facebook Pixel</h5>
+                                        <p>Suivi des conversions et remarketing sur Facebook et Instagram.</p>
+                                        <p class="cookies-service-link"><a href="https://www.facebook.com/privacy/explanation" target="_blank">Politique de confidentialité Meta <i class="bi bi-box-arrow-up-right"></i></a></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="cookies-type-legal"><strong>Base légale :</strong> Consentement explicite de l'utilisateur (Article 82 de la loi Informatique et Libertés).</p>
+                        </div>
+
+                        {# Cookies fonctionnels #}
+                        <div class="cookies-type-card cookies-type-functional">
+                            <div class="cookies-type-header">
+                                <div class="cookies-type-icon">
+                                    <i class="bi bi-sliders"></i>
+                                </div>
+                                <div>
+                                    <h3>Cookies fonctionnels et de personnalisation</h3>
+                                    <span class="cookies-consent-badge cookies-consent-optional">Consentement recommandé</span>
+                                </div>
+                            </div>
+
+                            <p class="cookies-type-description">Ces cookies améliorent votre expérience en mémorisant vos préférences et en personnalisant certaines fonctionnalités du site.</p>
+
+                            <h4>Exemples d'utilisation :</h4>
+                            <ul>
+                                <li>Mémoriser votre langue préférée</li>
+                                <li>Enregistrer vos préférences d'affichage (grille/liste)</li>
+                                <li>Mémoriser vos filtres de recherche</li>
+                                <li>Sauvegarder vos produits favoris</li>
+                                <li>Personnaliser le contenu selon votre localisation</li>
+                            </ul>
+
+                            <p class="cookies-type-legal"><strong>Base légale :</strong> Consentement de l'utilisateur recommandé selon la CNIL.</p>
+                        </div>
+
+                        {# Cookies réseaux sociaux #}
+                        <div class="cookies-type-card cookies-type-social">
+                            <div class="cookies-type-header">
+                                <div class="cookies-type-icon">
+                                    <i class="bi bi-share-fill"></i>
+                                </div>
+                                <div>
+                                    <h3>Cookies de réseaux sociaux</h3>
+                                    <span class="cookies-consent-badge cookies-consent-optional">Consentement requis</span>
+                                </div>
+                            </div>
+
+                            <p class="cookies-type-description">Ces cookies sont déposés par les réseaux sociaux lorsque vous utilisez les boutons de partage ou que vous consultez des contenus intégrés (vidéos YouTube, posts Facebook, etc.).</p>
+
+                            <h4>Exemples d'utilisation :</h4>
+                            <ul>
+                                <li>Permettre le partage de contenus sur les réseaux sociaux</li>
+                                <li>Afficher des contenus intégrés (vidéos, posts)</li>
+                                <li>Suivre vos interactions avec ces contenus</li>
+                                <li>Personnaliser les publicités sur les réseaux sociaux</li>
+                            </ul>
+
+                            <div class="cookies-service-list">
+                                <div class="cookies-service-item">
+                                    <div class="cookies-service-logo">
+                                        <i class="bi bi-facebook"></i>
+                                    </div>
+                                    <div class="cookies-service-info">
+                                        <h5>Facebook / Instagram</h5>
+                                        <p class="cookies-service-link"><a href="https://www.facebook.com/privacy/explanation" target="_blank">Politique de confidentialité <i class="bi bi-box-arrow-up-right"></i></a></p>
+                                    </div>
+                                </div>
+
+                                <div class="cookies-service-item">
+                                    <div class="cookies-service-logo">
+                                        <i class="bi bi-youtube"></i>
+                                    </div>
+                                    <div class="cookies-service-info">
+                                        <h5>YouTube (Google)</h5>
+                                        <p class="cookies-service-link"><a href="https://policies.google.com/privacy" target="_blank">Politique de confidentialité <i class="bi bi-box-arrow-up-right"></i></a></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="cookies-type-legal"><strong>Base légale :</strong> Consentement explicite de l'utilisateur (Article 82 de la loi Informatique et Libertés).</p>
+                        </div>
+                    </div>
+
+                    {# Utilisation #}
+                    <div class="legal-section" id="utilisation">
+                        <h2>4. Notre utilisation des cookies</h2>
+
+                        <h3>4.1. Finalités détaillées</h3>
+                        <div class="cookies-purpose-grid">
+                            <div class="cookies-purpose-card">
+                                <i class="bi bi-speedometer2"></i>
+                                <h4>Performance technique</h4>
+                                <p>Optimiser la vitesse de chargement et la stabilité du site.</p>
+                            </div>
+
+                            <div class="cookies-purpose-card">
+                                <i class="bi bi-person-check"></i>
+                                <h4>Authentification</h4>
+                                <p>Vous maintenir connecté pendant votre session de navigation.</p>
+                            </div>
+
+                            <div class="cookies-purpose-card">
+                                <i class="bi bi-cart"></i>
+                                <h4>Panier d'achat</h4>
+                                <p>Mémoriser vos produits ajoutés au panier entre les pages.</p>
+                            </div>
+
+                            <div class="cookies-purpose-card">
+                                <i class="bi bi-shield-check"></i>
+                                <h4>Sécurité</h4>
+                                <p>Détecter et prévenir les activités frauduleuses.</p>
+                            </div>
+
+                            <div class="cookies-purpose-card">
+                                <i class="bi bi-bar-chart"></i>
+                                <h4>Analyse</h4>
+                                <p>Comprendre comment vous utilisez notre site pour l'améliorer.</p>
+                            </div>
+
+                            <div class="cookies-purpose-card">
+                                <i class="bi bi-bullseye"></i>
+                                <h4>Publicité</h4>
+                                <p>Vous proposer des offres pertinentes selon vos intérêts.</p>
+                            </div>
+                        </div>
+
+                        <h3>4.2. Données collectées via les cookies</h3>
+                        <p>Les cookies peuvent collecter les informations suivantes :</p>
+                        <ul>
+                            <li><strong>Données techniques :</strong> Adresse IP, type de navigateur, système d'exploitation, résolution d'écran</li>
+                            <li><strong>Données de navigation :</strong> Pages visitées, temps passé, clics, parcours de navigation</li>
+                            <li><strong>Données de comportement :</strong> Produits consultés, ajouts au panier, achats effectués</li>
+                            <li><strong>Données de localisation :</strong> Pays, région, ville (basé sur l'IP)</li>
+                            <li><strong>Identifiants :</strong> Identifiant unique de session, identifiant publicitaire</li>
+                        </ul>
+
+                        <div class="privacy-highlight privacy-highlight-info">
+                            <i class="bi bi-lock"></i>
+                            <div>
+                                <strong>Protection de vos données</strong>
+                                <p>Les données collectées via les cookies sont traitées conformément à notre <a href="{{ path('app_privacy') }}">Politique de Confidentialité</a> et ne sont jamais vendues à des tiers.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Gestion #}
+                    <div class="legal-section" id="gestion">
+                        <h2>5. Gérer vos préférences cookies</h2>
+
+                        <h3>5.1. Via notre outil de gestion</h3>
+                        <div class="cookies-manage-card">
+                            <div class="cookies-manage-icon">
+                                <i class="bi bi-sliders"></i>
+                            </div>
+                            <div class="cookies-manage-content">
+                                <h4>Centre de préférences cookies</h4>
+                                <p>Vous pouvez à tout moment modifier vos choix en cliquant sur le bouton ci-dessous :</p>
+                                <button type="button" class="btn btn-primary btn-lg mt-3" data-cc="show-preferencesModal">
+                                    <i class="bi bi-gear"></i> Gérer mes préférences cookies
+                                </button>
+                                <p class="mt-3 text-muted small">Ce bouton ouvre le bandeau de gestion des cookies qui vous permet d'accepter, refuser ou personnaliser vos choix par catégorie.</p>
+                            </div>
+                        </div>
+
+                        <h3>5.2. Via votre navigateur</h3>
+                        <p>Vous pouvez également configurer votre navigateur pour accepter, refuser ou être alerté lors du dépôt de cookies. Voici les liens vers les guides de gestion des cookies selon votre navigateur :</p>
+
+                        <div class="cookies-browsers-grid">
+                            <a href="https://support.google.com/chrome/answer/95647" target="_blank" class="cookies-browser-card">
+                                <i class="bi bi-google"></i>
+                                <span>Google Chrome</span>
+                            </a>
+                            <a href="https://support.mozilla.org/fr/kb/protection-renforcee-contre-pistage-firefox-ordinateur" target="_blank" class="cookies-browser-card">
+                                <i class="bi bi-fire"></i>
+                                <span>Mozilla Firefox</span>
+                            </a>
+                            <a href="https://support.apple.com/fr-fr/guide/safari/sfri11471/mac" target="_blank" class="cookies-browser-card">
+                                <i class="bi bi-apple"></i>
+                                <span>Safari</span>
+                            </a>
+                            <a href="https://support.microsoft.com/fr-fr/microsoft-edge/supprimer-les-cookies-dans-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" class="cookies-browser-card">
+                                <i class="bi bi-microsoft"></i>
+                                <span>Microsoft Edge</span>
+                            </a>
+                            <a href="https://help.opera.com/en/latest/web-preferences/#cookies" target="_blank" class="cookies-browser-card">
+                                <i class="bi bi-browser-chrome"></i>
+                                <span>Opera</span>
+                            </a>
+                            <a href="https://support.brave.com/hc/en-us/articles/360022806212-How-do-I-use-Shields-while-browsing" target="_blank" class="cookies-browser-card">
+                                <i class="bi bi-shield"></i>
+                                <span>Brave</span>
+                            </a>
+                        </div>
+
+                        <div class="privacy-highlight privacy-highlight-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            <div>
+                                <strong>Attention</strong>
+                                <p>Le blocage de certains cookies peut affecter votre expérience de navigation et empêcher l'utilisation de certaines fonctionnalités du site (connexion, panier, etc.).</p>
+                            </div>
+                        </div>
+
+                        <h3>5.3. Navigation privée</h3>
+                        <p>La plupart des navigateurs proposent un mode de navigation privée/incognito qui ne conserve pas l'historique de navigation ni les cookies après la fermeture de la fenêtre.</p>
+                    </div>
+
+                    {# Opposition #}
+                    <div class="legal-section" id="opposition">
+                        <h2>6. S'opposer aux cookies publicitaires</h2>
+
+                        <h3>6.1. Plateformes de désactivation</h3>
+                        <p>Vous pouvez vous opposer au dépôt de cookies publicitaires via les plateformes suivantes :</p>
+
+                        <div class="cookies-optout-list">
+                            <div class="cookies-optout-item">
+                                <i class="bi bi-box-arrow-up-right"></i>
+                                <div>
+                                    <h4>YourOnlineChoices (Europe)</h4>
+                                    <p>Plateforme européenne de désactivation des cookies publicitaires</p>
+                                    <a href="https://www.youronlinechoices.com/fr/" target="_blank" class="btn btn-outline-primary btn-sm mt-2">Accéder <i class="bi bi-arrow-right"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="cookies-optout-item">
+                                <i class="bi bi-box-arrow-up-right"></i>
+                                <div>
+                                    <h4>Google Ads Settings</h4>
+                                    <p>Désactiver la personnalisation des annonces Google</p>
+                                    <a href="https://adssettings.google.com/" target="_blank" class="btn btn-outline-primary btn-sm mt-2">Accéder <i class="bi bi-arrow-right"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="cookies-optout-item">
+                                <i class="bi bi-box-arrow-up-right"></i>
+                                <div>
+                                    <h4>Facebook Ad Preferences</h4>
+                                    <p>Gérer vos préférences publicitaires Facebook</p>
+                                    <a href="https://www.facebook.com/ads/preferences" target="_blank" class="btn btn-outline-primary btn-sm mt-2">Accéder <i class="bi bi-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>6.2. Do Not Track (DNT)</h3>
+                        <p>Certains navigateurs proposent une fonction "Do Not Track" qui envoie un signal aux sites web indiquant que vous ne souhaitez pas être suivi. Cependant, tous les sites ne respectent pas ce signal.</p>
+                    </div>
+
+                    {# Durée conservation #}
+                    <div class="legal-section">
+                        <h2>7. Durée de conservation</h2>
+                        <p>Conformément aux recommandations de la CNIL, la durée de validité maximale des cookies est de <strong>13 mois</strong> à compter de leur premier dépôt sur votre terminal.</p>
+                        <p>Votre consentement aux cookies est conservé pour une durée maximale de <strong>6 mois</strong>. Au-delà, nous vous demanderons à nouveau votre consentement.</p>
+                    </div>
+
+                    {# Modifications #}
+                    <div class="legal-section">
+                        <h2>8. Modifications de la politique cookies</h2>
+                        <p>Nous nous réservons le droit de modifier cette politique de cookies à tout moment pour refléter les évolutions réglementaires, techniques ou de nos pratiques.</p>
+                        <p>Toute modification substantielle vous sera signalée via un bandeau d'information lors de votre prochaine visite.</p>
+                    </div>
+
+                    {# Contact #}
+                    <div class="legal-section">
+                        <h2>9. Nous contacter</h2>
+                        <p>Pour toute question concernant notre utilisation des cookies, vous pouvez nous contacter :</p>
+
+                        <div class="privacy-contact-final">
+                            <div class="privacy-contact-col">
+                                <h4><i class="bi bi-envelope"></i> Email</h4>
+                                <p><a href="mailto:contact@recyclum.fr">contact@recyclum.fr</a></p>
+                            </div>
+                            <div class="privacy-contact-col">
+                                <h4><i class="bi bi-telephone"></i> Téléphone</h4>
+                                <p>01 43 07 63 63<br><small>Lun-Dim : 9h-19h</small></p>
+                            </div>
+                            <div class="privacy-contact-col">
+                                <h4><i class="bi bi-geo-alt"></i> Courrier</h4>
+                                <p>Recyclum<br>146 Avenue Daumesnil<br>75012 Paris</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Date MAJ #}
+                    <div class="legal-footer">
+                        <p><em>Dernière mise à jour : {{ "now"|date("d/m/Y") }}</em></p>
+                        <div class="mt-3">
+                            <a href="{{ path('app_privacy') }}" class="me-3">Politique de Confidentialité</a>
+                            <a href="{{ path('app_legal') }}">Mentions Légales</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# =========================================================
+   CTA
+   ========================================================= #}
+    <section class="legal-cta">
+        <div class="container">
+            <div class="text-center">
+                <h3 class="mb-3">Gérez vos préférences dès maintenant</h3>
+                <p class="mb-4">Prenez le contrôle de vos cookies en quelques clics.</p>
+                <button type="button" class="btn btn-primary btn-lg" data-cc="show-preferencesModal">
+                    <i class="bi bi-sliders"></i> Gérer mes préférences cookies
+                </button>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
