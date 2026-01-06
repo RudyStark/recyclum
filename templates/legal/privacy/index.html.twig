@@ -1,0 +1,611 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de Confidentialité | Recyclum{% endblock %}
+{% block meta_description %}Politique de confidentialité et protection des données personnelles de Recyclum. Conformité RGPD, utilisation des données, cookies et droits des utilisateurs.{% endblock %}
+
+{% block body %}
+
+    {# =========================================================
+   HERO SIMPLE
+   ========================================================= #}
+    <section class="legal-hero">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8 text-center">
+                    <div class="legal-badge">
+                        <i class="bi bi-lock"></i>
+                        <span>Protection des données</span>
+                    </div>
+                    <h1>Politique de Confidentialité</h1>
+                    <p class="legal-intro">Comment nous collectons, utilisons et protégeons vos données personnelles</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# =========================================================
+   NAVIGATION RAPIDE
+   ========================================================= #}
+    <section class="privacy-nav">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-9">
+                    <div class="privacy-nav-card">
+                        <h3>Navigation rapide</h3>
+                        <div class="privacy-nav-grid">
+                            <a href="#introduction" class="privacy-nav-item">
+                                <i class="bi bi-info-circle"></i>
+                                <span>Introduction</span>
+                            </a>
+                            <a href="#donnees-collectees" class="privacy-nav-item">
+                                <i class="bi bi-collection"></i>
+                                <span>Données collectées</span>
+                            </a>
+                            <a href="#utilisation" class="privacy-nav-item">
+                                <i class="bi bi-graph-up"></i>
+                                <span>Utilisation</span>
+                            </a>
+                            <a href="#partage" class="privacy-nav-item">
+                                <i class="bi bi-share"></i>
+                                <span>Partage</span>
+                            </a>
+                            <a href="#conservation" class="privacy-nav-item">
+                                <i class="bi bi-clock-history"></i>
+                                <span>Conservation</span>
+                            </a>
+                            <a href="#droits" class="privacy-nav-item">
+                                <i class="bi bi-shield-check"></i>
+                                <span>Vos droits</span>
+                            </a>
+                            <a href="#cookies" class="privacy-nav-item">
+                                <i class="bi bi-cookie"></i>
+                                <span>Cookies</span>
+                            </a>
+                            <a href="#securite" class="privacy-nav-item">
+                                <i class="bi bi-shield-lock"></i>
+                                <span>Sécurité</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# =========================================================
+   CONTENU
+   ========================================================= #}
+    <section class="legal-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-9">
+
+                    {# Introduction #}
+                    <div class="legal-section" id="introduction">
+                        <h2>1. Introduction</h2>
+                        <p>Recyclum accorde une grande importance à la protection de vos données personnelles. Cette politique de confidentialité vous informe sur la manière dont nous collectons, utilisons, partageons et protégeons vos informations personnelles conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés.</p>
+
+                        <div class="privacy-highlight">
+                            <i class="bi bi-shield-check"></i>
+                            <div>
+                                <strong>Notre engagement</strong>
+                                <p>Nous nous engageons à traiter vos données de manière transparente, sécurisée et conformément à la réglementation en vigueur. Vous gardez le contrôle total sur vos informations personnelles.</p>
+                            </div>
+                        </div>
+
+                        <h3>Responsable du traitement</h3>
+                        <div class="legal-box">
+                            <p><strong>Raison sociale :</strong> Recyclum</p>
+                            <p><strong>Adresse :</strong> 146 Avenue Daumesnil, 75012 Paris</p>
+                            <p><strong>Email :</strong> contact@recyclum.fr</p>
+                            <p><strong>Téléphone :</strong> 01 43 07 63 63</p>
+                        </div>
+                    </div>
+
+                    {# Données collectées #}
+                    <div class="legal-section" id="donnees-collectees">
+                        <h2>2. Données personnelles collectées</h2>
+                        <p>Nous collectons uniquement les données nécessaires pour vous fournir nos services et améliorer votre expérience.</p>
+
+                        <h3>2.1. Données collectées directement</h3>
+                        <div class="privacy-data-grid">
+                            <div class="privacy-data-card">
+                                <div class="privacy-data-icon">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                <h4>Informations d'identification</h4>
+                                <ul>
+                                    <li>Nom et prénom</li>
+                                    <li>Adresse email</li>
+                                    <li>Numéro de téléphone</li>
+                                    <li>Adresse postale</li>
+                                </ul>
+                            </div>
+
+                            <div class="privacy-data-card">
+                                <div class="privacy-data-icon">
+                                    <i class="bi bi-cart"></i>
+                                </div>
+                                <h4>Informations de commande</h4>
+                                <ul>
+                                    <li>Historique des achats</li>
+                                    <li>Produits consultés</li>
+                                    <li>Préférences de livraison</li>
+                                    <li>Adresse de facturation</li>
+                                </ul>
+                            </div>
+
+                            <div class="privacy-data-card">
+                                <div class="privacy-data-icon">
+                                    <i class="bi bi-credit-card"></i>
+                                </div>
+                                <h4>Informations de paiement</h4>
+                                <ul>
+                                    <li>Données bancaires (cryptées)</li>
+                                    <li>Factures et reçus</li>
+                                    <li>Mode de paiement</li>
+                                </ul>
+                                <p class="privacy-note"><strong>Note :</strong> Les informations bancaires sont traitées par nos prestataires de paiement sécurisés et ne sont jamais stockées sur nos serveurs.</p>
+                            </div>
+
+                            <div class="privacy-data-card">
+                                <div class="privacy-data-icon">
+                                    <i class="bi bi-chat-dots"></i>
+                                </div>
+                                <h4>Communications</h4>
+                                <ul>
+                                    <li>Échanges par email</li>
+                                    <li>Messages via formulaire</li>
+                                    <li>Historique du support client</li>
+                                    <li>Avis et retours produits</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3>2.2. Données collectées automatiquement</h3>
+                        <ul>
+                            <li><strong>Données de navigation :</strong> Adresse IP, type de navigateur, pages visitées, durée des visites</li>
+                            <li><strong>Données techniques :</strong> Système d'exploitation, résolution d'écran, langue du navigateur</li>
+                            <li><strong>Cookies et traceurs :</strong> Identifiants de session, préférences utilisateur (voir section Cookies)</li>
+                        </ul>
+                    </div>
+
+                    {# Utilisation des données #}
+                    <div class="legal-section" id="utilisation">
+                        <h2>3. Utilisation de vos données</h2>
+                        <p>Vos données personnelles sont utilisées dans le cadre des finalités suivantes :</p>
+
+                        <div class="privacy-purpose-list">
+                            <div class="privacy-purpose-item">
+                                <div class="privacy-purpose-number">1</div>
+                                <div class="privacy-purpose-content">
+                                    <h4>Gestion des commandes</h4>
+                                    <p>Traitement, suivi et livraison de vos commandes d'électroménagers reconditionnés.</p>
+                                    <span class="privacy-legal-basis">Base légale : Exécution du contrat</span>
+                                </div>
+                            </div>
+
+                            <div class="privacy-purpose-item">
+                                <div class="privacy-purpose-number">2</div>
+                                <div class="privacy-purpose-content">
+                                    <h4>Relation client</h4>
+                                    <p>Réponse à vos questions, gestion du SAV, traitement des réclamations et amélioration de nos services.</p>
+                                    <span class="privacy-legal-basis">Base légale : Exécution du contrat et intérêt légitime</span>
+                                </div>
+                            </div>
+
+                            <div class="privacy-purpose-item">
+                                <div class="privacy-purpose-number">3</div>
+                                <div class="privacy-purpose-content">
+                                    <h4>Communications marketing</h4>
+                                    <p>Envoi de newsletters, offres promotionnelles et informations sur nos produits (avec votre consentement).</p>
+                                    <span class="privacy-legal-basis">Base légale : Consentement (modifiable à tout moment)</span>
+                                </div>
+                            </div>
+
+                            <div class="privacy-purpose-item">
+                                <div class="privacy-purpose-number">4</div>
+                                <div class="privacy-purpose-content">
+                                    <h4>Amélioration du site</h4>
+                                    <p>Analyse de la navigation, optimisation de l'expérience utilisateur et développement de nouvelles fonctionnalités.</p>
+                                    <span class="privacy-legal-basis">Base légale : Intérêt légitime</span>
+                                </div>
+                            </div>
+
+                            <div class="privacy-purpose-item">
+                                <div class="privacy-purpose-number">5</div>
+                                <div class="privacy-purpose-content">
+                                    <h4>Obligations légales</h4>
+                                    <p>Respect des obligations comptables, fiscales et réglementaires (facturation, archivage).</p>
+                                    <span class="privacy-legal-basis">Base légale : Obligation légale</span>
+                                </div>
+                            </div>
+
+                            <div class="privacy-purpose-item">
+                                <div class="privacy-purpose-number">6</div>
+                                <div class="privacy-purpose-content">
+                                    <h4>Prévention de la fraude</h4>
+                                    <p>Détection et prévention des activités frauduleuses, protection de notre plateforme.</p>
+                                    <span class="privacy-legal-basis">Base légale : Intérêt légitime</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Partage des données #}
+                    <div class="legal-section" id="partage">
+                        <h2>4. Partage de vos données</h2>
+                        <p>Nous ne vendons jamais vos données personnelles. Vos informations peuvent être partagées uniquement dans les cas suivants :</p>
+
+                        <div class="privacy-sharing-grid">
+                            <div class="privacy-sharing-card">
+                                <h4><i class="bi bi-truck"></i> Prestataires de livraison</h4>
+                                <p>Nom, adresse et téléphone transmis pour assurer la livraison de vos commandes.</p>
+                            </div>
+
+                            <div class="privacy-sharing-card">
+                                <h4><i class="bi bi-credit-card-2-back"></i> Prestataires de paiement</h4>
+                                <p>Données bancaires traitées via des plateformes sécurisées (Stripe, PayPal, etc.).</p>
+                            </div>
+
+                            <div class="privacy-sharing-card">
+                                <h4><i class="bi bi-envelope"></i> Services d'emailing</h4>
+                                <p>Adresse email transmise pour l'envoi de communications (avec consentement).</p>
+                            </div>
+
+                            <div class="privacy-sharing-card">
+                                <h4><i class="bi bi-graph-up-arrow"></i> Outils d'analyse</h4>
+                                <p>Données anonymisées transmises à Google Analytics pour mesurer l'audience.</p>
+                            </div>
+
+                            <div class="privacy-sharing-card">
+                                <h4><i class="bi bi-shield-check"></i> Autorités légales</h4>
+                                <p>Transmission en cas de réquisition judiciaire ou obligation légale.</p>
+                            </div>
+
+                            <div class="privacy-sharing-card">
+                                <h4><i class="bi bi-cloud-upload"></i> Hébergement</h4>
+                                <p>Données stockées chez notre hébergeur certifié en France/UE.</p>
+                            </div>
+                        </div>
+
+                        <div class="privacy-highlight privacy-highlight-info">
+                            <i class="bi bi-info-circle"></i>
+                            <div>
+                                <strong>Transferts hors UE</strong>
+                                <p>Certains prestataires peuvent être situés hors de l'Union Européenne. Dans ce cas, nous nous assurons que des garanties appropriées sont mises en place (clauses contractuelles types, Privacy Shield, etc.).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Conservation #}
+                    <div class="legal-section" id="conservation">
+                        <h2>5. Durée de conservation</h2>
+                        <p>Vos données sont conservées uniquement pendant la durée nécessaire aux finalités pour lesquelles elles ont été collectées :</p>
+
+                        <div class="privacy-retention-table">
+                            <div class="privacy-retention-row">
+                                <div class="privacy-retention-type">Données de compte client actif</div>
+                                <div class="privacy-retention-duration">Durée de la relation commerciale + 3 ans</div>
+                            </div>
+                            <div class="privacy-retention-row">
+                                <div class="privacy-retention-type">Données de commande et facturation</div>
+                                <div class="privacy-retention-duration">10 ans (obligation comptable)</div>
+                            </div>
+                            <div class="privacy-retention-row">
+                                <div class="privacy-retention-type">Données de paiement</div>
+                                <div class="privacy-retention-duration">13 mois (obligation légale)</div>
+                            </div>
+                            <div class="privacy-retention-row">
+                                <div class="privacy-retention-type">Cookies et traceurs</div>
+                                <div class="privacy-retention-duration">13 mois maximum</div>
+                            </div>
+                            <div class="privacy-retention-row">
+                                <div class="privacy-retention-type">Données de prospection (newsletter)</div>
+                                <div class="privacy-retention-duration">3 ans après le dernier contact</div>
+                            </div>
+                            <div class="privacy-retention-row">
+                                <div class="privacy-retention-type">Compte client inactif</div>
+                                <div class="privacy-retention-duration">3 ans sans activité puis suppression</div>
+                            </div>
+                        </div>
+
+                        <p class="mt-4">À l'issue de ces délais, vos données sont supprimées ou anonymisées de manière irréversible.</p>
+                    </div>
+
+                    {# Vos droits #}
+                    <div class="legal-section" id="droits">
+                        <h2>6. Vos droits sur vos données</h2>
+                        <p>Conformément au RGPD, vous disposez des droits suivants que vous pouvez exercer à tout moment :</p>
+
+                        <div class="privacy-rights-grid">
+                            <div class="privacy-right-card">
+                                <div class="privacy-right-icon">
+                                    <i class="bi bi-eye"></i>
+                                </div>
+                                <h4>Droit d'accès</h4>
+                                <p>Obtenir une copie de toutes vos données personnelles que nous détenons.</p>
+                            </div>
+
+                            <div class="privacy-right-card">
+                                <div class="privacy-right-icon">
+                                    <i class="bi bi-pencil"></i>
+                                </div>
+                                <h4>Droit de rectification</h4>
+                                <p>Corriger ou mettre à jour vos données si elles sont inexactes ou incomplètes.</p>
+                            </div>
+
+                            <div class="privacy-right-card">
+                                <div class="privacy-right-icon">
+                                    <i class="bi bi-trash"></i>
+                                </div>
+                                <h4>Droit à l'effacement</h4>
+                                <p>Demander la suppression de vos données (sous certaines conditions).</p>
+                            </div>
+
+                            <div class="privacy-right-card">
+                                <div class="privacy-right-icon">
+                                    <i class="bi bi-hand-index"></i>
+                                </div>
+                                <h4>Droit d'opposition</h4>
+                                <p>Vous opposer au traitement de vos données pour des raisons légitimes.</p>
+                            </div>
+
+                            <div class="privacy-right-card">
+                                <div class="privacy-right-icon">
+                                    <i class="bi bi-pause-circle"></i>
+                                </div>
+                                <h4>Droit à la limitation</h4>
+                                <p>Demander la limitation du traitement de vos données dans certains cas.</p>
+                            </div>
+
+                            <div class="privacy-right-card">
+                                <div class="privacy-right-icon">
+                                    <i class="bi bi-arrow-right-circle"></i>
+                                </div>
+                                <h4>Droit à la portabilité</h4>
+                                <p>Récupérer vos données dans un format structuré et lisible.</p>
+                            </div>
+
+                            <div class="privacy-right-card">
+                                <div class="privacy-right-icon">
+                                    <i class="bi bi-x-circle"></i>
+                                </div>
+                                <h4>Retrait du consentement</h4>
+                                <p>Retirer votre consentement à tout moment pour les traitements basés sur celui-ci.</p>
+                            </div>
+
+                            <div class="privacy-right-card">
+                                <div class="privacy-right-icon">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </div>
+                                <h4>Directives post-mortem</h4>
+                                <p>Définir des directives sur le sort de vos données après votre décès.</p>
+                            </div>
+                        </div>
+
+                        <h3>Comment exercer vos droits ?</h3>
+                        <div class="privacy-contact-box">
+                            <div class="privacy-contact-method">
+                                <i class="bi bi-envelope-at"></i>
+                                <div>
+                                    <strong>Par email</strong>
+                                    <p>contact@recyclum.fr</p>
+                                </div>
+                            </div>
+                            <div class="privacy-contact-method">
+                                <i class="bi bi-mailbox"></i>
+                                <div>
+                                    <strong>Par courrier</strong>
+                                    <p>Recyclum - Service Données Personnelles<br>146 Avenue Daumesnil<br>75012 Paris</p>
+                                </div>
+                            </div>
+                            <div class="privacy-contact-method">
+                                <i class="bi bi-telephone"></i>
+                                <div>
+                                    <strong>Par téléphone</strong>
+                                    <p>01 43 07 63 63</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="mt-3">Nous nous engageons à répondre à votre demande dans un délai maximum d'<strong>un mois</strong> à compter de sa réception. Une pièce d'identité pourra vous être demandée pour vérifier votre identité.</p>
+
+                        <div class="privacy-highlight privacy-highlight-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            <div>
+                                <strong>Réclamation auprès de la CNIL</strong>
+                                <p>Si vous estimez que vos droits ne sont pas respectés, vous pouvez introduire une réclamation auprès de la Commission Nationale de l'Informatique et des Libertés (CNIL) : <a href="https://www.cnil.fr" target="_blank">www.cnil.fr</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Cookies #}
+                    <div class="legal-section" id="cookies">
+                        <h2>7. Cookies et traceurs</h2>
+                        <p>Notre site utilise des cookies et autres technologies de traçage pour améliorer votre expérience et analyser notre audience.</p>
+
+                        <h3>7.1. Qu'est-ce qu'un cookie ?</h3>
+                        <p>Un cookie est un petit fichier texte déposé sur votre appareil lors de la visite d'un site web. Il permet de reconnaître votre navigateur et de mémoriser certaines informations.</p>
+
+                        <h3>7.2. Types de cookies utilisés</h3>
+
+                        <div class="privacy-cookies-grid">
+                            <div class="privacy-cookie-card privacy-cookie-essential">
+                                <div class="privacy-cookie-header">
+                                    <i class="bi bi-gear"></i>
+                                    <h4>Cookies strictement nécessaires</h4>
+                                    <span class="privacy-cookie-badge">Obligatoires</span>
+                                </div>
+                                <p>Essentiels au fonctionnement du site (panier, authentification, sécurité).</p>
+                                <p class="privacy-cookie-duration">Durée : Session ou 1 an maximum</p>
+                                <p class="privacy-cookie-consent"><strong>Pas de consentement requis</strong></p>
+                            </div>
+
+                            <div class="privacy-cookie-card privacy-cookie-analytics">
+                                <div class="privacy-cookie-header">
+                                    <i class="bi bi-graph-up"></i>
+                                    <h4>Cookies analytiques</h4>
+                                    <span class="privacy-cookie-badge privacy-cookie-badge-optional">Optionnels</span>
+                                </div>
+                                <p>Mesure d'audience et statistiques de fréquentation (Google Analytics, Matomo).</p>
+                                <p class="privacy-cookie-duration">Durée : 13 mois maximum</p>
+                                <p class="privacy-cookie-consent"><strong>Consentement requis</strong></p>
+                            </div>
+
+                            <div class="privacy-cookie-card privacy-cookie-marketing">
+                                <div class="privacy-cookie-header">
+                                    <i class="bi bi-megaphone"></i>
+                                    <h4>Cookies marketing</h4>
+                                    <span class="privacy-cookie-badge privacy-cookie-badge-optional">Optionnels</span>
+                                </div>
+                                <p>Publicités ciblées et remarketing (Facebook Pixel, Google Ads).</p>
+                                <p class="privacy-cookie-duration">Durée : 13 mois maximum</p>
+                                <p class="privacy-cookie-consent"><strong>Consentement requis</strong></p>
+                            </div>
+
+                            <div class="privacy-cookie-card privacy-cookie-functional">
+                                <div class="privacy-cookie-header">
+                                    <i class="bi bi-sliders"></i>
+                                    <h4>Cookies fonctionnels</h4>
+                                    <span class="privacy-cookie-badge privacy-cookie-badge-optional">Optionnels</span>
+                                </div>
+                                <p>Amélioration de l'expérience (préférences de langue, thème, favoris).</p>
+                                <p class="privacy-cookie-duration">Durée : 6 mois à 1 an</p>
+                                <p class="privacy-cookie-consent"><strong>Consentement recommandé</strong></p>
+                            </div>
+                        </div>
+
+                        <h3>7.3. Gérer vos préférences cookies</h3>
+                        <p>Vous pouvez à tout moment accepter, refuser ou paramétrer les cookies :</p>
+                        <ul>
+                            <li>Via le bandeau cookies affiché lors de votre première visite</li>
+                            <li>En modifiant les paramètres de votre navigateur</li>
+                            <li>Via notre <a href="#" data-cc="show-preferencesModal">centre de préférences cookies</a></li>
+                        </ul>
+
+                        <div class="privacy-highlight">
+                            <i class="bi bi-lightbulb"></i>
+                            <div>
+                                <strong>Bon à savoir</strong>
+                                <p>Le refus des cookies fonctionnels et analytiques n'empêche pas la navigation sur le site, mais peut limiter certaines fonctionnalités et empêcher l'amélioration de nos services.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Sécurité #}
+                    <div class="legal-section" id="securite">
+                        <h2>8. Sécurité de vos données</h2>
+                        <p>Nous mettons en œuvre toutes les mesures techniques et organisationnelles appropriées pour protéger vos données personnelles contre tout accès non autorisé, perte, destruction ou divulgation.</p>
+
+                        <h3>Nos mesures de sécurité</h3>
+                        <div class="privacy-security-grid">
+                            <div class="privacy-security-item">
+                                <i class="bi bi-lock"></i>
+                                <h4>Chiffrement SSL/TLS</h4>
+                                <p>Toutes les communications sont cryptées via protocole HTTPS.</p>
+                            </div>
+                            <div class="privacy-security-item">
+                                <i class="bi bi-shield-check"></i>
+                                <h4>Pare-feu et antivirus</h4>
+                                <p>Protection contre les intrusions et logiciels malveillants.</p>
+                            </div>
+                            <div class="privacy-security-item">
+                                <i class="bi bi-key"></i>
+                                <h4>Authentification forte</h4>
+                                <p>Mots de passe sécurisés et accès restreints aux données.</p>
+                            </div>
+                            <div class="privacy-security-item">
+                                <i class="bi bi-cloud-check"></i>
+                                <h4>Sauvegardes régulières</h4>
+                                <p>Backups quotidiens pour prévenir toute perte de données.</p>
+                            </div>
+                            <div class="privacy-security-item">
+                                <i class="bi bi-people"></i>
+                                <h4>Formation du personnel</h4>
+                                <p>Sensibilisation régulière à la protection des données.</p>
+                            </div>
+                            <div class="privacy-security-item">
+                                <i class="bi bi-clipboard-check"></i>
+                                <h4>Audits de sécurité</h4>
+                                <p>Tests réguliers et mises à jour de sécurité.</p>
+                            </div>
+                        </div>
+
+                        <div class="privacy-highlight privacy-highlight-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            <div>
+                                <strong>En cas de violation de données</strong>
+                                <p>Conformément au RGPD, nous nous engageons à notifier la CNIL et les personnes concernées dans les 72 heures en cas de violation de données présentant un risque pour vos droits et libertés.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Mineurs #}
+                    <div class="legal-section">
+                        <h2>9. Protection des mineurs</h2>
+                        <p>Nos services ne sont pas destinés aux personnes de moins de 18 ans. Nous ne collectons pas sciemment de données personnelles concernant des mineurs.</p>
+                        <p>Si vous êtes parent ou tuteur légal et que vous pensez que votre enfant nous a fourni des données personnelles, contactez-nous immédiatement pour que nous puissions les supprimer.</p>
+                    </div>
+
+                    {# Modifications #}
+                    <div class="legal-section">
+                        <h2>10. Modifications de la politique</h2>
+                        <p>Nous nous réservons le droit de modifier cette politique de confidentialité à tout moment pour refléter les évolutions de nos pratiques, de la réglementation ou de nos services.</p>
+                        <p>En cas de modification substantielle, nous vous informerons par email ou via un bandeau visible sur le site. La date de dernière mise à jour est indiquée en bas de cette page.</p>
+                        <p>Nous vous encourageons à consulter régulièrement cette page pour rester informé de nos pratiques en matière de protection des données.</p>
+                    </div>
+
+                    {# Contact #}
+                    <div class="legal-section">
+                        <h2>11. Nous contacter</h2>
+                        <p>Pour toute question concernant cette politique de confidentialité ou l'exercice de vos droits, contactez-nous :</p>
+
+                        <div class="privacy-contact-final">
+                            <div class="privacy-contact-col">
+                                <h4><i class="bi bi-envelope"></i> Par email</h4>
+                                <p><a href="mailto:contact@recyclum.fr">contact@recyclum.fr</a></p>
+                            </div>
+                            <div class="privacy-contact-col">
+                                <h4><i class="bi bi-telephone"></i> Par téléphone</h4>
+                                <p>01 43 07 63 63<br><small>Lun-Dim : 9h-19h</small></p>
+                            </div>
+                            <div class="privacy-contact-col">
+                                <h4><i class="bi bi-geo-alt"></i> Par courrier</h4>
+                                <p>Recyclum<br>146 Avenue Daumesnil<br>75012 Paris</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Date de MAJ #}
+                    <div class="legal-footer">
+                        <p><em>Dernière mise à jour : {{ "now"|date("d/m/Y") }}</em></p>
+                        <p class="mt-2"><a href="{{ path('app_legal') }}">Voir les Mentions Légales</a></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# =========================================================
+   CTA
+   ========================================================= #}
+    <section class="legal-cta">
+        <div class="container">
+            <div class="text-center">
+                <h3 class="mb-3">Des questions sur vos données ?</h3>
+                <p class="mb-4">Notre équipe est à votre disposition pour répondre à toutes vos questions.</p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="/contact" class="btn btn-primary btn-lg">
+                        <i class="bi bi-envelope"></i> Nous contacter
+                    </a>
+                    <a href="/" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-arrow-left"></i> Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

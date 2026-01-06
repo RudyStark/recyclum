@@ -1,0 +1,228 @@
+/* =========================================================
+   PAGE MENTIONS LÉGALES - DESIGN PRO
+   ========================================================= */
+
+.legal-hero {
+    background: linear-gradient(135deg, #1a3333 0%, #2a4444 100%);
+    padding: 5rem 0 4rem;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: -30%;
+        right: -10%;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(#16C669, 0.08) 0%, transparent 60%);
+        border-radius: 50%;
+    }
+
+    @media (max-width: 575.98px) {
+        padding: 3rem 0 2rem;
+    }
+}
+
+.legal-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(#16C669, 0.15);
+    border: 1px solid rgba(#16C669, 0.3);
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+
+    i {
+        font-size: 1rem;
+        color: #16C669;
+    }
+}
+
+.legal-hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+
+    @media (max-width: 991.98px) {
+        font-size: 2.5rem;
+    }
+
+    @media (max-width: 575.98px) {
+        font-size: 2rem;
+    }
+}
+
+.legal-intro {
+    font-size: 1.25rem;
+    color: rgba(white, 0.9);
+    margin: 0;
+
+    @media (max-width: 575.98px) {
+        font-size: 1.0625rem;
+    }
+}
+
+/* =========================================================
+   CONTENU
+   ========================================================= */
+
+.legal-content {
+    padding: 5rem 0;
+    background: white;
+
+    @media (max-width: 991.98px) {
+        padding: 4rem 0;
+    }
+
+    @media (max-width: 575.98px) {
+        padding: 3rem 0;
+    }
+}
+
+.legal-section {
+    margin-bottom: 4rem;
+
+    &:last-of-type {
+        margin-bottom: 2rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #1F2937;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 3px solid #16C669;
+        letter-spacing: -0.01em;
+
+        @media (max-width: 575.98px) {
+            font-size: 1.5rem;
+        }
+    }
+
+    h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1F2937;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+
+        @media (max-width: 575.98px) {
+            font-size: 1.125rem;
+        }
+    }
+
+    p {
+        font-size: 1rem;
+        color: #4B5563;
+        line-height: 1.8;
+        margin-bottom: 1rem;
+
+        strong {
+            font-weight: 700;
+            color: #1F2937;
+        }
+    }
+
+    ul {
+        margin: 1rem 0;
+        padding-left: 1.5rem;
+
+        li {
+            font-size: 1rem;
+            color: #4B5563;
+            line-height: 1.8;
+            margin-bottom: 0.75rem;
+            padding-left: 0.5rem;
+
+            strong {
+                font-weight: 700;
+                color: #1F2937;
+            }
+
+            &::marker {
+                color: #16C669;
+            }
+        }
+    }
+}
+
+.legal-box {
+    background: #F8FAFB;
+    border: 1px solid #E5E7EB;
+    border-left: 4px solid #16C669;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 1.5rem;
+
+    p {
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        strong {
+            color: #1F2937;
+            font-weight: 700;
+            display: inline-block;
+            min-width: 180px;
+
+            @media (max-width: 575.98px) {
+                display: block;
+                min-width: auto;
+                margin-bottom: 0.25rem;
+            }
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        padding: 1.5rem;
+    }
+}
+
+.legal-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid #E5E7EB;
+    text-align: center;
+
+    p {
+        font-size: 0.9375rem;
+        color: #6B7280;
+        margin: 0;
+    }
+}
+
+/* =========================================================
+   CTA RETOUR
+   ========================================================= */
+
+.legal-cta {
+    padding: 4rem 0;
+    background: #F8FAFB;
+
+    @media (max-width: 575.98px) {
+        padding: 3rem 0;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+    .legal-section {
+        margin-bottom: 3rem;
+    }
+}

@@ -1,0 +1,841 @@
+/* =========================================================
+   PAGE CONFIDENTIALITÉ - DESIGN PRO
+   ========================================================= */
+
+/* =========================================================
+   NAVIGATION RAPIDE
+   ========================================================= */
+
+.privacy-nav {
+    padding: 3rem 0 0;
+    background: white;
+
+    @media (max-width: 575.98px) {
+        padding: 2rem 0 0;
+    }
+}
+
+.privacy-nav-card {
+    background: #F8FAFB;
+    border: 2px solid #E5E7EB;
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: -3rem;
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 8px 24px rgba(#1F2937, 0.08);
+
+    h3 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #1F2937;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.875rem;
+    }
+
+    @media (max-width: 575.98px) {
+        padding: 1.5rem;
+        margin-bottom: -2rem;
+    }
+}
+
+.privacy-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+
+    @media (max-width: 991.98px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 767.98px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 575.98px) {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+}
+
+.privacy-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 0.75rem;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    color: #1F2937;
+    font-size: 0.875rem;
+    font-weight: 600;
+
+    &:hover {
+        background: rgba(#16C669, 0.05);
+        border-color: #16C669;
+        color: #16C669;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(#16C669, 0.15);
+        text-decoration: none;
+
+        i {
+            color: #16C669;
+            transform: scale(1.1);
+        }
+    }
+
+    i {
+        font-size: 1.5rem;
+        color: #6B7280;
+        transition: all 0.3s ease;
+    }
+
+    span {
+        line-height: 1.3;
+    }
+}
+
+/* =========================================================
+   HIGHLIGHTS & BOXES
+   ========================================================= */
+
+.privacy-highlight {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: rgba(#16C669, 0.05);
+    border: 2px solid rgba(#16C669, 0.2);
+    border-left: 4px solid #16C669;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+
+    i {
+        font-size: 1.75rem;
+        color: #16C669;
+        flex-shrink: 0;
+        margin-top: 0.125rem;
+    }
+
+    strong {
+        display: block;
+        font-size: 1.0625rem;
+        font-weight: 700;
+        color: #1F2937;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        margin: 0;
+        color: #4B5563;
+        line-height: 1.7;
+    }
+}
+
+.privacy-highlight-info {
+    background: rgba(#3B82F6, 0.05);
+    border-color: rgba(#3B82F6, 0.2);
+    border-left-color: #3B82F6;
+
+    i {
+        color: #3B82F6;
+    }
+}
+
+.privacy-highlight-warning {
+    background: rgba(#F59E0B, 0.05);
+    border-color: rgba(#F59E0B, 0.2);
+    border-left-color: #F59E0B;
+
+    i {
+        color: #F59E0B;
+    }
+
+    a {
+        color: #F59E0B;
+        font-weight: 600;
+        text-decoration: underline;
+
+        &:hover {
+            color: darken(#F59E0B, 10%);
+        }
+    }
+}
+
+/* =========================================================
+   GRILLES DE DONNÉES
+   ========================================================= */
+
+.privacy-data-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+
+    @media (max-width: 991.98px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.privacy-data-card {
+    background: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 1.75rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: #16C669;
+        box-shadow: 0 8px 24px rgba(#16C669, 0.12);
+        transform: translateY(-4px);
+
+        .privacy-data-icon {
+            background: linear-gradient(135deg, #16C669 0%, #12A855 100%);
+
+            i {
+                color: white;
+            }
+        }
+    }
+
+    h4 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #1F2937;
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            padding: 0.375rem 0;
+            font-size: 0.9375rem;
+            color: #4B5563;
+            position: relative;
+            padding-left: 1.5rem;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0.875rem;
+                width: 5px;
+                height: 5px;
+                background: #16C669;
+                border-radius: 50%;
+            }
+        }
+    }
+
+    .privacy-note {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #E5E7EB;
+        font-size: 0.875rem;
+        color: #6B7280;
+        font-style: italic;
+
+        strong {
+            font-weight: 600;
+            color: #F59E0B;
+        }
+    }
+}
+
+.privacy-data-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(#16C669, 0.1);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+
+    i {
+        font-size: 1.75rem;
+        color: #16C669;
+        transition: all 0.3s ease;
+    }
+}
+
+/* =========================================================
+   LISTE DE FINALITÉS
+   ========================================================= */
+
+.privacy-purpose-list {
+    margin: 2rem 0;
+}
+
+.privacy-purpose-item {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #E5E7EB;
+
+    &:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    @media (max-width: 575.98px) {
+        gap: 1rem;
+    }
+}
+
+.privacy-purpose-number {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #16C669 0%, #12A855 100%);
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 900;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(#16C669, 0.3);
+
+    @media (max-width: 575.98px) {
+        width: 40px;
+        height: 40px;
+        font-size: 1.25rem;
+    }
+}
+
+.privacy-purpose-content {
+    flex: 1;
+
+    h4 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1F2937;
+        margin-bottom: 0.5rem;
+
+        @media (max-width: 575.98px) {
+            font-size: 1.125rem;
+        }
+    }
+
+    p {
+        font-size: 1rem;
+        color: #4B5563;
+        line-height: 1.7;
+        margin-bottom: 0.75rem;
+    }
+}
+
+.privacy-legal-basis {
+    display: inline-block;
+    padding: 0.375rem 0.875rem;
+    background: rgba(#16C669, 0.1);
+    border: 1px solid rgba(#16C669, 0.2);
+    border-radius: 50px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #12A855;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+/* =========================================================
+   PARTAGE DES DONNÉES
+   ========================================================= */
+
+.privacy-sharing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 2rem 0;
+
+    @media (max-width: 991.98px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 575.98px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.privacy-sharing-card {
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    text-align: center;
+
+    &:hover {
+        border-color: #16C669;
+        box-shadow: 0 6px 20px rgba(#16C669, 0.1);
+        transform: translateY(-4px);
+    }
+
+    h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1F2937;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+
+        i {
+            font-size: 1.25rem;
+            color: #16C669;
+        }
+    }
+
+    p {
+        font-size: 0.875rem;
+        color: #6B7280;
+        margin: 0;
+        line-height: 1.6;
+    }
+}
+
+/* =========================================================
+   TABLEAU DE CONSERVATION
+   ========================================================= */
+
+.privacy-retention-table {
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 2rem 0;
+}
+
+.privacy-retention-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #E5E7EB;
+    transition: all 0.2s ease;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:hover {
+        background: rgba(#16C669, 0.03);
+    }
+
+    @media (max-width: 767.98px) {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+}
+
+.privacy-retention-type {
+    font-size: 0.9375rem;
+    color: #1F2937;
+    font-weight: 600;
+}
+
+.privacy-retention-duration {
+    font-size: 0.9375rem;
+    color: #16C669;
+    font-weight: 700;
+    text-align: right;
+
+    @media (max-width: 767.98px) {
+        text-align: left;
+        font-size: 0.875rem;
+    }
+}
+
+/* =========================================================
+   GRILLE DES DROITS
+   ========================================================= */
+
+.privacy-rights-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 2rem 0;
+
+    @media (max-width: 991.98px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 575.98px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.privacy-right-card {
+    background: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: #16C669;
+        box-shadow: 0 8px 24px rgba(#16C669, 0.12);
+        transform: translateY(-4px);
+
+        .privacy-right-icon {
+            background: linear-gradient(135deg, #16C669 0%, #12A855 100%);
+
+            i {
+                color: white;
+            }
+        }
+    }
+
+    h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1F2937;
+        margin-bottom: 0.75rem;
+    }
+
+    p {
+        font-size: 0.875rem;
+        color: #6B7280;
+        margin: 0;
+        line-height: 1.6;
+    }
+}
+
+.privacy-right-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(#16C669, 0.1);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+
+    i {
+        font-size: 1.75rem;
+        color: #16C669;
+        transition: all 0.3s ease;
+    }
+}
+
+/* =========================================================
+   CONTACT BOX
+   ========================================================= */
+
+.privacy-contact-box {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+
+    @media (max-width: 991.98px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.privacy-contact-method {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #F8FAFB;
+    border: 2px solid #E5E7EB;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: #16C669;
+        background: rgba(#16C669, 0.03);
+    }
+
+    i {
+        font-size: 2rem;
+        color: #16C669;
+        flex-shrink: 0;
+    }
+
+    strong {
+        display: block;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1F2937;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        font-size: 0.9375rem;
+        color: #4B5563;
+        margin: 0;
+        line-height: 1.6;
+    }
+}
+
+/* =========================================================
+   COOKIES
+   ========================================================= */
+
+.privacy-cookies-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+
+    @media (max-width: 991.98px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.privacy-cookie-card {
+    background: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 1.75rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: #16C669;
+        box-shadow: 0 6px 20px rgba(#16C669, 0.1);
+        transform: translateY(-2px);
+    }
+
+    p {
+        font-size: 0.9375rem;
+        color: #4B5563;
+        line-height: 1.7;
+        margin-bottom: 1rem;
+    }
+}
+
+.privacy-cookie-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    i {
+        font-size: 1.75rem;
+        flex-shrink: 0;
+        margin-top: 0.125rem;
+    }
+
+    h4 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #1F2937;
+        flex: 1;
+        margin: 0;
+    }
+}
+
+.privacy-cookie-badge {
+    padding: 0.25rem 0.625rem;
+    border-radius: 50px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: #16C669;
+    color: white;
+    flex-shrink: 0;
+}
+
+.privacy-cookie-badge-optional {
+    background: #6B7280;
+}
+
+.privacy-cookie-essential {
+    border-color: #16C669;
+    background: rgba(#16C669, 0.02);
+
+    .privacy-cookie-header i {
+        color: #16C669;
+    }
+}
+
+.privacy-cookie-analytics {
+    .privacy-cookie-header i {
+        color: #3B82F6;
+    }
+}
+
+.privacy-cookie-marketing {
+    .privacy-cookie-header i {
+        color: #F59E0B;
+    }
+}
+
+.privacy-cookie-functional {
+    .privacy-cookie-header i {
+        color: #8B5CF6;
+    }
+}
+
+.privacy-cookie-duration {
+    font-size: 0.875rem;
+    color: #6B7280;
+    font-style: italic;
+    margin-bottom: 0.75rem;
+}
+
+.privacy-cookie-consent {
+    font-size: 0.875rem;
+    margin: 0;
+
+    strong {
+        color: #1F2937;
+    }
+}
+
+/* =========================================================
+   SÉCURITÉ
+   ========================================================= */
+
+.privacy-security-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin: 2rem 0;
+
+    @media (max-width: 991.98px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 575.98px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.privacy-security-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: #16C669;
+        box-shadow: 0 4px 16px rgba(#16C669, 0.1);
+        transform: translateY(-4px);
+
+        i {
+            color: #16C669;
+            transform: scale(1.1);
+        }
+    }
+
+    i {
+        font-size: 2.5rem;
+        color: #6B7280;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1F2937;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        font-size: 0.875rem;
+        color: #6B7280;
+        margin: 0;
+        line-height: 1.5;
+    }
+}
+
+/* =========================================================
+   CONTACT FINAL
+   ========================================================= */
+
+.privacy-contact-final {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin: 2rem 0;
+
+    @media (max-width: 767.98px) {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+.privacy-contact-col {
+    h4 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #1F2937;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        i {
+            font-size: 1.25rem;
+            color: #16C669;
+        }
+    }
+
+    p {
+        font-size: 1rem;
+        color: #4B5563;
+        margin: 0;
+        line-height: 1.7;
+
+        a {
+            color: #16C669;
+            font-weight: 600;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        small {
+            display: block;
+            font-size: 0.875rem;
+            color: #6B7280;
+            margin-top: 0.25rem;
+        }
+    }
+}
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.legal-cta {
+    h3 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1F2937;
+    }
+
+    p {
+        font-size: 1.125rem;
+        color: #6B7280;
+    }
+}

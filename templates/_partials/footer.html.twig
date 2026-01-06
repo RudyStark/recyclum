@@ -79,10 +79,19 @@
         <div class="footer-bottom">
             <p>© {{ "now"|date("Y") }} Recyclum. Tous droits réservés.</p>
             <div class="footer-legal">
-                <a href="/mentions-legales">Mentions légales</a>
-                <a href="/confidentialite">Confidentialité</a>
-                <a href="/cookies">Cookies</a>
-                <a href="/cgv">CGV</a>
+                <a href="{{ path('app_legal') }}">Mentions légales</a>
+                <a href="{{ path('app_privacy') }}">Confidentialité</a>
+                <a href="{{ path('app_cookies') }}">Cookies</a>
+                <a href="{{ path('app_cgv') }}">CGV</a>
+
+                {# Bouton pour réouvrir le bandeau cookies #}
+                <a
+                    href="#"
+                    data-controller="cookie-consent"
+                    data-action="click->cookie-consent#revoke"
+                >
+                    <i class="bi bi-sliders"></i> Gérer les cookies
+                </a>
             </div>
         </div>
     </div>
