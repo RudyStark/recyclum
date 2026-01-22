@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="checkout-wrapper">
+        {# Stepper #}
+        <section class="checkout-stepper">
+            <div class="container">
+                <div class="stepper">
+                    <div class="stepper-step {{ currentStep >= 1 ? 'active' : '' }} {{ currentStep > 1 ? 'completed' : '' }}">
+                        <div class="stepper-step-icon">
+                            {% if currentStep > 1 %}
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            {% else %}
+                                <span>1</span>
+                            {% endif %}
+                        </div>
+                        <div class="stepper-step-label">Livraison</div>
+                    </div>
+
+                    <div class="stepper-line {{ currentStep > 1 ? 'completed' : '' }}"></div>
+
+                    <div class="stepper-step {{ currentStep >= 2 ? 'active' : '' }} {{ currentStep > 2 ? 'completed' : '' }}">
+                        <div class="stepper-step-icon">
+                            {% if currentStep > 2 %}
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            {% else %}
+                                <span>2</span>
+                            {% endif %}
+                        </div>
+                        <div class="stepper-step-label">Récapitulatif</div>
+                    </div>
+
+                    <div class="stepper-line {{ currentStep > 2 ? 'completed' : '' }}"></div>
+
+                    <div class="stepper-step {{ currentStep >= 3 ? 'active' : '' }}">
+                        <div class="stepper-step-icon">
+                            <span>3</span>
+                        </div>
+                        <div class="stepper-step-label">Paiement</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {# Contenu de l'étape #}
+        <section class="checkout-content">
+            {% block checkout_content %}{% endblock %}
+        </section>
+    </div>
+{% endblock %}

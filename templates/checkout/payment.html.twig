@@ -1,0 +1,201 @@
+{% extends 'checkout/_layout.html.twig' %}
+
+{% block title %}Paiement | Recyclum{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
+
+{% block checkout_content %}
+    <div class="container">
+        <div class="checkout-grid">
+            {# Colonne principale - Paiement #}
+            <div class="checkout-main">
+                <div class="checkout-section">
+                    <div class="checkout-section-header">
+                        <div class="checkout-section-number">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </div>
+                        <div class="checkout-section-title">
+                            <h3>Paiement sécurisé</h3>
+                            <p>Vos données sont cryptées et protégées</p>
+                        </div>
+                    </div>
+
+                    <div class="checkout-section-body">
+                        {# Badges de sécurité #}
+                        <div class="payment-security-header">
+                            <div class="payment-security-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                    <path d="M9 12l2 2 4-4"></path>
+                                </svg>
+                            </div>
+                            <div class="payment-security-text">
+                                <h4>Paiement 100% sécurisé</h4>
+                                <p>Vos informations bancaires sont cryptées et ne sont jamais stockées sur nos serveurs</p>
+                            </div>
+                        </div>
+
+                        {# Formulaire Stripe AVEC Stimulus #}
+                        <form
+                            data-controller="stripe-payment"
+                            data-stripe-payment-public-key-value="{{ stripe_public_key }}"
+                            data-stripe-payment-order-id-value="{{ order.id }}"
+                            data-stripe-payment-order-total-value="{{ order.totalFormatted }}"
+                            data-action="submit->stripe-payment#submit"
+                            class="payment-form-stripe"
+                        >
+                            <div class="form-group">
+                                <label for="card-element">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                        <line x1="1" y1="10" x2="23" y2="10"></line>
+                                    </svg>
+                                    Informations de carte bancaire
+                                </label>
+                                <div
+                                    class="stripe-card-element"
+                                    data-stripe-payment-target="cardElement"
+                                ></div>
+                                <div
+                                    class="invalid-feedback"
+                                    data-stripe-payment-target="cardErrors"
+                                ></div>
+                            </div>
+
+                            <div class="payment-cards-accepted">
+                                <span>Cartes acceptées :</span>
+                                <div class="payment-card-icons">
+                                    <svg width="40" height="26" viewBox="0 0 40 26" fill="none">
+                                        <rect width="40" height="26" rx="3" fill="#1434CB"/>
+                                        <text x="20" y="16" font-size="10" fill="white" text-anchor="middle" font-weight="bold">VISA</text>
+                                    </svg>
+                                    <svg width="40" height="26" viewBox="0 0 40 26" fill="none">
+                                        <rect width="40" height="26" rx="3" fill="#EB001B"/>
+                                        <circle cx="15" cy="13" r="8" fill="#FF5F00" opacity="0.8"/>
+                                        <circle cx="25" cy="13" r="8" fill="#F79E1B" opacity="0.8"/>
+                                    </svg>
+                                    <svg width="40" height="26" viewBox="0 0 40 26" fill="none">
+                                        <rect width="40" height="26" rx="3" fill="#016FD0"/>
+                                        <text x="20" y="16" font-size="8" fill="white" text-anchor="middle" font-weight="bold">AMEX</text>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="payment-test-mode">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <div>
+                                    <strong>Mode Test</strong>
+                                    <p>Utilisez la carte <code>4242 4242 4242 4242</code> avec n'importe quelle date future et CVC</p>
+                                </div>
+                            </div>
+
+                            <div class="checkout-form-actions">
+                                <a href="{{ path('checkout_summary') }}" class="btn btn-outline-secondary btn-lg">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                                        <polyline points="12 19 5 12 12 5"></polyline>
+                                    </svg>
+                                    Retour
+                                </a>
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary btn-lg btn-payment"
+                                    data-stripe-payment-target="submitButton"
+                                >
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                    <span data-stripe-payment-target="buttonText">Payer {{ order.totalFormatted }}</span>
+                                    <span
+                                        class="spinner-border spinner-border-sm"
+                                        style="display: none;"
+                                        data-stripe-payment-target="spinner"
+                                    ></span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {# Sidebar - Récapitulatif commande #}
+            <div class="checkout-sidebar">
+                <div class="checkout-card">
+                    <div class="checkout-card-header">
+                        <h3>Récapitulatif</h3>
+                    </div>
+
+                    <div class="checkout-card-body">
+                        <div class="order-summary-compact">
+                            <div class="order-summary-line">
+                                <span>Commande</span>
+                                <strong>{{ order.orderNumber }}</strong>
+                            </div>
+                            <div class="order-summary-line">
+                                <span>Articles</span>
+                                <span>{{ order.totalQuantity }} article{{ order.totalQuantity > 1 ? 's' : '' }}</span>
+                            </div>
+                        </div>
+
+                        <div class="summary-totals">
+                            <div class="summary-total-line">
+                                <span>Sous-total</span>
+                                <span>{{ order.subtotalFormatted }}</span>
+                            </div>
+                            <div class="summary-total-line">
+                            <span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="1" y="3" width="15" height="13"></rect>
+                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                </svg>
+                                Livraison
+                            </span>
+                                <span>{{ order.deliveryPriceFormatted }}</span>
+                            </div>
+                        </div>
+
+                        <div class="summary-total-final">
+                            <span>Total TTC</span>
+                            <span>{{ order.totalFormatted }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-security-info">
+                    <div class="security-info-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        <div>
+                            <strong>Cryptage SSL</strong>
+                            <p>Connexion sécurisée</p>
+                        </div>
+                    </div>
+
+                    <div class="security-info-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                        </svg>
+                        <div>
+                            <strong>Powered by Stripe</strong>
+                            <p>Paiement sécurisé</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

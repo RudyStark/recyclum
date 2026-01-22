@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sécurité - Mon compte - Recyclum{% endblock %}
+
+{% block body %}
+<main class="account-page py-5">
+    <div class="container">
+        <div class="row g-4">
+            {# Sidebar Navigation #}
+            <div class="col-lg-3">
+                {% include 'account/_sidebar.html.twig' with {active: 'security'} %}
+            </div>
+
+            {# Main Content #}
+            <div class="col-lg-9">
+                {# Page Header #}
+                <div class="account-page-header mb-4">
+                    <h1 class="account-page-title">Sécurité</h1>
+                    <p class="account-page-subtitle">Gérez la sécurité de votre compte</p>
+                </div>
+
+                {# Flash Messages #}
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                        <i class="bi bi-exclamation-circle-fill me-2"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                {# Change Password Form #}
+                <div class="account-section">
+                    <h2 class="account-section-title">
+                        <i class="bi bi-key"></i>
+                        Modifier le mot de passe
+                    </h2>
+
+                    {{ form_start(form, {'attr': {'class': 'account-form'}}) }}
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    {{ form_widget(form.currentPassword, {'attr': {'class': 'form-control', 'placeholder': 'Mot de passe actuel'}}) }}
+                                    {{ form_label(form.currentPassword) }}
+                                    {{ form_errors(form.currentPassword) }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    {{ form_widget(form.newPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'Nouveau mot de passe'}}) }}
+                                    {{ form_label(form.newPassword.first) }}
+                                    {{ form_errors(form.newPassword.first) }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    {{ form_widget(form.newPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Confirmer'}}) }}
+                                    {{ form_label(form.newPassword.second) }}
+                                    {{ form_errors(form.newPassword.second) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="password-requirements mt-3">
+                            <p class="text-muted mb-2"><small>Le mot de passe doit contenir :</small></p>
+                            <ul class="password-requirements-list">
+                                <li><i class="bi bi-check-circle"></i> Au moins 8 caractères</li>
+                                <li><i class="bi bi-check-circle"></i> Au moins un chiffre</li>
+                            </ul>
+                        </div>
+
+                        <div class="form-actions mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-shield-check me-2"></i>
+                                Modifier le mot de passe
+                            </button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+
+                {# Security Tips #}
+                <div class="account-section mt-4">
+                    <h2 class="account-section-title">
+                        <i class="bi bi-lightbulb"></i>
+                        Conseils de sécurité
+                    </h2>
+                    <div class="security-tips">
+                        <div class="security-tip">
+                            <div class="tip-icon">
+                                <i class="bi bi-lock"></i>
+                            </div>
+                            <div class="tip-content">
+                                <strong>Utilisez un mot de passe unique</strong>
+                                <p>N'utilisez pas le même mot de passe sur plusieurs sites.</p>
+                            </div>
+                        </div>
+                        <div class="security-tip">
+                            <div class="tip-icon">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <div class="tip-content">
+                                <strong>Mélangez les caractères</strong>
+                                <p>Combinez lettres majuscules, minuscules, chiffres et symboles.</p>
+                            </div>
+                        </div>
+                        <div class="security-tip">
+                            <div class="tip-icon">
+                                <i class="bi bi-arrow-repeat"></i>
+                            </div>
+                            <div class="tip-content">
+                                <strong>Changez régulièrement</strong>
+                                <p>Modifiez votre mot de passe tous les 3 à 6 mois.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

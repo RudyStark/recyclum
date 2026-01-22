@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes commandes - Recyclum{% endblock %}
+
+{% block body %}
+<main class="account-page orders-page py-5">
+    <div class="container">
+        <div class="row g-4">
+            {# Sidebar Navigation #}
+            <div class="col-lg-3">
+                {% include 'account/_sidebar.html.twig' with {active: 'orders'} %}
+            </div>
+
+            {# Main Content #}
+            <div class="col-lg-9">
+                {# Header #}
+                <div class="orders-header mb-4">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                        <div>
+                            <h1 class="orders-title mb-1">Mes commandes</h1>
+                            <p class="orders-subtitle text-muted mb-0">Suivez l'avancement de vos commandes</p>
+                        </div>
+                        <a href="{{ path('catalog_index') }}" class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-2"></i>
+                            Continuer mes achats
+                        </a>
+                    </div>
+                </div>
+
+        {# Filter Tabs #}
+        <div class="orders-tabs mb-4">
+            <ul class="nav nav-pills orders-nav">
+                <li class="nav-item">
+                    <a class="nav-link {{ filter == 'all' ? 'active' : '' }}" href="{{ path('account_orders', {filter: 'all'}) }}">
+                        Toutes
+                        <span class="badge">{{ counts.all }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ filter == 'active' ? 'active' : '' }}" href="{{ path('account_orders', {filter: 'active'}) }}">
+                        En cours
+                        <span class="badge">{{ counts.active }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ filter == 'delivered' ? 'active' : '' }}" href="{{ path('account_orders', {filter: 'delivered'}) }}">
+                        Livrées
+                        <span class="badge">{{ counts.delivered }}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        {# Orders List or Empty State #}
+        {% if orders is empty %}
+            <div class="orders-empty">
+                <div class="orders-empty-icon">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+                <h3>Aucune commande</h3>
+                {% if filter == 'active' %}
+                    <p>Vous n'avez pas de commande en cours pour le moment.</p>
+                {% elseif filter == 'delivered' %}
+                    <p>Vous n'avez pas encore reçu de commande.</p>
+                {% else %}
+                    <p>Vous n'avez pas encore passé de commande.</p>
+                {% endif %}
+                <a href="{{ path('catalog_index') }}" class="btn btn-primary btn-lg mt-3">
+                    <i class="bi bi-grid me-2"></i>
+                    Découvrir nos produits
+                </a>
+            </div>
+        {% else %}
+            {# Desktop Table View #}
+            <div class="orders-table-wrapper d-none d-lg-block">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Commande</th>
+                            <th>Date</th>
+                            <th>Articles</th>
+                            <th>Total</th>
+                            <th>Statut</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                            <tr class="order-row" onclick="window.location='{{ path('account_order_show', {orderNumber: order.orderNumber}) }}'">
+                                <td>
+                                    <span class="order-number">{{ order.orderNumber }}</span>
+                                </td>
+                                <td>
+                                    <span class="order-date">{{ order.createdAt|date('d/m/Y') }}</span>
+                                    <span class="order-time">{{ order.createdAt|date('H:i') }}</span>
+                                </td>
+                                <td>
+                                    <span class="order-items-count">{{ order.items|length }} article{{ order.items|length > 1 ? 's' : '' }}</span>
+                                </td>
+                                <td>
+                                    <span class="order-total">{{ order.totalFormatted }}</span>
+                                </td>
+                                <td>
+                                    <span class="order-status-badge status-{{ order.status.value }}">
+                                        {{ order.status.label }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if order.status.value == 'pending' %}
+                                        <a href="{{ path('checkout_resume', {orderNumber: order.orderNumber}) }}" class="btn-resume-payment-sm" onclick="event.stopPropagation();">
+                                            <i class="bi bi-credit-card"></i>
+                                            Payer
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ path('account_order_show', {orderNumber: order.orderNumber}) }}" class="btn-view-order">
+                                            <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {# Mobile Cards View #}
+            <div class="orders-cards d-lg-none">
+                {% for order in orders %}
+                    <div class="order-card-wrapper">
+                        <a href="{{ path('account_order_show', {orderNumber: order.orderNumber}) }}" class="order-card">
+                            <div class="order-card-header">
+                                <span class="order-number">{{ order.orderNumber }}</span>
+                                <span class="order-status-badge status-{{ order.status.value }}">
+                                    {{ order.status.label }}
+                                </span>
+                            </div>
+                            <div class="order-card-body">
+                                <div class="order-card-row">
+                                    <span class="order-card-label">Date</span>
+                                    <span class="order-card-value">{{ order.createdAt|date('d/m/Y à H:i') }}</span>
+                                </div>
+                                <div class="order-card-row">
+                                    <span class="order-card-label">Articles</span>
+                                    <span class="order-card-value">{{ order.items|length }} article{{ order.items|length > 1 ? 's' : '' }}</span>
+                                </div>
+                                <div class="order-card-row">
+                                    <span class="order-card-label">Total</span>
+                                    <span class="order-card-value order-total">{{ order.totalFormatted }}</span>
+                                </div>
+                            </div>
+                            <div class="order-card-footer">
+                                <span>Voir le détail</span>
+                                <i class="bi bi-chevron-right"></i>
+                            </div>
+                        </a>
+                        {% if order.status.value == 'pending' %}
+                            <a href="{{ path('checkout_resume', {orderNumber: order.orderNumber}) }}" class="btn-resume-payment">
+                                <i class="bi bi-credit-card"></i>
+                                Finaliser le paiement
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

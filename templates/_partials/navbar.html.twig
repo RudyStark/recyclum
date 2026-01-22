@@ -160,29 +160,106 @@
                 </a>
             </nav>
 
-            {# CTA DESKTOP #}
-            <a href="#" class="btn-cta-modern">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                    <polyline points="22,6 12,13 2,6"></polyline>
-                </svg>
-                <span>Contact</span>
-                <div class="btn-shine"></div>
-            </a>
+            {# RIGHT ACTIONS: Cart, Connexion, Contact #}
+            <div class="nav-actions">
+                {# 🛒 CART #}
+                <a href="{{ path('cart_index') }}" class="btn-cart" aria-label="Panier" data-controller="cart-widget">
+                    <i class="bi bi-cart3"></i>
+                    <span class="cart-badge" data-cart-widget-target="badge" style="display: none;">0</span>
+                </a>
 
-            {# HAMBURGER MOBILE #}
-            <button
-                class="mobile-menu-toggle"
-                data-action="click->mobile-menu#toggle"
-                data-mobile-menu-target="toggle"
-                aria-label="Menu"
-            >
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </button>
+                {# 👤 USER / CONNEXION #}
+                {% if app.user %}
+                    <div class="user-menu" data-controller="user-dropdown">
+                        <button
+                            class="btn-connexion"
+                            data-action="click->user-dropdown#toggle"
+                            data-user-dropdown-target="trigger"
+                            type="button"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <span>Mon Compte</span>
+                        </button>
+
+                        <div class="user-menu-dropdown" data-user-dropdown-target="panel">
+                            <div class="user-menu-header">
+                                <span class="user-menu-email">{{ app.user.email }}</span>
+                            </div>
+                            <div class="user-menu-items">
+                                <a href="{{ path('account_dashboard') }}" class="user-menu-item">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    Mon compte
+                                </a>
+                                <a href="{{ path('account_orders') }}" class="user-menu-item">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="1" y="3" width="15" height="13"></rect>
+                                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                        <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                        <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                    </svg>
+                                    Mes commandes
+                                </a>
+                            </div>
+                            <div class="user-menu-divider"></div>
+                            <a href="{{ path('app_logout') }}" class="user-menu-item user-menu-item-logout">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn-connexion">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                            <polyline points="10 17 15 12 10 7"></polyline>
+                            <line x1="15" y1="12" x2="3" y2="12"></line>
+                        </svg>
+                        <span>Connexion</span>
+                    </a>
+                {% endif %}
+
+                {# CONTACT CTA #}
+                <a href="#" class="btn-contact-cta">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <span>Contact</span>
+                </a>
+            </div>
+
+            {# MOBILE ACTIONS (Cart + Hamburger) #}
+            <div class="mobile-actions">
+                <a href="{{ path('cart_index') }}" class="btn-cart-mobile" aria-label="Panier" data-controller="cart-widget">
+                    <i class="bi bi-cart3"></i>
+                    <span class="cart-badge" data-cart-widget-target="badge" style="display: none;">0</span>
+                </a>
+
+                <button
+                    class="mobile-menu-toggle"
+                    data-action="click->mobile-menu#toggle"
+                    data-mobile-menu-target="toggle"
+                    aria-label="Menu"
+                >
+                    <div class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -207,6 +284,76 @@
         </div>
 
         <div class="mobile-drawer-content">
+            {# User Account Section #}
+            <div class="mobile-nav-section mobile-user-section">
+                {% if app.user %}
+                    <div class="mobile-user-info">
+                        <div class="mobile-user-avatar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="mobile-user-details">
+                            <span class="mobile-user-name">{{ app.user.fullName|default(app.user.email|split('@')[0]) }}</span>
+                            <span class="mobile-user-email">{{ app.user.email }}</span>
+                        </div>
+                    </div>
+                    <ul class="mobile-nav-list">
+                        <li>
+                            <a href="{{ path('account_dashboard') }}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                Mon compte
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('account_orders') }}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="1" y="3" width="15" height="13"></rect>
+                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                </svg>
+                                Mes commandes
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('app_logout') }}" class="mobile-logout-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                                Déconnexion
+                            </a>
+                        </li>
+                    </ul>
+                {% else %}
+                    <div class="mobile-auth-buttons">
+                        <a href="{{ path('app_login') }}" class="mobile-btn-login">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                <polyline points="10 17 15 12 10 7"></polyline>
+                                <line x1="15" y1="12" x2="3" y2="12"></line>
+                            </svg>
+                            Connexion
+                        </a>
+                        <a href="{{ path('app_register') }}" class="mobile-btn-register">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="8.5" cy="7" r="4"></circle>
+                                <line x1="20" y1="8" x2="20" y2="14"></line>
+                                <line x1="23" y1="11" x2="17" y2="11"></line>
+                            </svg>
+                            Créer un compte
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
             {# Navigation principale #}
             <div class="mobile-nav-section">
                 <ul class="mobile-nav-list">
@@ -219,7 +366,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ path('reparation_index') }}">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
                             </svg>
@@ -227,7 +374,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ path('app_rachat') }}">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                                 <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
@@ -236,12 +383,21 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ path('app_reviews') }}">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                             </svg>
                             Avis
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('cart_index') }}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                            Panier
                         </a>
                     </li>
                 </ul>
