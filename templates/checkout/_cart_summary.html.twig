@@ -1,0 +1,39 @@
+<div class="checkout-card">
+    <div class="checkout-card-header">
+        <h3>Mon panier</h3>
+    </div>
+
+    <div class="checkout-card-body">
+        <div class="checkout-cart-items">
+            {% for item in cart.items %}
+                {% set product = item.product %}
+                {% set firstImage = product.images|first %}
+
+                <div class="checkout-cart-item">
+                    <div class="checkout-cart-item-image">
+                        {% if firstImage %}
+                            <img src="/uploads/products/{{ firstImage.filename }}" alt="{{ product.title }}">
+                        {% else %}
+                            <div class="checkout-cart-placeholder">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                                </svg>
+                            </div>
+                        {% endif %}
+                        <span class="checkout-cart-item-qty">{{ item.quantity }}</span>
+                    </div>
+
+                    <div class="checkout-cart-item-details">
+                        <div class="checkout-cart-item-title">{{ product.title }}</div>
+                        <div class="checkout-cart-item-price">{{ item.subtotalFormatted }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="checkout-cart-total">
+            <span>Sous-total</span>
+            <strong>{{ cart.totalFormatted }}</strong>
+        </div>
+    </div>
+</div>

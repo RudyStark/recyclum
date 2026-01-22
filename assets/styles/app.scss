@@ -409,6 +409,21 @@ body{
 @import 'cookies';
 @import "cookie_banner";
 
+// Cart
+@import "cart";
+
+// Checkout
+@import "checkout";
+
+// Auth (Login & Register)
+@import "auth";
+
+// Account Orders
+@import "orders";
+
+// Account Pages
+@import "account";
+
 /* Font Awesome */
 @import "@fortawesome/fontawesome-free/scss/fontawesome";
 @import "@fortawesome/fontawesome-free/scss/solid";

@@ -1,0 +1,245 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suivi de commande {{ order.orderNumber }} | Recyclum{% endblock %}
+
+{% block body %}
+    <div class="tracking-page">
+        <div class="container">
+            <div class="tracking-content">
+                {# Header avec icône #}
+                <div class="tracking-header">
+                    <div class="tracking-header-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="3" width="15" height="13"></rect>
+                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                        </svg>
+                    </div>
+                    <h1>Suivi de votre commande</h1>
+                    <p class="tracking-subtitle">Suivez l'avancement de votre commande en temps réel</p>
+                </div>
+
+                {# Informations commande #}
+                <div class="tracking-order-info">
+                    <div class="tracking-order-card">
+                        <div class="tracking-order-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </div>
+                        <span class="tracking-order-label">Commande</span>
+                        <strong class="tracking-order-value">{{ order.orderNumber }}</strong>
+                    </div>
+
+                    <div class="tracking-order-card">
+                        <div class="tracking-order-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </div>
+                        <span class="tracking-order-label">Date</span>
+                        <strong class="tracking-order-value">{{ order.createdAt|date('d/m/Y') }}</strong>
+                    </div>
+
+                    <div class="tracking-order-card tracking-order-card-highlight">
+                        <div class="tracking-order-icon tracking-order-icon-green">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                        </div>
+                        <span class="tracking-order-label">Total</span>
+                        <strong class="tracking-order-value tracking-order-value-green">{{ order.totalFormatted }}</strong>
+                    </div>
+                </div>
+
+                {# Statut actuel #}
+                <div class="tracking-current-status">
+                    <div class="tracking-status-badge tracking-status-badge-{{ order.status.badgeClass }}">
+                        {{ order.status.label }}
+                    </div>
+                    {% if order.status.value == 'cancelled' %}
+                        <p class="tracking-status-message tracking-status-message-danger">
+                            Cette commande a été annulée.
+                        </p>
+                    {% elseif order.status.value == 'refunded' %}
+                        <p class="tracking-status-message tracking-status-message-info">
+                            Cette commande a été remboursée.
+                        </p>
+                    {% endif %}
+                </div>
+
+                {# Timeline #}
+                {% if order.status.value not in ['cancelled', 'refunded'] %}
+                    <div class="tracking-timeline-section">
+                        <h2>Progression de votre commande</h2>
+                        <div class="tracking-timeline">
+                            {% for step in timelineSteps %}
+                                <div class="tracking-timeline-step {% if step.completed %}completed{% endif %} {% if step.current %}current{% endif %}">
+                                    <div class="tracking-timeline-icon">
+                                        {% if step.completed %}
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg>
+                                        {% else %}
+                                            {% if step.icon == 'credit-card' %}
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                                                </svg>
+                                            {% elseif step.icon == 'package' %}
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+                                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                                </svg>
+                                            {% elseif step.icon == 'truck' %}
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <rect x="1" y="3" width="15" height="13"></rect>
+                                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                                </svg>
+                                            {% elseif step.icon == 'check-circle' %}
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                                </svg>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="tracking-timeline-content">
+                                        <strong>{{ step.label }}</strong>
+                                        <span>{{ step.description }}</span>
+                                        {% if step.date %}
+                                            <span class="tracking-timeline-date">{{ step.date|date('d/m/Y à H:i') }}</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if not loop.last %}
+                                        <div class="tracking-timeline-line {% if step.completed %}completed{% endif %}"></div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {# Produits commandés #}
+                <div class="tracking-products">
+                    <h2>Détail de votre commande</h2>
+                    <div class="tracking-products-list">
+                        {% for item in order.items %}
+                            <div class="tracking-product-item">
+                                <div class="tracking-product-image">
+                                    {% if item.product and item.product.mainImage %}
+                                        <img src="{{ asset('uploads/products/' ~ item.product.mainImage.filename) }}" alt="{{ item.productTitle }}">
+                                    {% else %}
+                                        <div class="tracking-product-placeholder">
+                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                                <polyline points="21 15 16 10 5 21"></polyline>
+                                            </svg>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="tracking-product-details">
+                                    <h4 class="tracking-product-title">{{ item.productTitle }}</h4>
+                                    <span class="tracking-product-meta">{{ item.productBrand }}</span>
+                                    <span class="tracking-product-quantity">Quantité : <strong>{{ item.quantity }}</strong></span>
+                                </div>
+                                <div class="tracking-product-price">
+                                    <span class="tracking-product-unit">{{ item.unitPriceFormatted }} / unité</span>
+                                    <strong class="tracking-product-subtotal">{{ item.subtotalFormatted }}</strong>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {# Totaux #}
+                    <div class="tracking-products-total">
+                        <div class="tracking-total-line">
+                            <span>Sous-total</span>
+                            <span>{{ order.subtotalFormatted }}</span>
+                        </div>
+                        <div class="tracking-total-line">
+                            <span>
+                                Livraison
+                                {% if order.deliveryType == 'with_installation' %}
+                                    (avec installation)
+                                {% endif %}
+                            </span>
+                            <span>{{ order.deliveryPriceFormatted }}</span>
+                        </div>
+                        <div class="tracking-total-line tracking-total-line-final">
+                            <span>Total TTC</span>
+                            <strong>{{ order.totalFormatted }}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                {# Adresse de livraison #}
+                <div class="tracking-delivery">
+                    <h2>Adresse de livraison</h2>
+                    <div class="tracking-delivery-card">
+                        <div class="tracking-delivery-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div class="tracking-delivery-info">
+                            <strong>{{ order.deliveryFirstName }} {{ order.deliveryLastName }}</strong>
+                            <p>
+                                {{ order.deliveryStreet }}<br>
+                                {% if order.deliveryStreetComplement %}
+                                    {{ order.deliveryStreetComplement }}<br>
+                                {% endif %}
+                                {{ order.deliveryPostalCode }} {{ order.deliveryCity }}
+                            </p>
+                            <p class="tracking-delivery-phone">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                {{ order.deliveryPhone }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {# Actions #}
+                <div class="tracking-actions">
+                    <a href="{{ path('app_home') }}" class="btn btn-primary btn-lg">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        Retour à l'accueil
+                    </a>
+                    <a href="{{ path('catalog_index') }}" class="btn btn-outline-primary btn-lg">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        Continuer mes achats
+                    </a>
+                </div>
+
+                {# Aide #}
+                <div class="tracking-help">
+                    <p>Une question concernant votre commande ?</p>
+                    <a href="mailto:contact@recyclum.fr">Contactez notre service client</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

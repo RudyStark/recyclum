@@ -10,6 +10,7 @@ use Brevo\Client\Api\TransactionalEmailsApi;
 use Brevo\Client\Configuration;
 use Brevo\Client\Model\SendSmtpEmail;
 use GuzzleHttp\Client;
+use Psr\Log\LoggerInterface;
 use Twig\Environment;
 
 class EmailService
@@ -21,6 +22,7 @@ class EmailService
 
     public function __construct(
         private Environment $twig,
+        private LoggerInterface $logger,
         string $brevoApiKey,
         string $senderEmail = 'rudy.saksik@gmail.com',
         string $senderName = 'Recyclum',
@@ -36,16 +38,48 @@ class EmailService
     /**
      * Méthode générique d'envoi d'email
      */
-    private function sendEmail(string $to, string $toName, string $subject, string $htmlContent): void
+    public function sendEmail(string $to, string $toName, string $subject, string $htmlContent): void
     {
-        $sendSmtpEmail = new SendSmtpEmail([
-            'sender' => ['email' => $this->senderEmail, 'name' => $this->senderName],
-            'to' => [['email' => $to, 'name' => $toName]],
+        $this->logger->info('EmailService: Préparation envoi email', [
+            'to' => $to,
+            'to_name' => $toName,
             'subject' => $subject,
-            'htmlContent' => $htmlContent,
+            'sender' => $this->senderEmail,
         ]);
 
-        $this->brevoApi->sendTransacEmail($sendSmtpEmail);
+        try {
+            $sendSmtpEmail = new SendSmtpEmail([
+                'sender' => ['email' => $this->senderEmail, 'name' => $this->senderName],
+                'to' => [['email' => $to, 'name' => $toName]],
+                'subject' => $subject,
+                'htmlContent' => $htmlContent,
+            ]);
+
+            $response = $this->brevoApi->sendTransacEmail($sendSmtpEmail);
+
+            $this->logger->info('EmailService: Email envoyé via Brevo', [
+                'to' => $to,
+                'subject' => $subject,
+                'message_id' => $response->getMessageId() ?? 'N/A',
+            ]);
+        } catch (\Brevo\Client\ApiException $e) {
+            $this->logger->error('EmailService: Erreur API Brevo', [
+                'to' => $to,
+                'subject' => $subject,
+                'error_code' => $e->getCode(),
+                'error_message' => $e->getMessage(),
+                'response_body' => $e->getResponseBody(),
+            ]);
+            throw $e;
+        } catch (\Exception $e) {
+            $this->logger->error('EmailService: Erreur inattendue', [
+                'to' => $to,
+                'subject' => $subject,
+                'error_class' => get_class($e),
+                'error_message' => $e->getMessage(),
+            ]);
+            throw $e;
+        }
     }
 
     // ========================================================================

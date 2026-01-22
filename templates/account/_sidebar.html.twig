@@ -1,0 +1,52 @@
+{# Account Sidebar Navigation #}
+<div class="account-sidebar">
+    <div class="account-sidebar-header">
+        <div class="sidebar-avatar">
+            <i class="bi bi-person-fill"></i>
+        </div>
+        <div class="sidebar-user-info">
+            <span class="sidebar-user-name">{{ app.user.fullName }}</span>
+            <span class="sidebar-user-email">{{ app.user.email }}</span>
+        </div>
+    </div>
+
+    <nav class="account-nav">
+        <ul class="account-nav-list">
+            <li>
+                <a href="{{ path('account_dashboard') }}" class="account-nav-link {{ active == 'dashboard' ? 'active' : '' }}">
+                    <i class="bi bi-house"></i>
+                    <span>Tableau de bord</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('account_orders') }}" class="account-nav-link {{ active == 'orders' ? 'active' : '' }}">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Mes commandes</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('account_profile') }}" class="account-nav-link {{ active == 'profile' ? 'active' : '' }}">
+                    <i class="bi bi-person"></i>
+                    <span>Mon profil</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('account_security') }}" class="account-nav-link {{ active == 'security' ? 'active' : '' }}">
+                    <i class="bi bi-shield-lock"></i>
+                    <span>Sécurité</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="account-nav-divider"></div>
+
+        <ul class="account-nav-list">
+            <li>
+                <a href="{{ path('app_logout') }}" class="account-nav-link account-nav-logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Déconnexion</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

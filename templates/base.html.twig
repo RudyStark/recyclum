@@ -1,23 +1,32 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>{% block title %}Recyclum — Électroménager reconditionné{% endblock %}</title>
-        <meta name="description" content="{% block meta_description %}Recyclum, reconditionné & réparation à Paris 12.{% endblock %}">
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>{% block title %}Recyclum — Électroménager reconditionné{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Recyclum, reconditionné & réparation à Paris 12.{% endblock %}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% include '_partials/navbar.html.twig' %}
-        {% block body %}{% endblock %}
-        {% include '_partials/footer.html.twig' %}
-        {% include 'components/_cookie_banner.html.twig' %}
-    </body>
+    {# 🔐 TOKENS CSRF GLOBAUX - TOUJOURS PRÉSENTS #}
+    <meta name="csrf-token-clear_cart" content="{{ csrf_token('clear_cart') }}">
+
+    {# ✅ CRITICAL : Block head pour tokens CSRF spécifiques aux pages #}
+    {% block head %}{% endblock %}
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+{% include '_partials/navbar.html.twig' %}
+
+{% block body %}{% endblock %}
+
+{% include '_partials/footer.html.twig' %}
+{% include 'components/_cookie_banner.html.twig' %}
+</body>
 </html>

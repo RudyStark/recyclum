@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commander | Recyclum{% endblock %}
+
+{% block body %}
+    <div class="checkout-gateway">
+        <div class="container">
+            <div class="checkout-gateway-content">
+                <div class="checkout-gateway-header">
+                    <h1>Finaliser ma commande</h1>
+                    <p>{{ cart.totalQuantity }} article{{ cart.totalQuantity > 1 ? 's' : '' }} · {{ cart.totalFormatted }}</p>
+                </div>
+
+                <div class="checkout-gateway-options">
+                    {# Option 1 : Invité #}
+                    <div class="checkout-gateway-card">
+                        <div class="checkout-gateway-card-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="8.5" cy="7" r="4"></circle>
+                                <line x1="20" y1="8" x2="20" y2="14"></line>
+                                <line x1="23" y1="11" x2="17" y2="11"></line>
+                            </svg>
+                        </div>
+                        <h2>Commander en tant qu'invité</h2>
+                        <p>Commandez rapidement sans créer de compte</p>
+                        <ul class="checkout-gateway-features">
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Processus rapide
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Aucune inscription
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Confirmation par email
+                            </li>
+                        </ul>
+                        <a href="{{ path('checkout_delivery') }}" class="btn btn-primary">
+                            Continuer
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+
+                    {# Option 2 : Connexion #}
+                    <div class="checkout-gateway-card checkout-gateway-card-highlight">
+                        <div class="checkout-gateway-badge">Recommandé</div>
+                        <div class="checkout-gateway-card-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <h2>Se connecter à mon compte</h2>
+                        <p>Profitez de votre espace client personnalisé</p>
+                        <ul class="checkout-gateway-features">
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Adresses sauvegardées
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Historique des commandes
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Suivi en temps réel
+                            </li>
+                        </ul>
+                        <a href="{{ path('app_login', {redirect: path('checkout_delivery')}) }}" class="btn btn-primary">
+                            Se connecter
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                <polyline points="10 17 15 12 10 7"></polyline>
+                                <line x1="15" y1="12" x2="3" y2="12"></line>
+                            </svg>
+                        </a>
+                        <div class="checkout-gateway-register">
+                            <span>Pas de compte ?</span>
+                            <a href="{{ path('app_home', {redirect: path('checkout_delivery')}) }}">Créer un compte</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-gateway-back">
+                    <a href="{{ path('cart_index') }}" class="btn btn-outline-secondary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Retour au panier
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

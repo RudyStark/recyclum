@@ -1,0 +1,288 @@
+{% extends 'checkout/_layout.html.twig' %}
+
+{% block title %}Récapitulatif | Recyclum{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <meta name="csrf-token-checkout_summary" content="{{ csrf_token('checkout_summary') }}">
+{% endblock %}
+
+{% block checkout_content %}
+    <div class="container">
+        <div class="checkout-grid">
+            {# Colonne principale #}
+            <div class="checkout-main">
+
+                {# === SECTION ADRESSE DE LIVRAISON === #}
+                <div class="checkout-section">
+                    <div class="checkout-section-header">
+                        <div class="checkout-section-number">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="checkout-section-title">
+                            <h3>Adresse de livraison</h3>
+                            <p>Vérifiez vos informations</p>
+                        </div>
+                        <a href="{{ path('checkout_delivery') }}" class="btn-edit">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            Modifier
+                        </a>
+                    </div>
+
+                    <div class="checkout-section-body">
+                        <div class="summary-info-grid">
+                            <div class="summary-info-item">
+                                <div class="summary-info-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <div class="summary-info-content">
+                                    <span class="summary-info-label">Destinataire</span>
+                                    <span class="summary-info-value">{{ deliveryData.firstName }} {{ deliveryData.lastName }}</span>
+                                </div>
+                            </div>
+
+                            <div class="summary-info-item">
+                                <div class="summary-info-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="summary-info-content">
+                                    <span class="summary-info-label">Adresse</span>
+                                    <span class="summary-info-value">
+                                    {{ deliveryData.street }}<br>
+                                    {% if deliveryData.streetComplement %}
+                                        {{ deliveryData.streetComplement }}<br>
+                                    {% endif %}
+                                        {{ deliveryData.postalCode }} {{ deliveryData.city }}
+                                </span>
+                                </div>
+                            </div>
+
+                            <div class="summary-info-item">
+                                <div class="summary-info-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                    </svg>
+                                </div>
+                                <div class="summary-info-content">
+                                    <span class="summary-info-label">Téléphone</span>
+                                    <span class="summary-info-value">{{ deliveryData.phone }}</span>
+                                </div>
+                            </div>
+
+                            <div class="summary-info-item summary-info-item-full">
+                                <div class="summary-info-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="1" y="3" width="15" height="13"></rect>
+                                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                        <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                        <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                    </svg>
+                                </div>
+                                <div class="summary-info-content">
+                                    <span class="summary-info-label">Type de livraison</span>
+                                    <span class="summary-info-value summary-info-delivery">
+                                    {% if deliveryData.deliveryType == 'simple' %}
+                                        <strong>Livraison simple</strong> · 20,00 €
+                                    {% else %}
+                                        <strong>Livraison + Installation</strong> · 30,00 €
+                                    {% endif %}
+                                </span>
+                                </div>
+                            </div>
+
+                            {% if deliveryData.instructions %}
+                                <div class="summary-info-item summary-info-item-full">
+                                    <div class="summary-info-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                            <polyline points="14 2 14 8 20 8"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div class="summary-info-content">
+                                        <span class="summary-info-label">Instructions</span>
+                                        <span class="summary-info-value">{{ deliveryData.instructions }}</span>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {# === SECTION PRODUITS === #}
+                <div class="checkout-section">
+                    <div class="checkout-section-header">
+                        <div class="checkout-section-number">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="checkout-section-title">
+                            <h3>Produits commandés</h3>
+                            <p>{{ cart.totalQuantity }} article{{ cart.totalQuantity > 1 ? 's' : '' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="checkout-section-body">
+                        <div class="summary-products">
+                            {% for item in cart.items %}
+                                {% set product = item.product %}
+                                {% set firstImage = product.images|first %}
+
+                                <div class="summary-product-item">
+                                    <div class="summary-product-image">
+                                        {% if firstImage %}
+                                            <img src="/uploads/products/{{ firstImage.filename }}" alt="{{ product.title }}">
+                                        {% else %}
+                                            <div class="summary-product-placeholder">
+                                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                                </svg>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="summary-product-details">
+                                        <h4 class="summary-product-title">{{ product.title }}</h4>
+                                        <div class="summary-product-meta">
+                                            {% if product.brand %}{{ product.brand.name }}{% endif %}
+                                            {% if product.category %} · {{ product.category.name }}{% endif %}
+                                        </div>
+                                        <div class="summary-product-quantity">
+                                            Quantité : <strong>{{ item.quantity }}</strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="summary-product-price">
+                                        <div class="summary-product-unit">{{ item.unitPriceFormatted }}</div>
+                                        <div class="summary-product-subtotal">{{ item.subtotalFormatted }}</div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                {# === VALIDATION === #}
+                <div class="checkout-section checkout-section-validation">
+                    <div class="checkout-section-body">
+                        <form method="post" class="validation-form">
+                            <input type="hidden" name="_token" value="{{ csrf_token('checkout_summary') }}">
+
+                            <div class="validation-checkbox">
+                                <label class="checkbox-label-pro">
+                                    <input type="checkbox" required>
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-text">
+                                    J'accepte les <a href="{{ path('app_cgv') }}" target="_blank">conditions générales de vente</a> et j'ai lu la <a href="{{ path('app_privacy') }}" target="_blank">politique de confidentialité</a>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <div class="validation-actions">
+                                <a href="{{ path('checkout_delivery') }}" class="btn btn-outline-secondary btn-lg">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                                        <polyline points="12 19 5 12 12 5"></polyline>
+                                    </svg>
+                                    Retour
+                                </a>
+                                <button type="submit" class="btn btn-primary btn-lg btn-payment">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                    Procéder au paiement
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            {# === SIDEBAR RÉCAPITULATIF === #}
+            <div class="checkout-sidebar">
+                <div class="checkout-card">
+                    <div class="checkout-card-header">
+                        <h3>Récapitulatif</h3>
+                    </div>
+
+                    <div class="checkout-card-body">
+                        <div class="summary-totals">
+                            <div class="summary-total-line">
+                                <span>Sous-total</span>
+                                <span>{{ summary.subtotalFormatted }}</span>
+                            </div>
+
+                            <div class="summary-total-line">
+                            <span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="1" y="3" width="15" height="13"></rect>
+                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                </svg>
+                                Livraison
+                            </span>
+                                <span>{{ summary.deliveryPriceFormatted }}</span>
+                            </div>
+                        </div>
+
+                        <div class="summary-total-final">
+                            <span>Total TTC</span>
+                            <span>{{ summary.totalFormatted }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-security-info">
+                    <div class="security-info-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            <path d="M9 12l2 2 4-4"></path>
+                        </svg>
+                        <div>
+                            <strong>Paiement sécurisé</strong>
+                            <p>Vos données sont cryptées</p>
+                        </div>
+                    </div>
+
+                    <div class="security-info-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                        </svg>
+                        <div>
+                            <strong>Cartes acceptées</strong>
+                            <p>Visa, Mastercard, Amex</p>
+                        </div>
+                    </div>
+
+                    <div class="security-info-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <div>
+                            <strong>Garantie</strong>
+                            <p>Jusqu'à 24 mois</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

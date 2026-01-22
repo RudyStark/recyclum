@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte - Recyclum{% endblock %}
+
+{% block body %}
+<main class="account-page py-5">
+    <div class="container">
+        <div class="row g-4">
+            {# Sidebar Navigation #}
+            <div class="col-lg-3">
+                {% include 'account/_sidebar.html.twig' with {active: 'dashboard'} %}
+            </div>
+
+            {# Main Content #}
+            <div class="col-lg-9">
+                {# Welcome Header #}
+                <div class="account-welcome mb-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="account-avatar">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <div>
+                            <h1 class="account-welcome-title">
+                                Bonjour{{ user.firstName ? ' ' ~ user.firstName : '' }} !
+                            </h1>
+                            <p class="account-welcome-text mb-0">
+                                Bienvenue dans votre espace personnel
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {# Quick Stats #}
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-6 col-md-4">
+                        <div class="account-stat-card">
+                            <div class="stat-icon stat-icon-primary">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value">{{ totalOrders }}</span>
+                                <span class="stat-label">Commande{{ totalOrders > 1 ? 's' : '' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="account-stat-card">
+                            <div class="stat-icon stat-icon-warning">
+                                <i class="bi bi-truck"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value">{{ activeOrders }}</span>
+                                <span class="stat-label">En cours</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="account-stat-card">
+                            <div class="stat-icon stat-icon-success">
+                                <i class="bi bi-geo-alt"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value">{{ user.addresses|length }}</span>
+                                <span class="stat-label">Adresse{{ user.addresses|length > 1 ? 's' : '' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Quick Actions #}
+                <div class="account-section mb-4">
+                    <h2 class="account-section-title">
+                        <i class="bi bi-lightning-charge"></i>
+                        Actions rapides
+                    </h2>
+                    <div class="row g-3">
+                        <div class="col-sm-6 col-md-4">
+                            <a href="{{ path('account_orders') }}" class="quick-action-card">
+                                <div class="quick-action-icon">
+                                    <i class="bi bi-box-seam"></i>
+                                </div>
+                                <span class="quick-action-label">Mes commandes</span>
+                                <i class="bi bi-chevron-right quick-action-arrow"></i>
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <a href="{{ path('account_profile') }}" class="quick-action-card">
+                                <div class="quick-action-icon">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                <span class="quick-action-label">Mon profil</span>
+                                <i class="bi bi-chevron-right quick-action-arrow"></i>
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <a href="{{ path('account_security') }}" class="quick-action-card">
+                                <div class="quick-action-icon">
+                                    <i class="bi bi-shield-lock"></i>
+                                </div>
+                                <span class="quick-action-label">Sécurité</span>
+                                <i class="bi bi-chevron-right quick-action-arrow"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {# Recent Orders #}
+                <div class="account-section">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h2 class="account-section-title mb-0">
+                            <i class="bi bi-clock-history"></i>
+                            Commandes récentes
+                        </h2>
+                        <a href="{{ path('account_orders') }}" class="btn btn-sm btn-outline-primary">
+                            Voir tout
+                        </a>
+                    </div>
+
+                    {% if recentOrders is empty %}
+                        <div class="account-empty-state">
+                            <div class="empty-icon">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+                            <p>Vous n'avez pas encore passé de commande.</p>
+                            <a href="{{ path('catalog_index') }}" class="btn btn-primary">
+                                <i class="bi bi-grid me-2"></i>
+                                Découvrir nos produits
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="recent-orders-list">
+                            {% for order in recentOrders %}
+                                <div class="recent-order-card-wrapper">
+                                    <a href="{{ path('account_order_show', {orderNumber: order.orderNumber}) }}" class="recent-order-card">
+                                        <div class="recent-order-info">
+                                            <span class="recent-order-number">{{ order.orderNumber }}</span>
+                                            <span class="recent-order-date">{{ order.createdAt|date('d/m/Y') }}</span>
+                                        </div>
+                                        <div class="recent-order-details">
+                                            <span class="recent-order-items">{{ order.items|length }} article{{ order.items|length > 1 ? 's' : '' }}</span>
+                                            <span class="recent-order-total">{{ order.totalFormatted }}</span>
+                                        </div>
+                                        <span class="order-status-badge status-{{ order.status.value }}">
+                                            {{ order.status.label }}
+                                        </span>
+                                        <i class="bi bi-chevron-right recent-order-arrow"></i>
+                                    </a>
+                                    {% if order.status.value == 'pending' %}
+                                        <a href="{{ path('checkout_resume', {orderNumber: order.orderNumber}) }}" class="btn-resume-payment">
+                                            <i class="bi bi-credit-card"></i>
+                                            Finaliser le paiement
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

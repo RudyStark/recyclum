@@ -20,10 +20,15 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+                default_target_path: /
             logout:
                 path: app_logout
-                # where to redirect after logout
-                # target: app_any_route
+                target: app_home
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path: /
+                always_remember_me: false
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
