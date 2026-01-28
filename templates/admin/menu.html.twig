@@ -1,5 +1,3 @@
-{% trans_default_domain ea.i18n.translationDomain %}
-
 <nav id="main-menu" class="recyclum-sidebar" role="navigation">
     {# LOGO / HEADER #}
     <div class="sidebar-header">
@@ -54,6 +52,39 @@
                class="menu-item {% if app.request.query.get('crudControllerFqcn') == 'App\\Controller\\Admin\\BrandCrudController' %}active{% endif %}">
                 <i class="fa fa-copyright menu-icon"></i>
                 <span class="menu-label">Marques</span>
+            </a>
+        </div>
+
+        {# SECTION: COMMANDES #}
+        <div class="menu-section">
+            <div class="menu-section-title">COMMANDES</div>
+
+            {% set orders_action_count = get_orders_requiring_action_count() %}
+            <a href="{{ path('admin_order_index') }}"
+               class="menu-item {% if app.request.get('_route') starts with 'admin_order' %}active{% endif %}">
+                <i class="fa fa-shopping-bag menu-icon"></i>
+                <span class="menu-label">Toutes les commandes</span>
+                {% if orders_action_count > 0 %}
+                    <span class="menu-badge">{{ orders_action_count }}</span>
+                {% endif %}
+            </a>
+
+            <a href="{{ path('admin_order_index', {status: 'pending'}) }}"
+               class="menu-item {% if app.request.get('_route') == 'admin_order_index' and app.request.query.get('status') == 'pending' %}active{% endif %}">
+                <i class="fa fa-hourglass-half menu-icon"></i>
+                <span class="menu-label">En attente</span>
+            </a>
+
+            <a href="{{ path('admin_order_index', {status: 'processing'}) }}"
+               class="menu-item {% if app.request.get('_route') == 'admin_order_index' and app.request.query.get('status') == 'processing' %}active{% endif %}">
+                <i class="fa fa-box menu-icon"></i>
+                <span class="menu-label">En préparation</span>
+            </a>
+
+            <a href="{{ path('admin_order_index', {status: 'shipped'}) }}"
+               class="menu-item {% if app.request.get('_route') == 'admin_order_index' and app.request.query.get('status') == 'shipped' %}active{% endif %}">
+                <i class="fa fa-truck menu-icon"></i>
+                <span class="menu-label">Expédiées</span>
             </a>
         </div>
 

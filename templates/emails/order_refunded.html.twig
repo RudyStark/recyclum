@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande remboursée</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #F9FAFB;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F9FAFB;">
+    <tr>
+        <td align="center" style="padding: 20px 0;">
+            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+                <!-- Header -->
+                <tr>
+                    <td style="background: linear-gradient(135deg, #16C669 0%, #12A855 100%); padding: 40px 30px; text-align: center;">
+                        <span style="font-size: 28px; font-weight: 900; color: #ffffff;">RECYCLUM</span>
+                    </td>
+                </tr>
+
+                <!-- Body -->
+                <tr>
+                    <td style="padding: 40px 30px;">
+                        <!-- Icon -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td align="center" style="padding-bottom: 20px;">
+                                    <span style="font-size: 56px; line-height: 1;">&#128179;</span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Title -->
+                        <h1 style="font-size: 26px; font-weight: 800; color: #1F2937; text-align: center; margin: 0 0 10px 0;">Remboursement effectué</h1>
+                        <p style="font-size: 16px; color: #6B7280; text-align: center; margin: 0 0 30px 0;">{{ order.deliveryFirstName }}, votre commande a été remboursée.</p>
+
+                        <!-- Refund Box -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, rgba(22, 198, 105, 0.1) 0%, rgba(22, 198, 105, 0.05) 100%); border: 2px solid rgba(22, 198, 105, 0.4); border-radius: 16px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 30px; text-align: center;">
+                                    <h2 style="margin: 0 0 15px 0; font-size: 20px; color: #065F46;">&#10003; Remboursement confirmé</h2>
+                                    <p style="margin: 0 0 15px 0; font-size: 36px; font-weight: 900; color: #16C669;">{{ order.totalFormatted }}</p>
+                                    <p style="margin: 0; color: #047857; font-size: 14px; line-height: 1.6;">Le remboursement a été initié et sera crédité sur votre compte bancaire.</p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Order Info -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 12px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #6B7280; font-weight: 600;">Commande</td>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #1F2937; font-weight: 700; text-align: right;">{{ order.orderNumber }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #6B7280; font-weight: 600;">Date de commande</td>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #1F2937; font-weight: 700; text-align: right;">{{ order.createdAt|date('d/m/Y') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #6B7280; font-weight: 600;">Montant remboursé</td>
+                                            <td style="padding: 8px 0; font-size: 18px; color: #16C669; font-weight: 700; text-align: right;">{{ order.totalFormatted }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #6B7280; font-weight: 600;">Statut</td>
+                                            <td style="padding: 8px 0; text-align: right;">
+                                                <span style="display: inline-block; background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;">Remboursée</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Timeline Box -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F9FAFB; border-radius: 12px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 25px;">
+                                    <h3 style="margin: 0 0 20px 0; font-size: 16px; color: #1F2937;">&#128197; Délais de remboursement</h3>
+
+                                    <!-- Step 1 -->
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 15px;">
+                                        <tr>
+                                            <td width="40" valign="top">
+                                                <div style="width: 32px; height: 32px; background: #16C669; border-radius: 50%; color: white; font-weight: 700; font-size: 14px; line-height: 32px; text-align: center;">&#10003;</div>
+                                            </td>
+                                            <td valign="middle" style="padding-left: 12px;">
+                                                <p style="margin: 0 0 2px 0; font-size: 14px; font-weight: 700; color: #1F2937;">Remboursement initié</p>
+                                                <p style="margin: 0; font-size: 13px; color: #6B7280;">Aujourd'hui - Le remboursement a été lancé</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <!-- Step 2 -->
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 15px;">
+                                        <tr>
+                                            <td width="40" valign="top">
+                                                <div style="width: 32px; height: 32px; background: #16C669; border-radius: 50%; color: white; font-weight: 700; font-size: 14px; line-height: 32px; text-align: center;">&#9203;</div>
+                                            </td>
+                                            <td valign="middle" style="padding-left: 12px;">
+                                                <p style="margin: 0 0 2px 0; font-size: 14px; font-weight: 700; color: #1F2937;">Traitement bancaire</p>
+                                                <p style="margin: 0; font-size: 13px; color: #6B7280;">1 à 3 jours ouvrés - Traitement par notre prestataire de paiement</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <!-- Step 3 -->
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td width="40" valign="top">
+                                                <div style="width: 32px; height: 32px; background: #16C669; border-radius: 50%; color: white; font-weight: 700; font-size: 14px; line-height: 32px; text-align: center;">&#128179;</div>
+                                            </td>
+                                            <td valign="middle" style="padding-left: 12px;">
+                                                <p style="margin: 0 0 2px 0; font-size: 14px; font-weight: 700; color: #1F2937;">Crédit sur votre compte</p>
+                                                <p style="margin: 0; font-size: 13px; color: #6B7280;">5 à 10 jours ouvrés - Selon votre banque</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Info Message -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #EFF6FF; border-left: 4px solid #3B82F6; border-radius: 0 8px 8px 0; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <p style="margin: 0; color: #1E40AF; font-size: 14px; line-height: 1.6;">
+                                        <strong>&#128161; Bon à savoir :</strong> Le délai de remboursement dépend de votre établissement bancaire.
+                                        Si vous ne voyez pas le crédit après 10 jours ouvrés, n'hésitez pas à nous contacter avec votre
+                                        numéro de commande <strong>{{ order.orderNumber }}</strong>.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- CTA -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td style="text-align: center;">
+                                    <p style="color: #6B7280; margin: 0 0 20px 0; font-size: 15px;">Nous espérons vous revoir bientôt chez Recyclum !</p>
+                                    <a href="https://recyclum.com/catalogue" style="display: inline-block; padding: 14px 30px; background: linear-gradient(135deg, #16C669 0%, #12A855 100%); color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 15px;">Découvrir nos produits</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="background: #1F2937; padding: 30px; text-align: center;">
+                        <p style="margin: 0 0 10px 0; font-size: 13px; color: #ffffff;">Une question sur votre remboursement ? <a href="mailto:contact@recyclum.com" style="color: #16C669; text-decoration: none;">Contactez-nous</a></p>
+                        <p style="margin: 0; font-size: 13px; color: rgba(255,255,255,0.7);">&copy; {{ "now"|date('Y') }} Recyclum - Electroménager reconditionné</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

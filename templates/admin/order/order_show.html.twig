@@ -1,0 +1,521 @@
+{% extends 'admin/base_layout.html.twig' %}
+
+{% block body_class 'admin-order-detail-page' %}
+{% block page_title %}Commande {{ order.orderNumber }}{% endblock %}
+
+{% block main %}
+<div class="order-detail-container">
+    {# Header #}
+    <div class="order-detail-header">
+        <div class="header-left">
+            <a href="{{ path('admin_order_index') }}" class="back-link">
+                <i class="bi bi-arrow-left"></i>
+                Retour aux commandes
+            </a>
+            <h1>
+                Commande <span class="order-number">{{ order.orderNumber }}</span>
+            </h1>
+            <div class="order-meta">
+                <span class="meta-item">
+                    <i class="bi bi-calendar3"></i>
+                    {{ order.createdAt|date('d/m/Y à H:i') }}
+                </span>
+                {% if order.user %}
+                    <span class="meta-item">
+                        <i class="bi bi-person"></i>
+                        Client enregistré
+                    </span>
+                {% else %}
+                    <span class="meta-item meta-guest">
+                        <i class="bi bi-person-x"></i>
+                        Commande invité
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="header-right">
+            <span class="order-status-badge status-{{ order.status.value }} status-badge-lg">
+                {{ order.status.label }}
+            </span>
+        </div>
+    </div>
+
+    <div class="order-detail-grid">
+        {# Main Content #}
+        <div class="order-detail-main">
+            {# Timeline #}
+            <div class="detail-card">
+                <div class="card-header">
+                    <h2><i class="bi bi-clock-history"></i> Suivi de commande</h2>
+                </div>
+                <div class="card-body">
+                    <div class="order-timeline-horizontal">
+                        {% for step in timeline %}
+                            {% if step.status not in ['cancelled', 'refunded'] or step.current|default(false) %}
+                                <div class="timeline-step {{ step.completed ? 'completed' : '' }} {{ step.current|default(false) ? 'current' : '' }} {{ step.variant is defined ? 'variant-' ~ step.variant : '' }}">
+                                    <div class="step-marker">
+                                        <i class="{{ step.icon }}"></i>
+                                    </div>
+                                    <div class="step-content">
+                                        <span class="step-label">{{ step.label }}</span>
+                                        {% if step.date %}
+                                            <span class="step-date">{{ step.date|date('d/m/Y H:i') }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {# Update Status Form #}
+            <div class="detail-card">
+                <div class="card-header">
+                    <h2><i class="bi bi-arrow-repeat"></i> Modifier le statut</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ path('admin_order_update_status', {id: order.id}) }}" class="status-update-form">
+                        <input type="hidden" name="_token" value="{{ csrf_token('order_status_' ~ order.id) }}">
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="status">Nouveau statut</label>
+                                <select name="status" id="status" class="form-select">
+                                    <option value="pending" {{ order.status.value == 'pending' ? 'selected' : '' }}>En attente de paiement</option>
+                                    <option value="paid" {{ order.status.value == 'paid' ? 'selected' : '' }}>Payée</option>
+                                    <option value="processing" {{ order.status.value == 'processing' ? 'selected' : '' }}>En préparation</option>
+                                    <option value="shipped" {{ order.status.value == 'shipped' ? 'selected' : '' }}>Expédiée</option>
+                                    <option value="delivered" {{ order.status.value == 'delivered' ? 'selected' : '' }}>Livrée</option>
+                                    <option value="cancelled" {{ order.status.value == 'cancelled' ? 'selected' : '' }}>Annulée</option>
+                                    <option value="refunded" {{ order.status.value == 'refunded' ? 'selected' : '' }}>Remboursée</option>
+                                </select>
+                            </div>
+                            <div class="form-group form-group-notes">
+                                <label for="notes">Note (optionnel)</label>
+                                <input type="text" name="notes" id="notes" class="form-input" placeholder="Ajouter une note...">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg"></i>
+                                Mettre à jour
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {# Products #}
+            <div class="detail-card">
+                <div class="card-header">
+                    <h2><i class="bi bi-box-seam"></i> Articles commandés ({{ order.items|length }})</h2>
+                </div>
+                <div class="card-body">
+                    <div class="order-items-list">
+                        {% for item in order.items %}
+                            <div class="order-item">
+                                <div class="item-image">
+                                    {% if item.product and item.product.mainImage %}
+                                        <img src="{{ asset('uploads/products/' ~ item.product.mainImage.filename) }}" alt="{{ item.productTitle }}">
+                                    {% else %}
+                                        <div class="item-placeholder">
+                                            <i class="bi bi-image"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="item-info">
+                                    <h4 class="item-title">{{ item.productTitle }}</h4>
+                                    <div class="item-meta">
+                                        {% if item.productBrand %}
+                                            <span class="meta-tag">{{ item.productBrand }}</span>
+                                        {% endif %}
+                                        {% if item.productCategory %}
+                                            <span class="meta-tag">{{ item.productCategory }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="item-quantity">
+                                    <span class="qty-label">Qté</span>
+                                    <span class="qty-value">{{ item.quantity }}</span>
+                                </div>
+                                <div class="item-price">
+                                    <span class="price-unit">{{ item.unitPriceFormatted }}</span>
+                                    {% if item.quantity > 1 %}
+                                        <span class="price-subtotal">{{ item.subtotalFormatted }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {# Notes #}
+            <div class="detail-card">
+                <div class="card-header">
+                    <h2><i class="bi bi-sticky"></i> Notes internes</h2>
+                </div>
+                <div class="card-body">
+                    {# Add Note Form - At the top #}
+                    <form method="POST" action="{{ path('admin_order_add_note', {id: order.id}) }}" class="add-note-form-top">
+                        <input type="hidden" name="_token" value="{{ csrf_token('order_note_' ~ order.id) }}">
+                        <div class="note-input-wrapper">
+                            <div class="note-input-avatar">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <div class="note-input-content">
+                                <textarea name="note" rows="2" class="form-textarea-modern" placeholder="Ajouter une note interne..."></textarea>
+                                <div class="note-input-actions">
+                                    <button type="submit" class="btn-add-note">
+                                        <i class="bi bi-send-fill"></i>
+                                        Ajouter
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    {# Notes Timeline #}
+                    <div class="notes-timeline">
+                        {% if order.notes %}
+                            {# Parse notes - split by double newline #}
+                            {% set noteBlocks = order.notes|split("\n\n") %}
+                            {% for noteBlock in noteBlocks|reverse %}
+                                {% if noteBlock|trim is not empty %}
+                                    {# Parse timestamp and content #}
+                                    {% set lines = noteBlock|split("\n") %}
+                                    {% set firstLine = lines|first %}
+
+                                    {# Check if it's a timestamp line [dd/mm/yyyy hh:mm] #}
+                                    {% if firstLine matches '/^\\[\\d{2}\\/\\d{2}\\/\\d{4}\\s\\d{2}:\\d{2}\\]/' %}
+                                        {% set timestamp = firstLine|slice(1, 16) %}
+                                        {% set noteType = firstLine|slice(18)|trim %}
+                                        {% set noteContent = lines|slice(1)|join("\n")|trim %}
+
+                                        {# Determine note type and icon #}
+                                        {% set isStatusChange = noteType starts with 'Statut:' %}
+                                        {% set isManualNote = noteType starts with 'Note:' %}
+
+                                        <div class="note-item {{ isStatusChange ? 'note-status-change' : 'note-manual' }}">
+                                            <div class="note-item-marker">
+                                                {% if isStatusChange %}
+                                                    <i class="bi bi-arrow-repeat"></i>
+                                                {% else %}
+                                                    <i class="bi bi-chat-left-text"></i>
+                                                {% endif %}
+                                            </div>
+                                            <div class="note-item-content">
+                                                <div class="note-item-header">
+                                                    <span class="note-item-type">
+                                                        {% if isStatusChange %}
+                                                            <span class="note-badge note-badge-status">
+                                                                <i class="bi bi-arrow-right-circle"></i>
+                                                                Changement de statut
+                                                            </span>
+                                                            {% set statusChange = noteType|replace({'Statut:': ''})|trim %}
+                                                            <span class="note-status-detail">{{ statusChange }}</span>
+                                                        {% else %}
+                                                            <span class="note-badge note-badge-note">
+                                                                <i class="bi bi-pencil"></i>
+                                                                Note
+                                                            </span>
+                                                        {% endif %}
+                                                    </span>
+                                                    <span class="note-item-time">
+                                                        <i class="bi bi-clock"></i>
+                                                        {{ timestamp }}
+                                                    </span>
+                                                </div>
+                                                {% if noteContent %}
+                                                    <div class="note-item-body">
+                                                        {{ noteContent|nl2br }}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        {# Legacy format without timestamp #}
+                                        <div class="note-item note-legacy">
+                                            <div class="note-item-marker">
+                                                <i class="bi bi-file-text"></i>
+                                            </div>
+                                            <div class="note-item-content">
+                                                <div class="note-item-header">
+                                                    <span class="note-badge note-badge-legacy">Note ancienne</span>
+                                                </div>
+                                                <div class="note-item-body">
+                                                    {{ noteBlock|nl2br }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <div class="notes-empty">
+                                <div class="notes-empty-icon">
+                                    <i class="bi bi-chat-left-dots"></i>
+                                </div>
+                                <p>Aucune note pour cette commande</p>
+                                <span>Les notes internes ne sont pas visibles par le client</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Sidebar #}
+        <div class="order-detail-sidebar">
+            {# Order Summary #}
+            <div class="detail-card">
+                <div class="card-header">
+                    <h2><i class="bi bi-receipt"></i> Récapitulatif</h2>
+                </div>
+                <div class="card-body">
+                    <div class="summary-lines">
+                        <div class="summary-line">
+                            <span>Sous-total</span>
+                            <span>{{ order.subtotalFormatted }}</span>
+                        </div>
+                        <div class="summary-line">
+                            <span>
+                                Livraison
+                                {% if order.deliveryType == 'with_installation' %}
+                                    <small>(avec installation)</small>
+                                {% endif %}
+                            </span>
+                            <span>{{ order.deliveryPriceFormatted }}</span>
+                        </div>
+                        <div class="summary-line summary-total">
+                            <span>Total TTC</span>
+                            <strong>{{ order.totalFormatted }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Customer Info #}
+            <div class="detail-card">
+                <div class="card-header">
+                    <h2><i class="bi bi-person"></i> Client</h2>
+                </div>
+                <div class="card-body">
+                    {% if order.user %}
+                        <div class="customer-profile">
+                            <div class="customer-avatar">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <div class="customer-details">
+                                <strong>{{ order.user.fullName }}</strong>
+                                <span>{{ order.user.email }}</span>
+                                {% if order.user.phone %}
+                                    <span><i class="bi bi-telephone"></i> {{ order.user.phone }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="customer-guest">
+                            <span class="guest-badge"><i class="bi bi-person-x"></i> Commande invité</span>
+                            {% if order.customerEmail %}
+                                <p><i class="bi bi-envelope"></i> {{ order.customerEmail }}</p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Delivery Appointment #}
+            <div class="detail-card">
+                <div class="card-header">
+                    <h2><i class="bi bi-calendar-event"></i> Date de livraison</h2>
+                </div>
+                <div class="card-body">
+                    {% if order.deliveryAppointment %}
+                        <div class="delivery-appointment">
+                            <div class="appointment-status appointment-{{ order.deliveryAppointment.status }}">
+                                {% if order.deliveryAppointment.isScheduled %}
+                                    <i class="bi bi-calendar-check-fill"></i>
+                                {% elseif order.deliveryAppointment.isCompleted %}
+                                    <i class="bi bi-check-circle-fill"></i>
+                                {% else %}
+                                    <i class="bi bi-x-circle-fill"></i>
+                                {% endif %}
+                                <div>
+                                    <strong>{{ order.deliveryAppointment.formattedDate }}</strong>
+                                    <span class="appointment-badge {{ order.deliveryAppointment.status }}">{{ order.deliveryAppointment.statusLabel }}</span>
+                                </div>
+                            </div>
+                            <div class="appointment-meta">
+                                <span><i class="bi bi-person"></i> Réservé par: {{ order.deliveryAppointment.bookedByLabel }}</span>
+                                <span><i class="bi bi-clock"></i> Le {{ order.deliveryAppointment.createdAt|date('d/m/Y à H:i') }}</span>
+                            </div>
+                        </div>
+                    {% elseif order.status.value == 'processing' %}
+                        <div class="no-appointment">
+                            <p class="text-warning"><i class="bi bi-exclamation-triangle"></i> Aucune date de livraison programmée</p>
+
+                            {# Form to set date manually #}
+                            <form method="POST" action="{{ path('admin_order_set_delivery_date', {id: order.id}) }}" class="delivery-date-form">
+                                <input type="hidden" name="_token" value="{{ csrf_token('order_delivery_' ~ order.id) }}">
+                                <div class="form-group">
+                                    <label for="delivery_date">Définir une date de livraison</label>
+                                    <input type="date" name="delivery_date" id="delivery_date" class="form-input"
+                                           min="{{ 'now'|date('Y-m-d') }}" required>
+                                    <small class="form-help">Jours ouvrés uniquement (lun-ven)</small>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-calendar-plus"></i> Confirmer cette date
+                                </button>
+                            </form>
+
+                            <hr style="margin: 1rem 0; border-color: var(--border);">
+
+                            {# Resend booking email #}
+                            <form method="POST" action="{{ path('admin_order_resend_booking_email', {id: order.id}) }}" class="resend-form">
+                                <input type="hidden" name="_token" value="{{ csrf_token('order_resend_' ~ order.id) }}">
+                                <button type="submit" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-envelope"></i> Renvoyer l'email de réservation au client
+                                </button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">
+                            {% if order.status.value == 'pending' or order.status.value == 'paid' %}
+                                La date de livraison pourra être définie une fois la commande en préparation.
+                            {% elseif order.status.value == 'shipped' or order.status.value == 'delivered' %}
+                                Commande déjà expédiée/livrée.
+                            {% else %}
+                                Non applicable pour cette commande.
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Delivery Address #}
+            <div class="detail-card">
+                <div class="card-header">
+                    <h2><i class="bi bi-geo-alt"></i> Adresse de livraison</h2>
+                </div>
+                <div class="card-body">
+                    <div class="address-block">
+                        <strong>{{ order.deliveryFirstName }} {{ order.deliveryLastName }}</strong>
+                        <p>
+                            {{ order.deliveryStreet }}<br>
+                            {% if order.deliveryStreetComplement %}
+                                {{ order.deliveryStreetComplement }}<br>
+                            {% endif %}
+                            {{ order.deliveryPostalCode }} {{ order.deliveryCity }}
+                        </p>
+                        <div class="address-phone">
+                            <i class="bi bi-telephone"></i>
+                            {{ order.deliveryPhone }}
+                        </div>
+                        {% if order.deliveryInstructions %}
+                            <div class="address-instructions">
+                                <strong>Instructions :</strong>
+                                <p>{{ order.deliveryInstructions }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {# Payment Info #}
+            <div class="detail-card">
+                <div class="card-header">
+                    <h2><i class="bi bi-credit-card"></i> Paiement</h2>
+                </div>
+                <div class="card-body">
+                    <div class="payment-info">
+                        {% if order.paidAt %}
+                            <div class="payment-status payment-success">
+                                <i class="bi bi-check-circle-fill"></i>
+                                <div>
+                                    <strong>Paiement reçu</strong>
+                                    <span>{{ order.paidAt|date('d/m/Y à H:i') }}</span>
+                                </div>
+                            </div>
+                        {% elseif order.status.value == 'pending' %}
+                            <div class="payment-status payment-pending">
+                                <i class="bi bi-hourglass-split"></i>
+                                <div>
+                                    <strong>En attente de paiement</strong>
+                                </div>
+                            </div>
+                        {% elseif order.status.value == 'cancelled' %}
+                            <div class="payment-status payment-cancelled">
+                                <i class="bi bi-x-circle-fill"></i>
+                                <div>
+                                    <strong>Commande annulée</strong>
+                                    {% if order.cancelledAt %}
+                                        <span>{{ order.cancelledAt|date('d/m/Y à H:i') }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if order.payments|length > 0 %}
+                            <div class="payment-details">
+                                <h4>Transactions</h4>
+                                {% for payment in order.payments %}
+                                    <div class="payment-transaction">
+                                        <span class="transaction-id">{{ payment.paymentIntentId|default(payment.transactionId)|slice(0, 20) }}...</span>
+                                        <span class="transaction-amount">{{ (payment.amount / 100)|number_format(2, ',', ' ') }} €</span>
+                                        <span class="transaction-status status-{{ payment.status.value }}">{{ payment.status.value }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {# Timestamps #}
+            <div class="detail-card">
+                <div class="card-header">
+                    <h2><i class="bi bi-clock"></i> Historique</h2>
+                </div>
+                <div class="card-body">
+                    <div class="timestamps-list">
+                        <div class="timestamp-item">
+                            <span class="timestamp-label">Créée</span>
+                            <span class="timestamp-value">{{ order.createdAt|date('d/m/Y H:i') }}</span>
+                        </div>
+                        {% if order.paidAt %}
+                            <div class="timestamp-item">
+                                <span class="timestamp-label">Payée</span>
+                                <span class="timestamp-value">{{ order.paidAt|date('d/m/Y H:i') }}</span>
+                            </div>
+                        {% endif %}
+                        {% if order.shippedAt %}
+                            <div class="timestamp-item">
+                                <span class="timestamp-label">Expédiée</span>
+                                <span class="timestamp-value">{{ order.shippedAt|date('d/m/Y H:i') }}</span>
+                            </div>
+                        {% endif %}
+                        {% if order.deliveredAt %}
+                            <div class="timestamp-item">
+                                <span class="timestamp-label">Livrée</span>
+                                <span class="timestamp-value">{{ order.deliveredAt|date('d/m/Y H:i') }}</span>
+                            </div>
+                        {% endif %}
+                        {% if order.cancelledAt %}
+                            <div class="timestamp-item timestamp-danger">
+                                <span class="timestamp-label">Annulée</span>
+                                <span class="timestamp-value">{{ order.cancelledAt|date('d/m/Y H:i') }}</span>
+                            </div>
+                        {% endif %}
+                        {% if order.updatedAt %}
+                            <div class="timestamp-item timestamp-muted">
+                                <span class="timestamp-label">Dernière modification</span>
+                                <span class="timestamp-value">{{ order.updatedAt|date('d/m/Y H:i') }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

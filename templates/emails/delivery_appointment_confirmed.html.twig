@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date de livraison confirmée</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #F9FAFB;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F9FAFB;">
+    <tr>
+        <td align="center" style="padding: 20px 0;">
+            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+                <!-- Header -->
+                <tr>
+                    <td style="background: linear-gradient(135deg, #16C669 0%, #12A855 100%); padding: 40px 30px; text-align: center;">
+                        <span style="font-size: 28px; font-weight: 900; color: #ffffff;">RECYCLUM</span>
+                    </td>
+                </tr>
+
+                <!-- Body -->
+                <tr>
+                    <td style="padding: 40px 30px;">
+                        <!-- Icon -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td align="center" style="padding-bottom: 20px;">
+                                    <span style="font-size: 56px; line-height: 1;">&#9989;</span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Title -->
+                        <h1 style="font-size: 26px; font-weight: 800; color: #1F2937; text-align: center; margin: 0 0 10px 0;">Date de livraison confirmée !</h1>
+                        <p style="font-size: 16px; color: #6B7280; text-align: center; margin: 0 0 30px 0;">{{ order.deliveryFirstName }}, votre rendez-vous de livraison est enregistré.</p>
+
+                        <!-- Date Box -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, rgba(22, 198, 105, 0.1) 0%, rgba(22, 198, 105, 0.05) 100%); border: 2px solid rgba(22, 198, 105, 0.4); border-radius: 16px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 30px; text-align: center;">
+                                    <p style="margin: 0 0 10px 0; font-size: 14px; color: #065F46; text-transform: uppercase; letter-spacing: 1px;">Date de livraison</p>
+                                    <p style="margin: 0 0 10px 0; font-size: 28px; font-weight: 900; color: #16C669;">{{ appointment.formattedDate }}</p>
+                                    <p style="margin: 0; font-size: 14px; color: #047857;">Entre 9h et 18h</p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Order Info -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 12px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #6B7280; font-weight: 600;">Commande</td>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #1F2937; font-weight: 700; text-align: right;">{{ order.orderNumber }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #6B7280; font-weight: 600;">Type de livraison</td>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #1F2937; font-weight: 700; text-align: right;">
+                                                {% if order.deliveryType == 'with_installation' %}
+                                                    Livraison + Installation
+                                                {% else %}
+                                                    Livraison simple
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Address -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F9FAFB; border-radius: 12px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <h3 style="margin: 0 0 15px 0; font-size: 16px; color: #1F2937;">&#128205; Adresse de livraison</h3>
+                                    <p style="margin: 0; color: #6B7280; font-size: 14px; line-height: 1.8;">
+                                        {{ order.deliveryFirstName }} {{ order.deliveryLastName }}<br>
+                                        {{ order.deliveryStreet }}<br>
+                                        {% if order.deliveryStreetComplement %}{{ order.deliveryStreetComplement }}<br>{% endif %}
+                                        {{ order.deliveryPostalCode }} {{ order.deliveryCity }}<br>
+                                        &#128222; {{ order.deliveryPhone }}
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Order Items -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F9FAFB; border-radius: 12px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <h3 style="margin: 0 0 15px 0; font-size: 16px; color: #1F2937;">Articles de votre commande</h3>
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        {% for item in order.items %}
+                                        <tr>
+                                            <td style="padding: 10px 0; font-size: 14px; color: #1F2937; font-weight: 600; border-bottom: 1px solid #E5E7EB;">{{ item.productTitle }}</td>
+                                            <td style="padding: 10px 0; font-size: 14px; color: #6B7280; text-align: right; border-bottom: 1px solid #E5E7EB;">x{{ item.quantity }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Checklist -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 30px;">
+                            <tr>
+                                <td>
+                                    <h3 style="margin: 0 0 20px 0; font-size: 16px; color: #1F2937;">A prévoir pour le jour J</h3>
+
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 14px; color: #4B5563;">
+                                                <span style="color: #16C669; margin-right: 10px;">&#10004;</span>
+                                                Assurez-vous d'être présent à l'adresse indiquée
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 14px; color: #4B5563;">
+                                                <span style="color: #16C669; margin-right: 10px;">&#10004;</span>
+                                                Préparez l'emplacement pour votre appareil
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 14px; color: #4B5563;">
+                                                <span style="color: #16C669; margin-right: 10px;">&#10004;</span>
+                                                Dégagez le passage pour faciliter la livraison
+                                            </td>
+                                        </tr>
+                                        {% if order.deliveryType == 'with_installation' %}
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 14px; color: #4B5563;">
+                                                <span style="color: #16C669; margin-right: 10px;">&#10004;</span>
+                                                Vérifiez les raccordements nécessaires (eau, électricité)
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Info Message -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #EFF6FF; border-left: 4px solid #3B82F6; border-radius: 0 8px 8px 0;">
+                            <tr>
+                                <td style="padding: 15px 20px;">
+                                    <p style="margin: 0; color: #1E40AF; font-size: 14px; line-height: 1.6;">
+                                        <strong>Bon à savoir :</strong> Vous serez contacté la veille de la livraison pour confirmer un créneau horaire plus précis. Gardez votre téléphone à portée de main !
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="background: #1F2937; padding: 30px; text-align: center;">
+                        <p style="margin: 0 0 10px 0; font-size: 13px; color: #ffffff;">Une question sur votre livraison ? <a href="mailto:contact@recyclum.com" style="color: #16C669; text-decoration: none;">Contactez-nous</a></p>
+                        <p style="margin: 0; font-size: 13px; color: rgba(255,255,255,0.7);">&copy; {{ "now"|date('Y') }} Recyclum - Electroménager reconditionné</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

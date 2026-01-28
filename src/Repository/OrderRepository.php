@@ -149,4 +149,114 @@ class OrderRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Calcule le chiffre d'affaires total (commandes payées/livrées)
+     */
+    public function getTotalRevenue(): int
+    {
+        $result = $this->createQueryBuilder('o')
+            ->select('SUM(o.total)')
+            ->andWhere('o.status IN (:statuses)')
+            ->setParameter('statuses', [
+                OrderStatus::PAID,
+                OrderStatus::PROCESSING,
+                OrderStatus::SHIPPED,
+                OrderStatus::DELIVERED,
+            ])
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return (int) ($result ?? 0);
+    }
+
+    /**
+     * Calcule le chiffre d'affaires du mois en cours
+     */
+    public function getMonthlyRevenue(): int
+    {
+        $startOfMonth = new \DateTimeImmutable('first day of this month midnight');
+
+        $result = $this->createQueryBuilder('o')
+            ->select('SUM(o.total)')
+            ->andWhere('o.status IN (:statuses)')
+            ->andWhere('o.createdAt >= :startOfMonth')
+            ->setParameter('statuses', [
+                OrderStatus::PAID,
+                OrderStatus::PROCESSING,
+                OrderStatus::SHIPPED,
+                OrderStatus::DELIVERED,
+            ])
+            ->setParameter('startOfMonth', $startOfMonth)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return (int) ($result ?? 0);
+    }
+
+    /**
+     * Récupère les commandes récentes pour le dashboard admin
+     */
+    public function findRecentOrders(int $limit = 10): array
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.user', 'u')
+            ->leftJoin('o.items', 'i')
+            ->addSelect('u', 'i')
+            ->orderBy('o.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Récupère les commandes nécessitant une action (pending, paid)
+     */
+    public function findOrdersRequiringAction(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.user', 'u')
+            ->addSelect('u')
+            ->andWhere('o.status IN (:statuses)')
+            ->setParameter('statuses', [
+                OrderStatus::PENDING,
+                OrderStatus::PAID,
+            ])
+            ->orderBy('o.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Compte les commandes nécessitant une action
+     */
+    public function countOrdersRequiringAction(): int
+    {
+        return $this->createQueryBuilder('o')
+            ->select('COUNT(o.id)')
+            ->andWhere('o.status IN (:statuses)')
+            ->setParameter('statuses', [
+                OrderStatus::PENDING,
+                OrderStatus::PAID,
+            ])
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * Statistiques des commandes par jour (derniers 30 jours)
+     */
+    public function getOrdersStatsByDay(int $days = 30): array
+    {
+        $startDate = new \DateTimeImmutable("-{$days} days midnight");
+
+        return $this->createQueryBuilder('o')
+            ->select("DATE(o.createdAt) as date, COUNT(o.id) as count, SUM(o.total) as revenue")
+            ->andWhere('o.createdAt >= :startDate')
+            ->setParameter('startDate', $startDate)
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

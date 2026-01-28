@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande annulée</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #F9FAFB;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F9FAFB;">
+    <tr>
+        <td align="center" style="padding: 20px 0;">
+            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+                <!-- Header -->
+                <tr>
+                    <td style="background: linear-gradient(135deg, #16C669 0%, #12A855 100%); padding: 40px 30px; text-align: center;">
+                        <span style="font-size: 28px; font-weight: 900; color: #ffffff;">RECYCLUM</span>
+                    </td>
+                </tr>
+
+                <!-- Body -->
+                <tr>
+                    <td style="padding: 40px 30px;">
+                        <!-- Icon -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td align="center" style="padding-bottom: 20px;">
+                                    <span style="font-size: 56px; line-height: 1;">&#10060;</span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Title -->
+                        <h1 style="font-size: 26px; font-weight: 800; color: #1F2937; text-align: center; margin: 0 0 10px 0;">Commande annulée</h1>
+                        <p style="font-size: 16px; color: #6B7280; text-align: center; margin: 0 0 30px 0;">{{ order.deliveryFirstName }}, votre commande a été annulée.</p>
+
+                        <!-- Order Info -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 12px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #6B7280; font-weight: 600;">Commande</td>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #1F2937; font-weight: 700; text-align: right;">{{ order.orderNumber }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #6B7280; font-weight: 600;">Date de commande</td>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #1F2937; font-weight: 700; text-align: right;">{{ order.createdAt|date('d/m/Y') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #6B7280; font-weight: 600;">Date d'annulation</td>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #1F2937; font-weight: 700; text-align: right;">{{ order.cancelledAt|date('d/m/Y') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #6B7280; font-weight: 600;">Statut</td>
+                                            <td style="padding: 8px 0; text-align: right;">
+                                                <span style="display: inline-block; background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;">Annulée</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Message Box -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #FEF2F2; border-left: 4px solid #EF4444; border-radius: 0 8px 8px 0; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <p style="margin: 0; color: #991B1B; font-size: 15px; line-height: 1.6;">
+                                        Nous vous confirmons l'annulation de votre commande <strong>{{ order.orderNumber }}</strong>.
+                                        Si vous avez des questions concernant cette annulation, n'hésitez pas à nous contacter.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Refund Info (if paid) -->
+                        {% if order.paidAt %}
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #ECFDF5; border: 2px solid #A7F3D0; border-radius: 12px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 20px; text-align: center;">
+                                    <h3 style="margin: 0 0 10px 0; font-size: 16px; color: #065F46;">&#128179; Information sur le remboursement</h3>
+                                    <p style="margin: 0; color: #047857; font-size: 14px; line-height: 1.6;">
+                                        Si un paiement a été effectué, le remboursement sera traité dans les prochains jours.
+                                        Le délai de crédit sur votre compte dépend de votre banque (généralement 5 à 10 jours ouvrés).
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                        {% endif %}
+
+                        <!-- Products -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 12px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <h3 style="margin: 0 0 15px 0; font-size: 16px; color: #1F2937;">Articles de la commande annulée</h3>
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        {% for item in order.items %}
+                                        <tr>
+                                            <td style="padding: 12px 0; {% if not loop.last %}border-bottom: 1px solid #E5E7EB;{% endif %}">
+                                                <p style="margin: 0 0 4px 0; font-size: 15px; font-weight: 700; color: #6B7280;">{{ item.productTitle }}</p>
+                                                <p style="margin: 0; font-size: 13px; color: #9CA3AF;">{{ item.productBrand }} - {{ item.subtotalFormatted }}</p>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- CTA -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td style="text-align: center;">
+                                    <p style="color: #6B7280; margin: 0 0 20px 0; font-size: 15px;">Envie de découvrir nos autres produits reconditionnés ?</p>
+                                    <a href="https://recyclum.com/catalogue" style="display: inline-block; padding: 14px 30px; background: linear-gradient(135deg, #16C669 0%, #12A855 100%); color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 15px;">Voir le catalogue</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="background: #1F2937; padding: 30px; text-align: center;">
+                        <p style="margin: 0 0 10px 0; font-size: 13px; color: #ffffff;">Une question ? <a href="mailto:contact@recyclum.com" style="color: #16C669; text-decoration: none;">Contactez-nous</a></p>
+                        <p style="margin: 0; font-size: 13px; color: rgba(255,255,255,0.7);">&copy; {{ "now"|date('Y') }} Recyclum - Electroménager reconditionné</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

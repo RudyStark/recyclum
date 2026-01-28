@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livraison programmée - Recyclum</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f6f8fa 0%, #e9ecef 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .client-card {
+            max-width: 500px;
+            margin: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .client-card-header {
+            background: linear-gradient(135deg, #16C669 0%, #12a356 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .client-card-header h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin: 0;
+        }
+        .client-card-body {
+            padding: 2rem;
+            text-align: center;
+        }
+        .success-icon {
+            font-size: 4rem;
+            color: #16C669;
+            margin-bottom: 1.5rem;
+        }
+        .appointment-box {
+            background: linear-gradient(135deg, rgba(22, 198, 105, 0.1) 0%, rgba(22, 198, 105, 0.05) 100%);
+            border: 2px solid rgba(22, 198, 105, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .appointment-date {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #16C669;
+            margin-bottom: 0.5rem;
+        }
+        .appointment-info {
+            color: #6c7783;
+            font-size: 0.875rem;
+        }
+        .btn-home {
+            display: inline-block;
+            background: linear-gradient(135deg, #16C669 0%, #12a356 100%);
+            color: white;
+            text-decoration: none;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        .btn-home:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(22, 198, 105, 0.3);
+        }
+    </style>
+</head>
+<body>
+<div class="client-card">
+    <div class="client-card-header">
+        <h1><i class="fa fa-truck"></i> Livraison programmée</h1>
+    </div>
+
+    <div class="client-card-body">
+        <div class="success-icon">
+            <i class="fa fa-calendar-check"></i>
+        </div>
+
+        <h2 style="font-weight: 800; margin-bottom: 0.5rem;">Votre livraison est déjà programmée</h2>
+        <p style="color: #6c7783; margin-bottom: 1.5rem;">
+            Commande {{ order.orderNumber }}
+        </p>
+
+        <div class="appointment-box">
+            <div class="appointment-date">
+                {{ order.deliveryAppointment.formattedDate }}
+            </div>
+            <div class="appointment-info">
+                Livraison entre 9h et 18h<br>
+                Vous serez contacté la veille pour confirmer le créneau
+            </div>
+        </div>
+
+        <div style="background: #f8fafc; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; text-align: left;">
+            <div style="font-weight: 700; margin-bottom: 0.5rem; color: #0f1418;">Adresse de livraison</div>
+            <div style="color: #6c7783; font-size: 0.875rem;">
+                {{ order.deliveryFirstName }} {{ order.deliveryLastName }}<br>
+                {{ order.deliveryStreet }}<br>
+                {% if order.deliveryStreetComplement %}{{ order.deliveryStreetComplement }}<br>{% endif %}
+                {{ order.deliveryPostalCode }} {{ order.deliveryCity }}
+            </div>
+        </div>
+
+        <a href="{{ path('app_home') }}" class="btn-home">
+            <i class="fa fa-home"></i> Retour à l'accueil
+        </a>
+    </div>
+</div>
+</body>
+</html>
