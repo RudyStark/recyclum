@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livraison confirmée - Recyclum</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f6f8fa 0%, #e9ecef 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .client-card {
+            max-width: 550px;
+            margin: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .client-card-header {
+            background: linear-gradient(135deg, #16C669 0%, #12a356 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .client-card-header h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin: 0;
+        }
+        .client-card-body {
+            padding: 2rem;
+            text-align: center;
+        }
+        .success-icon {
+            font-size: 5rem;
+            color: #16C669;
+            margin-bottom: 1.5rem;
+            animation: scaleIn 0.5s ease-out;
+        }
+        @keyframes scaleIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .appointment-box {
+            background: linear-gradient(135deg, rgba(22, 198, 105, 0.1) 0%, rgba(22, 198, 105, 0.05) 100%);
+            border: 2px solid rgba(22, 198, 105, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .appointment-label {
+            font-size: 0.875rem;
+            color: #6c7783;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+        .appointment-date {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: #16C669;
+            margin-bottom: 0.5rem;
+        }
+        .appointment-info {
+            color: #6c7783;
+            font-size: 0.875rem;
+        }
+        .delivery-address {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        .delivery-address h4 {
+            font-weight: 700;
+            margin: 0 0 0.75rem 0;
+            color: #0f1418;
+            font-size: 0.9rem;
+        }
+        .delivery-address p {
+            margin: 0;
+            color: #6c7783;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        .next-steps {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        .next-steps h4 {
+            font-weight: 700;
+            margin: 0 0 0.75rem 0;
+            color: #1e40af;
+            font-size: 0.9rem;
+        }
+        .next-steps ul {
+            margin: 0;
+            padding-left: 1.25rem;
+            color: #1e40af;
+            font-size: 0.875rem;
+        }
+        .next-steps li {
+            margin-bottom: 0.25rem;
+        }
+        .btn-home {
+            display: inline-block;
+            background: linear-gradient(135deg, #16C669 0%, #12a356 100%);
+            color: white;
+            text-decoration: none;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        .btn-home:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(22, 198, 105, 0.3);
+        }
+        .order-number {
+            display: inline-block;
+            background: #f1f5f9;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.875rem;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+<div class="client-card">
+    <div class="client-card-header">
+        <h1><i class="fa fa-check-circle"></i> Livraison confirmée</h1>
+    </div>
+
+    <div class="client-card-body">
+        <div class="success-icon">
+            <i class="fa fa-calendar-check"></i>
+        </div>
+
+        <h2 style="font-weight: 800; margin-bottom: 0.5rem;">Votre date de livraison est confirmée !</h2>
+        <p style="color: #6c7783; margin-bottom: 0.5rem;">
+            Merci {{ order.deliveryFirstName }} !
+        </p>
+        <span class="order-number">{{ order.orderNumber }}</span>
+
+        <div class="appointment-box">
+            <div class="appointment-label">Date de livraison</div>
+            <div class="appointment-date">
+                {{ order.deliveryAppointment.formattedDate }}
+            </div>
+            <div class="appointment-info">
+                Entre 9h et 18h
+            </div>
+        </div>
+
+        <div class="delivery-address">
+            <h4><i class="fa fa-map-marker-alt"></i> Adresse de livraison</h4>
+            <p>
+                {{ order.deliveryFirstName }} {{ order.deliveryLastName }}<br>
+                {{ order.deliveryStreet }}<br>
+                {% if order.deliveryStreetComplement %}{{ order.deliveryStreetComplement }}<br>{% endif %}
+                {{ order.deliveryPostalCode }} {{ order.deliveryCity }}<br>
+                <i class="fa fa-phone"></i> {{ order.deliveryPhone }}
+            </p>
+        </div>
+
+        <div class="next-steps">
+            <h4><i class="fa fa-info-circle"></i> Prochaines étapes</h4>
+            <ul>
+                <li>Un email de confirmation vous a été envoyé</li>
+                <li>Vous serez contacté la veille de la livraison pour confirmer un créneau horaire</li>
+                {% if order.deliveryType == 'with_installation' %}
+                <li>Notre technicien procédera à l'installation et la mise en service</li>
+                {% endif %}
+                <li>Pensez à préparer l'emplacement de votre appareil</li>
+            </ul>
+        </div>
+
+        <a href="{{ path('app_home') }}" class="btn-home">
+            <i class="fa fa-home"></i> Retour à l'accueil
+        </a>
+    </div>
+</div>
+</body>
+</html>

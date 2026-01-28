@@ -1,0 +1,252 @@
+{% extends 'admin/base_layout.html.twig' %}
+
+{% block body_class 'admin-orders-page' %}
+{% block page_title %}Gestion des commandes{% endblock %}
+
+{% block main %}
+<div class="orders-container">
+    {# Hero Header #}
+    <div class="orders-hero">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="bi bi-box-seam"></i>
+            </div>
+            <div class="hero-text">
+                <h1>Gestion des commandes</h1>
+                <p>Suivez et gérez toutes les commandes de votre boutique</p>
+            </div>
+        </div>
+    </div>
+
+    {# Stats Cards #}
+    <div class="stats-grid">
+        <div class="stat-card stat-card-primary">
+            <div class="stat-icon">
+                <i class="bi bi-currency-euro"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ (stats.total_revenue / 100)|number_format(2, ',', ' ') }} €</span>
+                <span class="stat-label">Chiffre d'affaires total</span>
+            </div>
+        </div>
+        <div class="stat-card stat-card-success">
+            <div class="stat-icon">
+                <i class="bi bi-graph-up-arrow"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ (stats.monthly_revenue / 100)|number_format(2, ',', ' ') }} €</span>
+                <span class="stat-label">Ce mois-ci</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="bi bi-inbox"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ stats.total }}</span>
+                <span class="stat-label">Total commandes</span>
+            </div>
+        </div>
+        <div class="stat-card stat-card-warning">
+            <div class="stat-icon">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ stats.pending + stats.paid }}</span>
+                <span class="stat-label">À traiter</span>
+            </div>
+        </div>
+    </div>
+
+    {# Status Filters #}
+    <div class="status-filters">
+        <a href="{{ path('admin_order_index', {status: 'all', search: search}) }}"
+           class="status-filter {{ currentStatus == 'all' ? 'active' : '' }}">
+            <span class="filter-label">Toutes</span>
+            <span class="filter-count">{{ stats.total }}</span>
+        </a>
+        <a href="{{ path('admin_order_index', {status: 'pending', search: search}) }}"
+           class="status-filter status-pending {{ currentStatus == 'pending' ? 'active' : '' }}">
+            <i class="bi bi-hourglass-split"></i>
+            <span class="filter-label">En attente</span>
+            <span class="filter-count">{{ stats.pending }}</span>
+        </a>
+        <a href="{{ path('admin_order_index', {status: 'paid', search: search}) }}"
+           class="status-filter status-paid {{ currentStatus == 'paid' ? 'active' : '' }}">
+            <i class="bi bi-credit-card"></i>
+            <span class="filter-label">Payées</span>
+            <span class="filter-count">{{ stats.paid }}</span>
+        </a>
+        <a href="{{ path('admin_order_index', {status: 'processing', search: search}) }}"
+           class="status-filter status-processing {{ currentStatus == 'processing' ? 'active' : '' }}">
+            <i class="bi bi-box-seam"></i>
+            <span class="filter-label">En préparation</span>
+            <span class="filter-count">{{ stats.processing }}</span>
+        </a>
+        <a href="{{ path('admin_order_index', {status: 'shipped', search: search}) }}"
+           class="status-filter status-shipped {{ currentStatus == 'shipped' ? 'active' : '' }}">
+            <i class="bi bi-truck"></i>
+            <span class="filter-label">Expédiées</span>
+            <span class="filter-count">{{ stats.shipped }}</span>
+        </a>
+        <a href="{{ path('admin_order_index', {status: 'delivered', search: search}) }}"
+           class="status-filter status-delivered {{ currentStatus == 'delivered' ? 'active' : '' }}">
+            <i class="bi bi-check-circle"></i>
+            <span class="filter-label">Livrées</span>
+            <span class="filter-count">{{ stats.delivered }}</span>
+        </a>
+        <a href="{{ path('admin_order_index', {status: 'cancelled', search: search}) }}"
+           class="status-filter status-cancelled {{ currentStatus == 'cancelled' ? 'active' : '' }}">
+            <i class="bi bi-x-circle"></i>
+            <span class="filter-label">Annulées</span>
+            <span class="filter-count">{{ stats.cancelled }}</span>
+        </a>
+    </div>
+
+    {# Search & Actions Bar #}
+    <div class="orders-toolbar">
+        <form method="GET" action="{{ path('admin_order_index') }}" class="search-form">
+            <input type="hidden" name="status" value="{{ currentStatus }}">
+            <div class="search-input-wrapper">
+                <i class="bi bi-search"></i>
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Rechercher par n° commande, nom, ville, email..."
+                    class="search-input"
+                >
+                {% if search %}
+                    <a href="{{ path('admin_order_index', {status: currentStatus}) }}" class="search-clear">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn-search">Rechercher</button>
+        </form>
+
+        <div class="toolbar-info">
+            <span class="results-count">{{ totalItems }} résultat{{ totalItems > 1 ? 's' : '' }}</span>
+        </div>
+    </div>
+
+    {# Orders Table #}
+    <div class="data-table-card">
+        {% if orders|length > 0 %}
+            <div class="table-responsive">
+                <table class="data-table orders-table">
+                    <thead>
+                        <tr>
+                            <th>Commande</th>
+                            <th>Client</th>
+                            <th>Date</th>
+                            <th>Articles</th>
+                            <th>Total</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                            <tr class="order-row" data-order-id="{{ order.id }}">
+                                <td class="order-number-cell">
+                                    <a href="{{ path('admin_order_show', {id: order.id}) }}" class="order-number-link">
+                                        <strong>{{ order.orderNumber }}</strong>
+                                    </a>
+                                </td>
+                                <td class="customer-cell">
+                                    <div class="customer-info">
+                                        <span class="customer-name">{{ order.deliveryFirstName }} {{ order.deliveryLastName }}</span>
+                                        <span class="customer-email">
+                                            {% if order.user %}
+                                                {{ order.user.email }}
+                                            {% elseif order.customerEmail %}
+                                                {{ order.customerEmail }}
+                                            {% else %}
+                                                <span class="text-muted">Invité</span>
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="date-cell">
+                                    <span class="date-main">{{ order.createdAt|date('d/m/Y') }}</span>
+                                    <span class="date-time">{{ order.createdAt|date('H:i') }}</span>
+                                </td>
+                                <td class="items-cell">
+                                    <span class="items-count">{{ order.items|length }} article{{ order.items|length > 1 ? 's' : '' }}</span>
+                                </td>
+                                <td class="total-cell">
+                                    <strong class="order-total">{{ order.totalFormatted }}</strong>
+                                </td>
+                                <td class="status-cell">
+                                    <span class="order-status-badge status-{{ order.status.value }}">
+                                        {{ order.status.label }}
+                                    </span>
+                                </td>
+                                <td class="actions-cell">
+                                    <a href="{{ path('admin_order_show', {id: order.id}) }}" class="btn-action btn-action-view" title="Voir détails">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {# Pagination #}
+            {% if totalPages > 1 %}
+                <div class="pagination-wrapper">
+                    <nav class="pagination">
+                        {% if currentPage > 1 %}
+                            <a href="{{ path('admin_order_index', {status: currentStatus, search: search, page: currentPage - 1}) }}" class="pagination-link pagination-prev">
+                                <i class="bi bi-chevron-left"></i>
+                                Précédent
+                            </a>
+                        {% endif %}
+
+                        <div class="pagination-pages">
+                            {% for p in 1..totalPages %}
+                                {% if p == currentPage %}
+                                    <span class="pagination-link pagination-current">{{ p }}</span>
+                                {% elseif p == 1 or p == totalPages or (p >= currentPage - 2 and p <= currentPage + 2) %}
+                                    <a href="{{ path('admin_order_index', {status: currentStatus, search: search, page: p}) }}" class="pagination-link">{{ p }}</a>
+                                {% elseif p == currentPage - 3 or p == currentPage + 3 %}
+                                    <span class="pagination-ellipsis">...</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        {% if currentPage < totalPages %}
+                            <a href="{{ path('admin_order_index', {status: currentStatus, search: search, page: currentPage + 1}) }}" class="pagination-link pagination-next">
+                                Suivant
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        {% endif %}
+                    </nav>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="bi bi-inbox"></i>
+                </div>
+                <h3>Aucune commande trouvée</h3>
+                {% if search %}
+                    <p>Aucun résultat pour "{{ search }}"</p>
+                    <a href="{{ path('admin_order_index', {status: currentStatus}) }}" class="btn btn-primary">
+                        Effacer la recherche
+                    </a>
+                {% elseif currentStatus != 'all' %}
+                    <p>Aucune commande avec le statut "{{ currentStatus }}"</p>
+                    <a href="{{ path('admin_order_index') }}" class="btn btn-primary">
+                        Voir toutes les commandes
+                    </a>
+                {% else %}
+                    <p>Vous n'avez pas encore reçu de commande</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

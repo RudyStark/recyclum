@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Entity\Order;
+use App\Entity\DeliveryAppointment;
 use App\Entity\RepairRequest;
 use App\Entity\RepairAppointment;
 use App\Entity\BuybackRequest;
@@ -340,6 +342,152 @@ class EmailService
             $buybackRequest->getEmail(),
             $buybackRequest->getFullName(),
             '💰 Votre paiement est en cours - Recyclum',
+            $htmlContent
+        );
+    }
+
+    // ========================================================================
+    // EMAILS COMMANDES E-COMMERCE
+    // ========================================================================
+
+    /**
+     * Email de confirmation de commande (après paiement réussi)
+     */
+    public function sendOrderConfirmationEmail(Order $order, string $customerEmail, string $customerName): void
+    {
+        $htmlContent = $this->twig->render('emails/order_confirmation.html.twig', [
+            'order' => $order,
+        ]);
+
+        $this->sendEmail(
+            $customerEmail,
+            $customerName,
+            '✅ Confirmation de votre commande ' . $order->getOrderNumber() . ' - Recyclum',
+            $htmlContent
+        );
+    }
+
+    /**
+     * Email quand la commande est en préparation
+     */
+    public function sendOrderProcessingEmail(Order $order, string $customerEmail, string $customerName): void
+    {
+        $htmlContent = $this->twig->render('emails/order_processing.html.twig', [
+            'order' => $order,
+        ]);
+
+        $this->sendEmail(
+            $customerEmail,
+            $customerName,
+            '📦 Votre commande ' . $order->getOrderNumber() . ' est en préparation - Recyclum',
+            $htmlContent
+        );
+    }
+
+    /**
+     * Email quand la commande est expédiée (en cours de livraison)
+     */
+    public function sendOrderShippedEmail(Order $order, string $customerEmail, string $customerName): void
+    {
+        $htmlContent = $this->twig->render('emails/order_shipped.html.twig', [
+            'order' => $order,
+        ]);
+
+        $this->sendEmail(
+            $customerEmail,
+            $customerName,
+            '🚚 Votre commande ' . $order->getOrderNumber() . ' est en cours de livraison - Recyclum',
+            $htmlContent
+        );
+    }
+
+    /**
+     * Email quand la commande est livrée (remerciements)
+     */
+    public function sendOrderDeliveredEmail(Order $order, string $customerEmail, string $customerName): void
+    {
+        $htmlContent = $this->twig->render('emails/order_delivered.html.twig', [
+            'order' => $order,
+        ]);
+
+        $this->sendEmail(
+            $customerEmail,
+            $customerName,
+            '🎉 Votre commande ' . $order->getOrderNumber() . ' a été livrée - Merci ! - Recyclum',
+            $htmlContent
+        );
+    }
+
+    /**
+     * Email quand la commande est annulée
+     */
+    public function sendOrderCancelledEmail(Order $order, string $customerEmail, string $customerName): void
+    {
+        $htmlContent = $this->twig->render('emails/order_cancelled.html.twig', [
+            'order' => $order,
+        ]);
+
+        $this->sendEmail(
+            $customerEmail,
+            $customerName,
+            '❌ Votre commande ' . $order->getOrderNumber() . ' a été annulée - Recyclum',
+            $htmlContent
+        );
+    }
+
+    /**
+     * Email quand la commande est remboursée
+     */
+    public function sendOrderRefundedEmail(Order $order, string $customerEmail, string $customerName): void
+    {
+        $htmlContent = $this->twig->render('emails/order_refunded.html.twig', [
+            'order' => $order,
+        ]);
+
+        $this->sendEmail(
+            $customerEmail,
+            $customerName,
+            '💳 Votre commande ' . $order->getOrderNumber() . ' a été remboursée - Recyclum',
+            $htmlContent
+        );
+    }
+
+    // ========================================================================
+    // EMAILS RENDEZ-VOUS DE LIVRAISON
+    // ========================================================================
+
+    /**
+     * Email avec lien pour choisir la date de livraison (quand statut passe à PROCESSING)
+     */
+    public function sendDeliveryBookingEmail(Order $order, string $bookingUrl, string $customerEmail, string $customerName): void
+    {
+        $htmlContent = $this->twig->render('emails/delivery_booking.html.twig', [
+            'order' => $order,
+            'bookingUrl' => $bookingUrl,
+        ]);
+
+        $this->sendEmail(
+            $customerEmail,
+            $customerName,
+            '📅 Choisissez votre date de livraison - Commande ' . $order->getOrderNumber() . ' - Recyclum',
+            $htmlContent
+        );
+    }
+
+    /**
+     * Email de confirmation après réservation de la date de livraison
+     */
+    public function sendDeliveryAppointmentConfirmation(Order $order, DeliveryAppointment $appointment, string $customerEmail, string $customerName): void
+    {
+        $htmlContent = $this->twig->render('emails/delivery_appointment_confirmed.html.twig', [
+            'order' => $order,
+            'appointment' => $appointment,
+        ]);
+
+        $this->sendEmail(
+            $customerEmail,
+            $customerName,
+            '✅ Date de livraison confirmée - Commande ' . $order->getOrderNumber() . ' - Recyclum',
             $htmlContent
         );
     }

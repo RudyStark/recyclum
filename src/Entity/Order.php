@@ -98,6 +98,11 @@ class Order
     #[ORM\Column(type: 'string', length: 180, nullable: true)]
     private ?string $customerEmail = null;
 
+    #[ORM\Column(type: 'string', length: 32, unique: true, nullable: true)]
+    private ?string $deliveryBookingToken = null;
+
+    #[ORM\OneToOne(mappedBy: 'order', targetEntity: DeliveryAppointment::class, cascade: ['persist', 'remove'])]
+    private ?DeliveryAppointment $deliveryAppointment = null;
 
     /**
      * @var Collection<int, OrderItem>
@@ -553,5 +558,62 @@ class Order
     {
         $this->customerEmail = $customerEmail;
         return $this;
+    }
+
+    public function getDeliveryBookingToken(): ?string
+    {
+        return $this->deliveryBookingToken;
+    }
+
+    public function setDeliveryBookingToken(?string $deliveryBookingToken): self
+    {
+        $this->deliveryBookingToken = $deliveryBookingToken;
+        return $this;
+    }
+
+    /**
+     * Generate a unique delivery booking token
+     */
+    public function generateDeliveryBookingToken(): self
+    {
+        $this->deliveryBookingToken = bin2hex(random_bytes(16)); // 32 characters
+        return $this;
+    }
+
+    public function getDeliveryAppointment(): ?DeliveryAppointment
+    {
+        return $this->deliveryAppointment;
+    }
+
+    public function setDeliveryAppointment(?DeliveryAppointment $deliveryAppointment): self
+    {
+        // Unset the owning side of the relation if necessary
+        if ($deliveryAppointment === null && $this->deliveryAppointment !== null) {
+            $this->deliveryAppointment->setOrder(null);
+        }
+
+        // Set the owning side of the relation if necessary
+        if ($deliveryAppointment !== null && $deliveryAppointment->getOrder() !== $this) {
+            $deliveryAppointment->setOrder($this);
+        }
+
+        $this->deliveryAppointment = $deliveryAppointment;
+        return $this;
+    }
+
+    /**
+     * Check if order has a delivery appointment scheduled
+     */
+    public function hasDeliveryAppointment(): bool
+    {
+        return $this->deliveryAppointment !== null && $this->deliveryAppointment->isScheduled();
+    }
+
+    /**
+     * Check if order needs delivery booking (status is PROCESSING and no appointment)
+     */
+    public function needsDeliveryBooking(): bool
+    {
+        return $this->status === OrderStatus::PROCESSING && !$this->hasDeliveryAppointment();
     }
 }

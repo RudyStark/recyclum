@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande en préparation</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #F9FAFB;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F9FAFB;">
+    <tr>
+        <td align="center" style="padding: 20px 0;">
+            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+                <!-- Header -->
+                <tr>
+                    <td style="background: linear-gradient(135deg, #16C669 0%, #12A855 100%); padding: 40px 30px; text-align: center;">
+                        <span style="font-size: 28px; font-weight: 900; color: #ffffff;">RECYCLUM</span>
+                    </td>
+                </tr>
+
+                <!-- Body -->
+                <tr>
+                    <td style="padding: 40px 30px;">
+                        <!-- Icon -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td align="center" style="padding-bottom: 20px;">
+                                    <span style="font-size: 56px; line-height: 1;">&#128230;</span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Title -->
+                        <h1 style="font-size: 26px; font-weight: 800; color: #1F2937; text-align: center; margin: 0 0 10px 0;">Votre commande est en préparation !</h1>
+                        <p style="font-size: 16px; color: #6B7280; text-align: center; margin: 0 0 30px 0;">Bonne nouvelle {{ order.deliveryFirstName }}, nous préparons votre commande avec soin.</p>
+
+                        <!-- Order Info -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 12px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #6B7280; font-weight: 600;">Commande</td>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #1F2937; font-weight: 700; text-align: right;">{{ order.orderNumber }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #6B7280; font-weight: 600;">Date de commande</td>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #1F2937; font-weight: 700; text-align: right;">{{ order.createdAt|date('d/m/Y') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 8px 0; font-size: 15px; color: #6B7280; font-weight: 600;">Statut actuel</td>
+                                            <td style="padding: 8px 0; text-align: right;">
+                                                <span style="display: inline-block; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;">En préparation</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Timeline -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%); border-radius: 12px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <!-- Step 1 - Done -->
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #E5E7EB;">
+                                        <tr>
+                                            <td width="40" valign="top">
+                                                <div style="width: 36px; height: 36px; background: #16C669; border-radius: 50%; color: white; font-weight: 700; font-size: 16px; line-height: 36px; text-align: center;">&#10003;</div>
+                                            </td>
+                                            <td valign="middle" style="padding-left: 12px;">
+                                                <p style="margin: 0 0 2px 0; font-size: 14px; font-weight: 700; color: #1F2937;">Commande reçue</p>
+                                                <p style="margin: 0; font-size: 13px; color: #6B7280;">Votre paiement a été validé</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <!-- Step 2 - Current -->
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #E5E7EB;">
+                                        <tr>
+                                            <td width="40" valign="top">
+                                                <div style="width: 36px; height: 36px; background: #F97316; border-radius: 50%; color: white; font-weight: 700; font-size: 16px; line-height: 36px; text-align: center;">&#128230;</div>
+                                            </td>
+                                            <td valign="middle" style="padding-left: 12px;">
+                                                <p style="margin: 0 0 2px 0; font-size: 14px; font-weight: 700; color: #1F2937;">En préparation</p>
+                                                <p style="margin: 0; font-size: 13px; color: #6B7280;">Nous préparons votre colis avec soin</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <!-- Step 3 - Pending -->
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #E5E7EB;">
+                                        <tr>
+                                            <td width="40" valign="top">
+                                                <div style="width: 36px; height: 36px; background: #E5E7EB; border-radius: 50%; color: #9CA3AF; font-weight: 700; font-size: 16px; line-height: 36px; text-align: center;">&#128666;</div>
+                                            </td>
+                                            <td valign="middle" style="padding-left: 12px;">
+                                                <p style="margin: 0 0 2px 0; font-size: 14px; font-weight: 700; color: #9CA3AF;">En cours de livraison</p>
+                                                <p style="margin: 0; font-size: 13px; color: #9CA3AF;">Bientôt en route vers vous</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <!-- Step 4 - Pending -->
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td width="40" valign="top">
+                                                <div style="width: 36px; height: 36px; background: #E5E7EB; border-radius: 50%; color: #9CA3AF; font-weight: 700; font-size: 16px; line-height: 36px; text-align: center;">&#127968;</div>
+                                            </td>
+                                            <td valign="middle" style="padding-left: 12px;">
+                                                <p style="margin: 0 0 2px 0; font-size: 14px; font-weight: 700; color: #9CA3AF;">Livrée</p>
+                                                <p style="margin: 0; font-size: 13px; color: #9CA3AF;">À votre adresse</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Message Box -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #FFF7ED; border-left: 4px solid #F97316; border-radius: 0 8px 8px 0; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <p style="margin: 0; color: #9A3412; font-size: 15px; line-height: 1.6;">
+                                        <strong>Que se passe-t-il maintenant ?</strong><br>
+                                        Notre équipe vérifie et prépare soigneusement votre appareil reconditionné.
+                                        Vous recevrez un email dès que votre commande sera expédiée avec les informations de livraison.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Delivery Address -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 12px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <h3 style="margin: 0 0 15px 0; font-size: 16px; color: #1F2937;">&#128205; Adresse de livraison</h3>
+                                    <p style="margin: 0; line-height: 1.8; color: #4B5563; font-size: 14px;">
+                                        <strong>{{ order.deliveryFirstName }} {{ order.deliveryLastName }}</strong><br>
+                                        {{ order.deliveryStreet }}<br>
+                                        {% if order.deliveryStreetComplement %}{{ order.deliveryStreetComplement }}<br>{% endif %}
+                                        {{ order.deliveryPostalCode }} {{ order.deliveryCity }}
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="background: #1F2937; padding: 30px; text-align: center;">
+                        <p style="margin: 0 0 10px 0; font-size: 13px; color: #ffffff;">Une question ? <a href="mailto:contact@recyclum.com" style="color: #16C669; text-decoration: none;">Contactez-nous</a></p>
+                        <p style="margin: 0; font-size: 13px; color: rgba(255,255,255,0.7);">&copy; {{ "now"|date('Y') }} Recyclum - Electroménager reconditionné</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
