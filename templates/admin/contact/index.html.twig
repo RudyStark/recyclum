@@ -1,0 +1,252 @@
+{% extends 'admin/base_layout.html.twig' %}
+
+{% block body_class 'admin-contacts-page' %}
+{% block page_title %}Messages de contact{% endblock %}
+
+{% block main %}
+<div class="contacts-container">
+    {# Hero Header #}
+    <div class="contacts-hero">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="bi bi-chat-dots"></i>
+            </div>
+            <div class="hero-text">
+                <h1>Messages de contact</h1>
+                <p>Gérez et répondez aux demandes de vos clients</p>
+            </div>
+        </div>
+    </div>
+
+    {# Stats Cards #}
+    <div class="stats-grid">
+        <div class="stat-card stat-card-danger">
+            <div class="stat-icon">
+                <i class="bi bi-envelope-exclamation"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ stats.new }}</span>
+                <span class="stat-label">Nouveaux</span>
+            </div>
+        </div>
+        <div class="stat-card stat-card-warning">
+            <div class="stat-icon">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ stats.open }}</span>
+                <span class="stat-label">En attente</span>
+            </div>
+        </div>
+        <div class="stat-card stat-card-success">
+            <div class="stat-icon">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ stats.answered }}</span>
+                <span class="stat-label">Répondus</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="bi bi-archive"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ stats.total }}</span>
+                <span class="stat-label">Total</span>
+            </div>
+        </div>
+    </div>
+
+    {# Status Filters #}
+    <div class="status-filters">
+        <a href="{{ path('admin_contact_index', {status: 'all', subject: currentSubject, search: search}) }}"
+           class="status-filter {{ currentStatus == 'all' ? 'active' : '' }}">
+            <span class="filter-label">Tous</span>
+            <span class="filter-count">{{ stats.total }}</span>
+        </a>
+        {% for status in statuses %}
+            <a href="{{ path('admin_contact_index', {status: status.value, subject: currentSubject, search: search}) }}"
+               class="status-filter status-{{ status.value }} {{ currentStatus == status.value ? 'active' : '' }}">
+                <span class="filter-label">{{ status.label }}</span>
+                <span class="filter-count">{{ stats[status.value] ?? 0 }}</span>
+            </a>
+        {% endfor %}
+    </div>
+
+    {# Subject Filters #}
+    <div class="subject-filters">
+        <span class="filter-label-text">Sujet:</span>
+        <a href="{{ path('admin_contact_index', {status: currentStatus, subject: 'all', search: search}) }}"
+           class="subject-chip {{ currentSubject == 'all' ? 'active' : '' }}">
+            Tous
+        </a>
+        {% for subject in subjects %}
+            <a href="{{ path('admin_contact_index', {status: currentStatus, subject: subject.value, search: search}) }}"
+               class="subject-chip {{ currentSubject == subject.value ? 'active' : '' }}"
+               style="--subject-color: {{ subject.color }}">
+                <i class="bi {{ subject.icon }}"></i>
+                {{ subject.label }}
+            </a>
+        {% endfor %}
+    </div>
+
+    {# Search & Actions Bar #}
+    <div class="contacts-toolbar">
+        <form method="GET" action="{{ path('admin_contact_index') }}" class="search-form">
+            <input type="hidden" name="status" value="{{ currentStatus }}">
+            <input type="hidden" name="subject" value="{{ currentSubject }}">
+            <div class="search-input-wrapper">
+                <i class="bi bi-search"></i>
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Rechercher par ticket, nom, email..."
+                    class="search-input"
+                >
+                {% if search %}
+                    <a href="{{ path('admin_contact_index', {status: currentStatus, subject: currentSubject}) }}" class="search-clear">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn-search">Rechercher</button>
+        </form>
+
+        <div class="toolbar-info">
+            <span class="results-count">{{ totalItems }} message{{ totalItems > 1 ? 's' : '' }}</span>
+        </div>
+    </div>
+
+    {# Messages Table #}
+    <div class="data-table-card">
+        {% if messages|length > 0 %}
+            <div class="table-responsive">
+                <table class="data-table contacts-table">
+                    <thead>
+                        <tr>
+                            <th>Ticket</th>
+                            <th>Sujet</th>
+                            <th>Client</th>
+                            <th>Commande</th>
+                            <th>Date</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for message in messages %}
+                            <tr class="message-row {{ message.isNew ? 'unread' : '' }} {{ message.isPriority ? 'priority' : '' }}" data-id="{{ message.id }}">
+                                <td class="ticket-cell">
+                                    <a href="{{ path('admin_contact_show', {id: message.id}) }}" class="ticket-link">
+                                        <strong>{{ message.ticketNumber }}</strong>
+                                    </a>
+                                    {% if message.isPriority %}
+                                        <span class="priority-badge" title="Prioritaire">
+                                            <i class="bi bi-exclamation-triangle-fill"></i>
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="subject-cell">
+                                    <span class="subject-badge" style="--subject-color: {{ message.subject.color }}">
+                                        <i class="bi {{ message.subject.icon }}"></i>
+                                        {{ message.subject.label }}
+                                    </span>
+                                </td>
+                                <td class="client-cell">
+                                    <div class="client-info">
+                                        <span class="client-name">{{ message.fullName }}</span>
+                                        <span class="client-email">{{ message.email }}</span>
+                                        {% if message.isMember %}
+                                            <span class="member-badge">
+                                                <i class="bi bi-person-check"></i> Membre
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td class="order-cell">
+                                    {% if message.relatedOrder %}
+                                        <a href="{{ path('admin_order_show', {id: message.relatedOrder.id}) }}" class="order-link">
+                                            {{ message.relatedOrder.orderNumber }}
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td class="date-cell">
+                                    <span class="date-main">{{ message.createdAt|date('d/m/Y') }}</span>
+                                    <span class="date-time">{{ message.createdAt|date('H:i') }}</span>
+                                </td>
+                                <td class="status-cell">
+                                    <span class="contact-status-badge status-{{ message.status.value }}">
+                                        {{ message.status.label }}
+                                    </span>
+                                </td>
+                                <td class="actions-cell">
+                                    <a href="{{ path('admin_contact_show', {id: message.id}) }}" class="btn-action btn-action-view" title="Voir et répondre">
+                                        <i class="bi bi-chat-left-text"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {# Pagination #}
+            {% if totalPages > 1 %}
+                <div class="pagination-wrapper">
+                    <nav class="pagination">
+                        {% if currentPage > 1 %}
+                            <a href="{{ path('admin_contact_index', {status: currentStatus, subject: currentSubject, search: search, page: currentPage - 1}) }}" class="pagination-link pagination-prev">
+                                <i class="bi bi-chevron-left"></i>
+                                Précédent
+                            </a>
+                        {% endif %}
+
+                        <div class="pagination-pages">
+                            {% for p in 1..totalPages %}
+                                {% if p == currentPage %}
+                                    <span class="pagination-link pagination-current">{{ p }}</span>
+                                {% elseif p == 1 or p == totalPages or (p >= currentPage - 2 and p <= currentPage + 2) %}
+                                    <a href="{{ path('admin_contact_index', {status: currentStatus, subject: currentSubject, search: search, page: p}) }}" class="pagination-link">{{ p }}</a>
+                                {% elseif p == currentPage - 3 or p == currentPage + 3 %}
+                                    <span class="pagination-ellipsis">...</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        {% if currentPage < totalPages %}
+                            <a href="{{ path('admin_contact_index', {status: currentStatus, subject: currentSubject, search: search, page: currentPage + 1}) }}" class="pagination-link pagination-next">
+                                Suivant
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        {% endif %}
+                    </nav>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="bi bi-chat-dots"></i>
+                </div>
+                <h3>Aucun message trouvé</h3>
+                {% if search %}
+                    <p>Aucun résultat pour "{{ search }}"</p>
+                    <a href="{{ path('admin_contact_index', {status: currentStatus, subject: currentSubject}) }}" class="btn btn-primary">
+                        Effacer la recherche
+                    </a>
+                {% elseif currentStatus != 'all' or currentSubject != 'all' %}
+                    <p>Aucun message avec ces filtres</p>
+                    <a href="{{ path('admin_contact_index') }}" class="btn btn-primary">
+                        Voir tous les messages
+                    </a>
+                {% else %}
+                    <p>Vous n'avez pas encore reçu de message</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

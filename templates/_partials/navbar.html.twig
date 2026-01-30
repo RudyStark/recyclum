@@ -1,4 +1,4 @@
-<header class="modern-header" data-controller="mega-menu mobile-menu">
+<header class="modern-header" data-controller="mobile-menu">
     <div class="header-container">
         <div class="container header-inner">
             {# LOGO MODERNE #}
@@ -29,10 +29,10 @@
                 </a>
 
                 {# MEGA MENU DROPDOWN #}
-                <div class="nav-item-dropdown" data-mega-menu-target="trigger">
+                <div class="nav-item-dropdown" data-controller="mega-menu" data-action="mouseenter->mega-menu#show mouseleave->mega-menu#hide">
                     <button
                         class="nav-item nav-dropdown {{ app.request.get('_route') starts with 'catalog' ? 'active' : '' }}"
-                        data-action="mouseenter->mega-menu#show mouseleave->mega-menu#hide click->mega-menu#toggle"
+                        data-action="click->mega-menu#toggle"
                         type="button"
                     >
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -49,7 +49,6 @@
                     <div
                         class="mega-panel"
                         data-mega-menu-target="panel"
-                        data-action="mouseenter->mega-menu#show mouseleave->mega-menu#hide"
                     >
                         <div class="mega-grid">
                             {# COLONNE 1 : CUISINE #}
@@ -231,7 +230,7 @@
                 {% endif %}
 
                 {# CONTACT CTA #}
-                <a href="#" class="btn-contact-cta">
+                <a href="{{ path('contact_index') }}" class="btn-contact-cta">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                         <polyline points="22,6 12,13 2,6"></polyline>
@@ -443,7 +442,7 @@
         </div>
 
         <div class="mobile-drawer-footer">
-            <a href="#" class="btn-mobile-cta">
+            <a href="{{ path('contact_index') }}" class="btn-mobile-cta">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                     <polyline points="22,6 12,13 2,6"></polyline>

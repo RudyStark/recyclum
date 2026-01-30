@@ -571,7 +571,7 @@ body:has([data-controller="faq-search"]) {
         text-decoration: none;
 
         &:hover {
-            text-decoration: underline;
+            opacity: 0.8;
         }
     }
 
@@ -607,7 +607,7 @@ body:has([data-controller="faq-search"]) {
             font-weight: 600;
 
             &:hover {
-                text-decoration: underline;
+                opacity: 0.8;
             }
         }
     }

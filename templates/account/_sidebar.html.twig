@@ -25,6 +25,12 @@
                 </a>
             </li>
             <li>
+                <a href="{{ path('account_tickets') }}" class="account-nav-link {{ active == 'tickets' ? 'active' : '' }}">
+                    <i class="bi bi-chat-left-text"></i>
+                    <span>Mes demandes</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ path('account_profile') }}" class="account-nav-link {{ active == 'profile' ? 'active' : '' }}">
                     <i class="bi bi-person"></i>
                     <span>Mon profil</span>

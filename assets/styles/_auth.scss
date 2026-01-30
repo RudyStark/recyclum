@@ -152,9 +152,10 @@
     color: inherit;
     font-weight: 600;
     margin-left: 0.5rem;
+    text-decoration: none;
 
     &:hover {
-        text-decoration: underline;
+        opacity: 0.8;
     }
 }
 
@@ -200,7 +201,7 @@
     text-decoration: none;
 
     &:hover {
-        text-decoration: underline;
+        opacity: 0.8;
     }
 }
 
@@ -356,9 +357,10 @@
     a {
         color: var(--primary);
         font-weight: 600;
+        text-decoration: none;
 
         &:hover {
-            text-decoration: underline;
+            opacity: 0.8;
         }
     }
 }

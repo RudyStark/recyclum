@@ -1,0 +1,337 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ticket {{ message.ticketNumber }} - Mon compte - Recyclum{% endblock %}
+
+{% block body %}
+<main class="account-page account-ticket-detail-page py-5">
+    <div class="container">
+        <div class="row g-4">
+            {# Sidebar Navigation #}
+            <div class="col-lg-3">
+                {% include 'account/_sidebar.html.twig' with {active: 'tickets'} %}
+            </div>
+
+            {# Main Content #}
+            <div class="col-lg-9">
+                {# Back Link #}
+                <a href="{{ path('account_tickets') }}" class="ticket-back-link">
+                    <i class="bi bi-arrow-left"></i>
+                    <span>Retour aux demandes</span>
+                </a>
+
+                {# Ticket Header Card - Compact #}
+                <div class="ticket-header-card compact">
+                    <div class="ticket-header-row">
+                        <div class="ticket-badges">
+                            <span class="ticket-number-badge">
+                                <i class="bi bi-ticket-detailed"></i>
+                                {{ message.ticketNumber }}
+                            </span>
+                            <span class="subject-badge" style="--subject-color: {{ message.subject.color }}">
+                                <i class="bi {{ message.subject.icon }}"></i>
+                                {{ message.subject.label }}
+                            </span>
+                            <span class="ticket-status-badge status-{{ message.status.value }}">
+                                <span class="status-indicator"></span>
+                                {{ message.status.label }}
+                            </span>
+                            {% if message.isPriority %}
+                                <span class="ticket-priority-badge">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                    Urgent
+                                </span>
+                            {% endif %}
+                        </div>
+                        <div class="ticket-header-date">
+                            <i class="bi bi-calendar3"></i>
+                            {{ message.createdAt|date('d/m/Y à H:i') }}
+                        </div>
+                    </div>
+                </div>
+
+                {# Flash Messages #}
+                {% for type, messages in app.flashes %}
+                    {% for flashMessage in messages %}
+                        <div class="alert alert-{{ type == 'error' ? 'danger' : type }} alert-dismissible fade show mb-4" role="alert">
+                            <i class="bi {{ type == 'success' ? 'bi-check-circle' : 'bi-exclamation-triangle' }} me-2"></i>
+                            {{ flashMessage }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                <div class="row g-4">
+                    {# Conversation Column #}
+                    <div class="col-lg-8">
+                        <div class="conversation-card">
+                            <div class="conversation-header">
+                                <div class="conversation-title">
+                                    <i class="bi bi-chat-square-text"></i>
+                                    <span>Conversation</span>
+                                </div>
+                                <span class="messages-count">
+                                    {{ 1 + message.replies|length }} message{{ message.replies|length > 0 ? 's' : '' }}
+                                </span>
+                            </div>
+
+                            <div class="conversation-thread">
+                                {# Original message #}
+                                <div class="message-item message-client">
+                                    <div class="message-avatar">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+                                    <div class="message-bubble">
+                                        <div class="message-header">
+                                            <span class="message-author">{{ message.fullName }} <span class="you-badge">Vous</span></span>
+                                            <span class="message-time">
+                                                <i class="bi bi-clock"></i>
+                                                {{ message.createdAt|date('d/m/Y à H:i') }}
+                                            </span>
+                                        </div>
+                                        <div class="message-body">
+                                            {{ message.message|nl2br }}
+                                        </div>
+                                        {% if message.attachments|length > 0 %}
+                                            <div class="message-attachments">
+                                                <div class="attachments-label">
+                                                    <i class="bi bi-paperclip"></i>
+                                                    {{ message.attachments|length }} pièce{{ message.attachments|length > 1 ? 's' : '' }} jointe{{ message.attachments|length > 1 ? 's' : '' }}
+                                                </div>
+                                                <div class="attachments-grid">
+                                                    {% for attachment in message.attachments %}
+                                                        {% if attachment.isImage %}
+                                                            <a href="{{ attachment.webPath }}" target="_blank" class="attachment-thumb">
+                                                                <img src="{{ attachment.webPath }}" alt="{{ attachment.originalFilename }}">
+                                                                <div class="attachment-overlay">
+                                                                    <i class="bi bi-zoom-in"></i>
+                                                                </div>
+                                                            </a>
+                                                        {% else %}
+                                                            <a href="{{ attachment.webPath }}" target="_blank" class="attachment-file" download>
+                                                                <i class="bi {{ attachment.isPdf ? 'bi-file-pdf' : 'bi-file-earmark' }}"></i>
+                                                                <div class="attachment-info">
+                                                                    <span class="attachment-name">{{ attachment.originalFilename }}</span>
+                                                                    <span class="attachment-size">{{ attachment.humanFileSize }}</span>
+                                                                </div>
+                                                            </a>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                {# Replies #}
+                                {% for reply in message.replies %}
+                                    <div class="message-item {{ reply.isAdminReply ? 'message-admin' : 'message-client' }}">
+                                        <div class="message-avatar {{ reply.isAdminReply ? 'admin' : '' }}">
+                                            <i class="bi {{ reply.isAdminReply ? 'bi-headset' : 'bi-person' }}"></i>
+                                        </div>
+                                        <div class="message-bubble">
+                                            <div class="message-header">
+                                                <span class="message-author">
+                                                    {% if reply.isAdminReply %}
+                                                        {{ reply.repliedBy ?: 'Équipe Recyclum' }}
+                                                        <span class="team-badge">Support</span>
+                                                    {% else %}
+                                                        {{ message.fullName }}
+                                                        <span class="you-badge">Vous</span>
+                                                    {% endif %}
+                                                </span>
+                                                <span class="message-time">
+                                                    <i class="bi bi-clock"></i>
+                                                    {{ reply.createdAt|date('d/m/Y à H:i') }}
+                                                </span>
+                                            </div>
+                                            <div class="message-body">
+                                                {{ reply.content|nl2br }}
+                                            </div>
+                                            {% if reply.attachments|length > 0 %}
+                                                <div class="message-attachments">
+                                                    <div class="attachments-label">
+                                                        <i class="bi bi-paperclip"></i>
+                                                        {{ reply.attachments|length }} pièce{{ reply.attachments|length > 1 ? 's' : '' }} jointe{{ reply.attachments|length > 1 ? 's' : '' }}
+                                                    </div>
+                                                    <div class="attachments-grid">
+                                                        {% for attachment in reply.attachments %}
+                                                            {% if attachment.isImage %}
+                                                                <a href="{{ attachment.webPath }}" target="_blank" class="attachment-thumb">
+                                                                    <img src="{{ attachment.webPath }}" alt="{{ attachment.originalFilename }}">
+                                                                    <div class="attachment-overlay">
+                                                                        <i class="bi bi-zoom-in"></i>
+                                                                    </div>
+                                                                </a>
+                                                            {% else %}
+                                                                <a href="{{ attachment.webPath }}" target="_blank" class="attachment-file" download>
+                                                                    <i class="bi {{ attachment.isPdf ? 'bi-file-pdf' : 'bi-file-earmark' }}"></i>
+                                                                    <div class="attachment-info">
+                                                                        <span class="attachment-name">{{ attachment.originalFilename }}</span>
+                                                                        <span class="attachment-size">{{ attachment.humanFileSize }}</span>
+                                                                    </div>
+                                                                </a>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            {# Reply Form #}
+                            {% if not message.isClosed %}
+                                <div class="reply-section">
+                                    <div class="reply-header">
+                                        <i class="bi bi-reply"></i>
+                                        <span>Répondre</span>
+                                    </div>
+                                    <form action="{{ path('account_ticket_reply', {id: message.id}) }}" method="POST" class="reply-form" enctype="multipart/form-data">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('ticket_reply_' ~ message.id) }}">
+
+                                        <div class="reply-textarea-wrapper">
+                                            <textarea
+                                                name="content"
+                                                class="reply-textarea"
+                                                rows="4"
+                                                placeholder="Écrivez votre message ici..."
+                                                required
+                                                minlength="5"
+                                            ></textarea>
+                                        </div>
+
+                                        <div class="reply-attachments" data-controller="attachment-upload">
+                                            <label class="attachments-trigger">
+                                                <input
+                                                    type="file"
+                                                    name="attachments[]"
+                                                    class="attachment-input"
+                                                    multiple
+                                                    accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx,.txt"
+                                                    data-attachment-upload-target="input"
+                                                    data-action="change->attachment-upload#onChange"
+                                                >
+                                                <i class="bi bi-paperclip"></i>
+                                                <span>Joindre des fichiers</span>
+                                            </label>
+                                            <div class="attachments-preview" data-attachment-upload-target="preview"></div>
+                                        </div>
+
+                                        <div class="reply-actions">
+                                            <span class="reply-hint">
+                                                <i class="bi bi-info-circle"></i>
+                                                Notre équipe vous répondra dans les plus brefs délais
+                                            </span>
+                                            <button type="submit" class="reply-submit-btn">
+                                                <i class="bi bi-send"></i>
+                                                <span>Envoyer</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            {% else %}
+                                <div class="ticket-closed-banner">
+                                    <div class="closed-icon">
+                                        <i class="bi bi-lock-fill"></i>
+                                    </div>
+                                    <div class="closed-content">
+                                        <strong>Ce ticket est fermé</strong>
+                                        <p>Besoin d'aide supplémentaire ? <a href="{{ path('contact_index') }}">Créez une nouvelle demande</a></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {# Info Sidebar #}
+                    <div class="col-lg-4">
+                        <div class="ticket-sidebar">
+                            {# Order Info #}
+                            {% if message.relatedOrder %}
+                                <div class="sidebar-card order-card">
+                                    <div class="sidebar-card-header">
+                                        <i class="bi bi-bag"></i>
+                                        <span>Commande liée</span>
+                                    </div>
+                                    <div class="sidebar-card-body">
+                                        <div class="info-row">
+                                            <span class="label">Numéro</span>
+                                            <a href="{{ path('account_order_show', {orderNumber: message.relatedOrder.orderNumber}) }}" class="value link">
+                                                {{ message.relatedOrder.orderNumber }}
+                                            </a>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="label">Date</span>
+                                            <span class="value">{{ message.relatedOrder.createdAt|date('d/m/Y') }}</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="label">Statut</span>
+                                            <span class="value">{{ message.relatedOrder.status.label }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {# Warranty Info #}
+                            {% if message.relatedOrderItem %}
+                                <div class="sidebar-card warranty-card {{ message.isWarrantyValid ? 'valid' : 'expired' }}">
+                                    <div class="sidebar-card-header">
+                                        <i class="bi bi-shield-check"></i>
+                                        <span>Garantie</span>
+                                    </div>
+                                    <div class="sidebar-card-body">
+                                        <div class="info-row">
+                                            <span class="label">Produit</span>
+                                            <span class="value">{{ message.relatedOrderItem.productName }}</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="label">Statut</span>
+                                            <span class="value">
+                                                {% if message.isWarrantyValid %}
+                                                    <span class="warranty-status valid">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                        Valide
+                                                    </span>
+                                                {% else %}
+                                                    <span class="warranty-status expired">
+                                                        <i class="bi bi-x-circle-fill"></i>
+                                                        Expirée
+                                                    </span>
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                        {% if message.warrantyExpirationDate %}
+                                            <div class="info-row">
+                                                <span class="label">Expire le</span>
+                                                <span class="value">{{ message.warrantyExpirationDate|date('d/m/Y') }}</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {# Help Card #}
+                            <div class="sidebar-card help-card">
+                                <div class="help-icon">
+                                    <i class="bi bi-headset"></i>
+                                </div>
+                                <h4>Besoin d'aide urgente ?</h4>
+                                <p>Notre équipe est à votre écoute</p>
+                                <a href="tel:0143076363" class="help-phone">
+                                    <i class="bi bi-telephone"></i>
+                                    01 43 07 63 63
+                                </a>
+                                <span class="help-hours">
+                                    <i class="bi bi-clock"></i>
+                                    Lun-Sam, 9h-19h
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

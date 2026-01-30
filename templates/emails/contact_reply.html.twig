@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réponse à votre message</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #F9FAFB;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F9FAFB;">
+    <tr>
+        <td align="center" style="padding: 20px 0;">
+            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+                <!-- Header -->
+                <tr>
+                    <td style="background: linear-gradient(135deg, #16C669 0%, #12A855 100%); padding: 40px 30px; text-align: center;">
+                        <span style="font-size: 28px; font-weight: 900; color: #ffffff;">RECYCLUM</span>
+                    </td>
+                </tr>
+
+                <!-- Body -->
+                <tr>
+                    <td style="padding: 40px 30px;">
+                        <!-- Icon -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td align="center" style="padding-bottom: 20px;">
+                                    <span style="font-size: 64px; line-height: 1;">&#128172;</span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Title -->
+                        <h1 style="font-size: 26px; font-weight: 800; color: #1F2937; text-align: center; margin: 0 0 10px 0;">Nouvelle réponse !</h1>
+                        <p style="font-size: 16px; color: #6B7280; text-align: center; margin: 0 0 30px 0;">Notre équipe a répondu à votre message.</p>
+
+                        <!-- Ticket Reference -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F3F4F6; border-radius: 8px; margin-bottom: 25px;">
+                            <tr>
+                                <td style="padding: 15px 20px;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td style="font-size: 13px; color: #6B7280;">Ticket</td>
+                                            <td style="font-size: 14px; color: #1F2937; font-weight: 700; text-align: right; font-family: monospace;">{{ contactMessage.ticketNumber }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 13px; color: #6B7280; padding-top: 8px;">Sujet</td>
+                                            <td style="font-size: 14px; color: #1F2937; font-weight: 600; text-align: right; padding-top: 8px;">{{ contactMessage.subject.label }}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Reply Content -->
+                        <h3 style="font-size: 14px; font-weight: 700; color: #1F2937; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px;">&#128172; Réponse de l'équipe Recyclum</h3>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, rgba(22, 198, 105, 0.08) 0%, rgba(22, 198, 105, 0.03) 100%); border: 2px solid rgba(22, 198, 105, 0.25); border-radius: 12px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 25px;">
+                                    <p style="margin: 0; font-size: 15px; color: #1F2937; line-height: 1.8; white-space: pre-wrap;">{{ reply.content }}</p>
+                                    {% if reply.repliedBy %}
+                                    <p style="margin: 20px 0 0 0; font-size: 13px; color: #6B7280; font-style: italic;">— {{ reply.repliedBy }}, {{ reply.createdAt|date('d/m/Y à H:i') }}</p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Original Message Reference -->
+                        <h3 style="font-size: 14px; font-weight: 700; color: #9CA3AF; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px;">&#128196; Votre message original</h3>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F9FAFB; border-radius: 8px; margin-bottom: 30px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <p style="margin: 0; font-size: 13px; color: #6B7280; line-height: 1.6;">{{ contactMessage.message|length > 300 ? contactMessage.message|slice(0, 300) ~ '...' : contactMessage.message }}</p>
+                                    <p style="margin: 15px 0 0 0; font-size: 12px; color: #9CA3AF;">Envoyé le {{ contactMessage.createdAt|date('d/m/Y à H:i') }}</p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        {% if ticketUrl %}
+                        <!-- Reply Button -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 25px;">
+                            <tr>
+                                <td align="center">
+                                    <a href="{{ ticketUrl }}" style="display: inline-block; background: linear-gradient(135deg, #16C669 0%, #12A855 100%); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 8px; font-weight: 700; font-size: 16px;">
+                                        &#128172; Voir la conversation et répondre
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                        {% endif %}
+
+                        <!-- Reply Instructions -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; margin-bottom: 20px;">
+                            <tr>
+                                <td style="padding: 15px 20px;">
+                                    <p style="margin: 0; font-size: 13px; color: #1E40AF; line-height: 1.5;">
+                                        <strong>&#128276; Besoin d'aide ?</strong><br>
+                                        {% if ticketUrl %}Cliquez sur le bouton ci-dessus pour répondre en ligne, ou contactez-nous{% else %}Vous pouvez nous contacter{% endif %} au <strong>01 43 07 63 63</strong>.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="background: #1F2937; padding: 30px; text-align: center;">
+                        <p style="margin: 0 0 10px 0; font-size: 13px; color: #ffffff;">&#128222; 01 43 07 63 63 | 146 Avenue Daumesnil, 75012 Paris</p>
+                        <p style="margin: 0; font-size: 13px; color: rgba(255,255,255,0.7);">&copy; {{ "now"|date('Y') }} Recyclum - Electroménager reconditionné</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

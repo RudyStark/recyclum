@@ -203,6 +203,25 @@
 
 .nav-item-dropdown {
     position: relative;
+
+    // Zone de pont invisible pour éviter que le hover se perde entre le bouton et le panel
+    &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: -50%;
+        right: -50%;
+        height: 2rem;
+        background: transparent;
+    }
+
+    // CSS-only hover fallback : affiche le panel quand le container est survolé
+    &:hover .mega-panel,
+    &.is-open .mega-panel {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+    }
 }
 
 // ============================================
@@ -228,6 +247,17 @@
     box-shadow:
         0 20px 40px rgba(0, 0, 0, 0.5),
         0 0 0 1px rgba(22, 198, 105, 0.1);
+
+    // Zone de pont invisible en haut pour couvrir le gap
+    &::after {
+        content: '';
+        position: absolute;
+        top: -1.5rem;
+        left: 0;
+        right: 0;
+        height: 1.5rem;
+        background: transparent;
+    }
 
     &.is-visible {
         opacity: 1;
