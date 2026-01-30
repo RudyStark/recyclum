@@ -1,0 +1,191 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes demandes - Mon compte - Recyclum{% endblock %}
+
+{% block body %}
+<main class="account-page account-tickets-page py-5">
+    <div class="container">
+        <div class="row g-4">
+            {# Sidebar Navigation #}
+            <div class="col-lg-3">
+                {% include 'account/_sidebar.html.twig' with {active: 'tickets'} %}
+            </div>
+
+            {# Main Content #}
+            <div class="col-lg-9">
+                {# Hero Header #}
+                <div class="tickets-hero">
+                    <div class="tickets-hero-content">
+                        <div class="tickets-hero-icon">
+                            <i class="bi bi-chat-left-text"></i>
+                        </div>
+                        <div class="tickets-hero-text">
+                            <h1>Mes demandes</h1>
+                            <p>Suivez vos conversations avec notre équipe support</p>
+                        </div>
+                    </div>
+                    <a href="{{ path('contact_index') }}" class="tickets-new-btn">
+                        <i class="bi bi-plus-lg"></i>
+                        <span>Nouvelle demande</span>
+                    </a>
+                </div>
+
+                {# Stats Cards #}
+                {% set openTickets = tickets|filter(t => t.status.value != 'closed')|length %}
+                {% set answeredTickets = tickets|filter(t => t.status.value == 'answered')|length %}
+                {% set closedTickets = tickets|filter(t => t.status.value == 'closed')|length %}
+
+                <div class="tickets-stats">
+                    <div class="stat-card stat-total">
+                        <div class="stat-icon">
+                            <i class="bi bi-inbox"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value">{{ tickets|length }}</span>
+                            <span class="stat-label">Total</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-open">
+                        <div class="stat-icon">
+                            <i class="bi bi-envelope-open"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value">{{ openTickets }}</span>
+                            <span class="stat-label">En cours</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-answered">
+                        <div class="stat-icon">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value">{{ answeredTickets }}</span>
+                            <span class="stat-label">Répondu</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-closed">
+                        <div class="stat-icon">
+                            <i class="bi bi-archive"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value">{{ closedTickets }}</span>
+                            <span class="stat-label">Fermé</span>
+                        </div>
+                    </div>
+                </div>
+
+                {# Tickets List #}
+                {% if tickets|length > 0 %}
+                    <div class="tickets-list-wrapper">
+                        <div class="tickets-list-header">
+                            <h2>
+                                <i class="bi bi-list-ul"></i>
+                                Historique des demandes
+                            </h2>
+                            <span class="tickets-count">{{ tickets|length }} demande{{ tickets|length > 1 ? 's' : '' }}</span>
+                        </div>
+
+                        <div class="account-tickets-list">
+                            {% for ticket in tickets %}
+                                <div class="ticket-card {{ ticket.isNew or (ticket.status.value == 'answered') ? 'ticket-unread' : '' }} {{ ticket.status.value == 'closed' ? 'ticket-closed' : '' }}">
+                                    <a href="{{ path('account_ticket_show', {id: ticket.id}) }}" class="ticket-card-link">
+                                        {# Left Accent #}
+                                        <div class="ticket-accent" style="--accent-color: {{ ticket.subject.color }}"></div>
+
+                                        {# Main Content #}
+                                        <div class="ticket-card-main">
+                                            <div class="ticket-card-header">
+                                                <div class="ticket-header-left">
+                                                    <span class="ticket-number">
+                                                        <i class="bi bi-ticket-detailed"></i>
+                                                        {{ ticket.ticketNumber }}
+                                                    </span>
+                                                    <span class="ticket-subject-chip" style="--subject-color: {{ ticket.subject.color }}">
+                                                        <i class="bi {{ ticket.subject.icon }}"></i>
+                                                        {{ ticket.subject.label }}
+                                                    </span>
+                                                </div>
+                                                <span class="ticket-status status-{{ ticket.status.value }}">
+                                                    <span class="status-dot"></span>
+                                                    {{ ticket.status.label }}
+                                                </span>
+                                            </div>
+
+                                            <p class="ticket-preview">
+                                                {{ ticket.message|length > 150 ? ticket.message|slice(0, 150) ~ '...' : ticket.message }}
+                                            </p>
+
+                                            <div class="ticket-footer">
+                                                <div class="ticket-meta">
+                                                    <span class="ticket-date">
+                                                        <i class="bi bi-calendar3"></i>
+                                                        {{ ticket.createdAt|date('d/m/Y') }}
+                                                    </span>
+                                                    <span class="ticket-time">
+                                                        <i class="bi bi-clock"></i>
+                                                        {{ ticket.createdAt|date('H:i') }}
+                                                    </span>
+                                                    {% if ticket.replies|length > 0 %}
+                                                        <span class="ticket-replies">
+                                                            <i class="bi bi-chat-dots-fill"></i>
+                                                            {{ ticket.replies|length }} réponse{{ ticket.replies|length > 1 ? 's' : '' }}
+                                                        </span>
+                                                    {% endif %}
+                                                </div>
+                                                {% if ticket.relatedOrder %}
+                                                    <span class="ticket-order-badge">
+                                                        <i class="bi bi-bag"></i>
+                                                        {{ ticket.relatedOrder.orderNumber }}
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        {# Arrow #}
+                                        <div class="ticket-card-arrow">
+                                            <i class="bi bi-arrow-right"></i>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="tickets-empty-state">
+                        <div class="empty-illustration">
+                            <div class="empty-icon-wrapper">
+                                <i class="bi bi-chat-left-text"></i>
+                            </div>
+                            <div class="empty-circles">
+                                <span class="circle circle-1"></span>
+                                <span class="circle circle-2"></span>
+                                <span class="circle circle-3"></span>
+                            </div>
+                        </div>
+                        <h3>Aucune demande pour le moment</h3>
+                        <p>Vous n'avez pas encore contacté notre équipe.<br>Une question ? Nous sommes là pour vous aider !</p>
+                        <a href="{{ path('contact_index') }}" class="empty-cta-btn">
+                            <i class="bi bi-envelope-plus me-2"></i>
+                            Nous contacter
+                        </a>
+                        <div class="empty-features">
+                            <div class="feature">
+                                <i class="bi bi-lightning-charge"></i>
+                                <span>Réponse rapide</span>
+                            </div>
+                            <div class="feature">
+                                <i class="bi bi-shield-check"></i>
+                                <span>Support dédié</span>
+                            </div>
+                            <div class="feature">
+                                <i class="bi bi-clock-history"></i>
+                                <span>Suivi en temps réel</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

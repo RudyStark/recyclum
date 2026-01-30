@@ -3,12 +3,14 @@
 namespace App\Service;
 
 use App\Repository\BuybackRequestRepository;
+use App\Repository\ContactMessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class NotificationService
 {
     public function __construct(
         private BuybackRequestRepository $buybackRequestRepository,
+        private ContactMessageRepository $contactMessageRepository,
         private EntityManagerInterface $entityManager
     ) {}
 
@@ -113,6 +115,75 @@ class NotificationService
             ];
         }
 
+        // 4. Nouveaux messages de contact
+        $newContactCount = $this->contactMessageRepository->countNew();
+        if ($newContactCount > 0) {
+            $recentNewContacts = $this->contactMessageRepository->findRecentNew(5);
+
+            $notifications[] = [
+                'type' => 'contact_new',
+                'title' => 'Nouveaux messages',
+                'message' => sprintf('%d nouveau%s message%s client',
+                    $newContactCount,
+                    $newContactCount > 1 ? 'x' : '',
+                    $newContactCount > 1 ? 's' : ''
+                ),
+                'count' => $newContactCount,
+                'icon' => 'fa-envelope',
+                'color' => '#ef4444',
+                'url' => '/admin/contacts?status=new',
+                'items' => array_map(function($message) {
+                    return [
+                        'id' => $message->getId(),
+                        'ticketNumber' => $message->getTicketNumber(),
+                        'customer' => $message->getFullName(),
+                        'email' => $message->getEmail(),
+                        'subject' => $message->getSubject()->getLabel(),
+                        'subjectIcon' => $message->getSubject()->getIcon(),
+                        'subjectColor' => $message->getSubject()->getColor(),
+                        'preview' => mb_substr($message->getMessage(), 0, 80) . (mb_strlen($message->getMessage()) > 80 ? '...' : ''),
+                        'date' => $message->getCreatedAt()->format('d/m/Y H:i'),
+                        'isPriority' => $message->isPriority(),
+                        'url' => '/admin/contacts/' . $message->getId()
+                    ];
+                }, $recentNewContacts)
+            ];
+        }
+
+        // 5. Messages en attente de réponse (client a répondu)
+        $awaitingCount = $this->contactMessageRepository->countAwaitingResponse();
+        if ($awaitingCount > 0) {
+            $awaitingContacts = $this->contactMessageRepository->findAwaitingResponse(5);
+
+            $notifications[] = [
+                'type' => 'contact_awaiting',
+                'title' => 'Réponses clients',
+                'message' => sprintf('%d message%s en attente de réponse',
+                    $awaitingCount,
+                    $awaitingCount > 1 ? 's' : ''
+                ),
+                'count' => $awaitingCount,
+                'icon' => 'fa-reply',
+                'color' => '#8b5cf6',
+                'url' => '/admin/contacts?status=in_progress',
+                'items' => array_map(function($message) {
+                    $lastReply = $message->getLastReply();
+                    return [
+                        'id' => $message->getId(),
+                        'ticketNumber' => $message->getTicketNumber(),
+                        'customer' => $message->getFullName(),
+                        'subject' => $message->getSubject()->getLabel(),
+                        'subjectIcon' => $message->getSubject()->getIcon(),
+                        'subjectColor' => $message->getSubject()->getColor(),
+                        'lastReplyDate' => $lastReply ? $lastReply->getCreatedAt()->format('d/m/Y H:i') : $message->getCreatedAt()->format('d/m/Y H:i'),
+                        'repliesCount' => $message->getRepliesCount(),
+                        'isPriority' => $message->isPriority(),
+                        'url' => '/admin/contacts/' . $message->getId()
+                    ];
+                }, $awaitingContacts)
+            ];
+        }
+
         return $notifications;
     }
 
@@ -131,6 +202,12 @@ class NotificationService
 
         // Appareils collectés
         $count += $this->buybackRequestRepository->count(['status' => 'collected']);
+
+        // Nouveaux messages de contact
+        $count += $this->contactMessageRepository->countNew();
+
+        // Messages en attente de réponse
+        $count += $this->contactMessageRepository->countAwaitingResponse();
 
         return $count;
     }

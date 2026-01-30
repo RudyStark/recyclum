@@ -81,7 +81,7 @@
                                     </div>
                                 {% else %}
                                     {% for notification in notifications %}
-                                        <div class="notification-dropdown-item">
+                                        <div class="notification-dropdown-item notification-type-{{ notification.type }}">
                                             <div class="notification-item-header">
                                                 <div class="notification-item-icon" style="background: {{ notification.color }};">
                                                     <i class="fas {{ notification.icon }}"></i>
@@ -95,19 +95,60 @@
                                                             {% for item in notification.items|slice(0, 3) %}
                                                                 <li>
                                                                     <a href="{{ item.url }}" class="notification-item-link">
-                                                                        <strong>{{ item.customer }}</strong> - {{ item.appliance }}
-                                                                        {% if item.price is defined %}
-                                                                            ({{ item.price }}€)
-                                                                        {% elseif item.date is defined %}
-                                                                            - {{ item.date }}
+                                                                        {# Contact Messages - New #}
+                                                                        {% if notification.type == 'contact_new' %}
+                                                                            <div class="notification-contact-item">
+                                                                                <div class="contact-item-header">
+                                                                                    <span class="contact-ticket">{{ item.ticketNumber }}</span>
+                                                                                    {% if item.isPriority %}
+                                                                                        <span class="contact-priority"><i class="fas fa-exclamation-triangle"></i></span>
+                                                                                    {% endif %}
+                                                                                </div>
+                                                                                <div class="contact-item-customer">{{ item.customer }}</div>
+                                                                                <div class="contact-item-subject">
+                                                                                    <i class="bi {{ item.subjectIcon }}" style="color: {{ item.subjectColor }}"></i>
+                                                                                    {{ item.subject }}
+                                                                                </div>
+                                                                                <div class="contact-item-preview">{{ item.preview }}</div>
+                                                                                <div class="contact-item-date"><i class="far fa-clock"></i> {{ item.date }}</div>
+                                                                            </div>
+                                                                        {# Contact Messages - Awaiting Response #}
+                                                                        {% elseif notification.type == 'contact_awaiting' %}
+                                                                            <div class="notification-contact-item">
+                                                                                <div class="contact-item-header">
+                                                                                    <span class="contact-ticket">{{ item.ticketNumber }}</span>
+                                                                                    <span class="contact-replies-badge">
+                                                                                        <i class="fas fa-comments"></i> {{ item.repliesCount }}
+                                                                                    </span>
+                                                                                    {% if item.isPriority %}
+                                                                                        <span class="contact-priority"><i class="fas fa-exclamation-triangle"></i></span>
+                                                                                    {% endif %}
+                                                                                </div>
+                                                                                <div class="contact-item-customer">{{ item.customer }}</div>
+                                                                                <div class="contact-item-subject">
+                                                                                    <i class="bi {{ item.subjectIcon }}" style="color: {{ item.subjectColor }}"></i>
+                                                                                    {{ item.subject }}
+                                                                                </div>
+                                                                                <div class="contact-item-date">
+                                                                                    <i class="fas fa-reply"></i> Dernière réponse: {{ item.lastReplyDate }}
+                                                                                </div>
+                                                                            </div>
+                                                                        {# Default - Buyback notifications #}
+                                                                        {% else %}
+                                                                            <strong>{{ item.customer }}</strong> - {{ item.appliance }}
+                                                                            {% if item.price is defined %}
+                                                                                ({{ item.price }}€)
+                                                                            {% elseif item.date is defined %}
+                                                                                - {{ item.date }}
+                                                                            {% endif %}
                                                                         {% endif %}
                                                                     </a>
                                                                 </li>
                                                             {% endfor %}
                                                             {% if notification.items|length > 3 %}
-                                                                <li style="text-align: center; padding-top: 0.5rem;">
-                                                                    <a href="{{ notification.url }}" class="notification-item-link">
-                                                                        Voir tout ({{ notification.items|length }})
+                                                                <li class="notification-see-all">
+                                                                    <a href="{{ notification.url }}" class="notification-item-link notification-see-all-link">
+                                                                        <i class="fas fa-arrow-right"></i> Voir tout ({{ notification.count }})
                                                                     </a>
                                                                 </li>
                                                             {% endif %}
@@ -143,6 +184,25 @@
                             <div class="notification-banner-actions">
                                 <a href="{{ notification.url }}" class="notification-banner-btn">
                                     <i class="fas fa-eye"></i> Voir les demandes
+                                </a>
+                            </div>
+                            <button class="notification-banner-close" onclick="this.closest('.notification-banner').remove()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    {% endif %}
+                    {% if notification.type == 'contact_new' and notification.count >= 3 %}
+                        <div class="notification-banner notification-banner-contact" id="notification-banner-{{ notification.type }}">
+                            <div class="notification-banner-icon">
+                                <i class="fas {{ notification.icon }}"></i>
+                            </div>
+                            <div class="notification-banner-content">
+                                <h4 class="notification-banner-title">{{ notification.title }}</h4>
+                                <p class="notification-banner-message">{{ notification.message }} - Réponse attendue sous 24h</p>
+                            </div>
+                            <div class="notification-banner-actions">
+                                <a href="{{ notification.url }}" class="notification-banner-btn">
+                                    <i class="fas fa-envelope-open"></i> Voir les messages
                                 </a>
                             </div>
                             <button class="notification-banner-close" onclick="this.closest('.notification-banner').remove()">

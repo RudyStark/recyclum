@@ -491,4 +491,83 @@ class EmailService
             $htmlContent
         );
     }
+
+    // ========================================================================
+    // EMAILS FORMULAIRE DE CONTACT
+    // ========================================================================
+
+    /**
+     * Email de confirmation au client après soumission du formulaire de contact
+     */
+    public function sendContactConfirmationToClient(\App\Entity\ContactMessage $contactMessage, string $ticketUrl = null): void
+    {
+        $htmlContent = $this->twig->render('emails/contact_confirmation.html.twig', [
+            'contactMessage' => $contactMessage,
+            'ticketUrl' => $ticketUrl,
+        ]);
+
+        $this->sendEmail(
+            $contactMessage->getEmail(),
+            $contactMessage->getFullName(),
+            '✅ Message reçu - Ticket ' . $contactMessage->getTicketNumber() . ' - Recyclum',
+            $htmlContent
+        );
+    }
+
+    /**
+     * Email de notification à l'admin quand nouveau message de contact
+     */
+    public function sendNewContactNotificationToAdmin(\App\Entity\ContactMessage $contactMessage, string $viewUrl): void
+    {
+        $htmlContent = $this->twig->render('emails/contact_admin_notification.html.twig', [
+            'contactMessage' => $contactMessage,
+            'viewUrl' => $viewUrl,
+        ]);
+
+        $subjectPrefix = $contactMessage->isPriority() ? '🚨 ' : '📩 ';
+        $this->sendEmail(
+            $this->adminEmail,
+            'Admin Recyclum',
+            $subjectPrefix . 'Nouveau message - ' . $contactMessage->getSubject()->getLabel() . ' - ' . $contactMessage->getTicketNumber(),
+            $htmlContent
+        );
+    }
+
+    /**
+     * Email de réponse au client (envoyé par l'admin)
+     */
+    public function sendContactReplyToClient(\App\Entity\ContactMessage $contactMessage, \App\Entity\ContactReply $reply, string $ticketUrl = null): void
+    {
+        $htmlContent = $this->twig->render('emails/contact_reply.html.twig', [
+            'contactMessage' => $contactMessage,
+            'reply' => $reply,
+            'ticketUrl' => $ticketUrl,
+        ]);
+
+        $this->sendEmail(
+            $contactMessage->getEmail(),
+            $contactMessage->getFullName(),
+            '💬 Réponse à votre message - Ticket ' . $contactMessage->getTicketNumber() . ' - Recyclum',
+            $htmlContent
+        );
+    }
+
+    /**
+     * Notification à l'admin quand un client répond à un ticket
+     */
+    public function sendClientReplyNotificationToAdmin(\App\Entity\ContactMessage $contactMessage, \App\Entity\ContactReply $reply, string $viewUrl): void
+    {
+        $htmlContent = $this->twig->render('emails/contact_client_reply_notification.html.twig', [
+            'contactMessage' => $contactMessage,
+            'reply' => $reply,
+            'viewUrl' => $viewUrl,
+        ]);
+
+        $this->sendEmail(
+            $this->adminEmail,
+            'Recyclum Admin',
+            '💬 Nouvelle réponse client - Ticket ' . $contactMessage->getTicketNumber() . ' - Recyclum',
+            $htmlContent
+        );
+    }
 }

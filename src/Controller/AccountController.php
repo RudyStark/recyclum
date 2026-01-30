@@ -2,9 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\ContactReply;
+use App\Enum\ContactStatus;
 use App\Form\ProfileFormType;
 use App\Form\ChangePasswordFormType;
+use App\Repository\ContactMessageRepository;
 use App\Repository\OrderRepository;
+use App\Service\AttachmentService;
+use App\Service\EmailService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +26,9 @@ class AccountController extends AbstractController
     public function __construct(
         private EntityManagerInterface $em,
         private OrderRepository $orderRepository,
+        private ContactMessageRepository $contactMessageRepository,
+        private EmailService $emailService,
+        private AttachmentService $attachmentService,
     ) {
     }
 
@@ -102,5 +111,111 @@ class AccountController extends AbstractController
             'user' => $user,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/demandes', name: 'account_tickets', methods: ['GET'])]
+    public function tickets(): Response
+    {
+        $user = $this->getUser();
+
+        $tickets = $this->contactMessageRepository->findBy(
+            ['user' => $user],
+            ['createdAt' => 'DESC']
+        );
+
+        return $this->render('account/tickets/index.html.twig', [
+            'user' => $user,
+            'tickets' => $tickets,
+        ]);
+    }
+
+    #[Route('/demandes/{id}', name: 'account_ticket_show', methods: ['GET'])]
+    public function ticketShow(int $id): Response
+    {
+        $user = $this->getUser();
+
+        $ticket = $this->contactMessageRepository->find($id);
+
+        if (!$ticket || $ticket->getUser() !== $user) {
+            throw $this->createNotFoundException('Demande introuvable.');
+        }
+
+        return $this->render('account/tickets/show.html.twig', [
+            'user' => $user,
+            'message' => $ticket,
+        ]);
+    }
+
+    #[Route('/demandes/{id}/repondre', name: 'account_ticket_reply', methods: ['POST'])]
+    public function ticketReply(int $id, Request $request): Response
+    {
+        $user = $this->getUser();
+
+        $ticket = $this->contactMessageRepository->find($id);
+
+        if (!$ticket || $ticket->getUser() !== $user) {
+            throw $this->createNotFoundException('Demande introuvable.');
+        }
+
+        // Vérifier le token CSRF
+        $csrfToken = $request->request->get('_token');
+        if (!$this->isCsrfTokenValid('ticket_reply_' . $id, $csrfToken)) {
+            $this->addFlash('error', 'Token de sécurité invalide. Veuillez réessayer.');
+            return $this->redirectToRoute('account_ticket_show', ['id' => $id]);
+        }
+
+        // Vérifier que le ticket n'est pas fermé
+        if ($ticket->isClosed()) {
+            $this->addFlash('error', 'Ce ticket est fermé. Vous ne pouvez plus y répondre.');
+            return $this->redirectToRoute('account_ticket_show', ['id' => $id]);
+        }
+
+        $content = trim($request->request->get('content', ''));
+
+        if (empty($content)) {
+            $this->addFlash('error', 'Le message ne peut pas être vide.');
+            return $this->redirectToRoute('account_ticket_show', ['id' => $id]);
+        }
+
+        if (strlen($content) < 5) {
+            $this->addFlash('error', 'Le message doit contenir au moins 5 caractères.');
+            return $this->redirectToRoute('account_ticket_show', ['id' => $id]);
+        }
+
+        // Créer la réponse client
+        $reply = new ContactReply();
+        $reply->setContactMessage($ticket);
+        $reply->setContent($content);
+        $reply->setIsAdminReply(false);
+
+        $ticket->addReply($reply);
+
+        // Gérer les pièces jointes
+        $uploadedFiles = $request->files->get('attachments', []);
+        if (!empty($uploadedFiles)) {
+            $this->attachmentService->handleUploadsForReply($uploadedFiles, $reply);
+        }
+
+        // Remettre le ticket en attente si nécessaire
+        if ($ticket->getStatus() === ContactStatus::ANSWERED || $ticket->getStatus() === ContactStatus::READ) {
+            $ticket->setStatus(ContactStatus::IN_PROGRESS);
+        }
+
+        $this->em->persist($reply);
+        $this->em->flush();
+
+        // Notifier l'admin de la nouvelle réponse client
+        try {
+            $adminViewUrl = $this->generateUrl('admin_contact_show', [
+                'id' => $ticket->getId()
+            ], UrlGeneratorInterface::ABSOLUTE_URL);
+            $this->emailService->sendClientReplyNotificationToAdmin($ticket, $reply, $adminViewUrl);
+        } catch (\Exception $e) {
+            // Log l'erreur mais ne pas bloquer
+        }
+
+        $this->addFlash('success', 'Votre réponse a été envoyée. Notre équipe vous répondra dans les plus brefs délais.');
+
+        return $this->redirectToRoute('account_ticket_show', ['id' => $id]);
     }
 }

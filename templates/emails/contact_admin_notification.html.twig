@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau message de contact</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #F9FAFB;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F9FAFB;">
+    <tr>
+        <td align="center" style="padding: 20px 0;">
+            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+                <!-- Header -->
+                <tr>
+                    <td style="background: linear-gradient(135deg, #1F2937 0%, #374151 100%); padding: 30px; text-align: center;">
+                        <span style="font-size: 24px; font-weight: 900; color: #ffffff;">RECYCLUM ADMIN</span>
+                    </td>
+                </tr>
+
+                <!-- Priority Banner (if applicable) -->
+                {% if contactMessage.isPriority %}
+                <tr>
+                    <td style="background: #FEF2F2; border-bottom: 3px solid #EF4444; padding: 15px 30px; text-align: center;">
+                        <span style="font-size: 14px; font-weight: 700; color: #DC2626;">&#128680; MESSAGE PRIORITAIRE - {{ contactMessage.subject.label|upper }}</span>
+                    </td>
+                </tr>
+                {% endif %}
+
+                <!-- Body -->
+                <tr>
+                    <td style="padding: 30px;">
+                        <!-- Title -->
+                        <h1 style="font-size: 22px; font-weight: 700; color: #1F2937; margin: 0 0 5px 0;">&#128233; Nouveau message de contact</h1>
+                        <p style="font-size: 14px; color: #6B7280; margin: 0 0 25px 0;">Reçu le {{ contactMessage.createdAt|date('d/m/Y à H:i') }}</p>
+
+                        <!-- Ticket Info -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F3F4F6; border-radius: 8px; margin-bottom: 25px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td style="padding: 6px 0; font-size: 14px; color: #6B7280;">Ticket</td>
+                                            <td style="padding: 6px 0; font-size: 14px; color: #1F2937; font-weight: 700; text-align: right; font-family: monospace;">{{ contactMessage.ticketNumber }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 6px 0; font-size: 14px; color: #6B7280;">Sujet</td>
+                                            <td style="padding: 6px 0; font-size: 14px; text-align: right;">
+                                                <span style="display: inline-block; padding: 4px 10px; background: {{ contactMessage.subject.color }}20; color: {{ contactMessage.subject.color }}; border-radius: 4px; font-weight: 600; font-size: 13px;">{{ contactMessage.subject.label }}</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Client Info -->
+                        <h3 style="font-size: 14px; font-weight: 700; color: #1F2937; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px;">&#128100; Informations client</h3>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; margin-bottom: 25px;">
+                            <tr>
+                                <td style="padding: 15px;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #6B7280;">Nom</td>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #1F2937; font-weight: 600; text-align: right;">{{ contactMessage.fullName }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #6B7280;">Email</td>
+                                            <td style="padding: 5px 0; font-size: 14px; text-align: right;"><a href="mailto:{{ contactMessage.email }}" style="color: #16C669; text-decoration: none; font-weight: 600;">{{ contactMessage.email }}</a></td>
+                                        </tr>
+                                        {% if contactMessage.phone %}
+                                        <tr>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #6B7280;">Téléphone</td>
+                                            <td style="padding: 5px 0; font-size: 14px; text-align: right;"><a href="tel:{{ contactMessage.phone }}" style="color: #16C669; text-decoration: none; font-weight: 600;">{{ contactMessage.phone }}</a></td>
+                                        </tr>
+                                        {% endif %}
+                                        <tr>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #6B7280;">Compte</td>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #1F2937; text-align: right;">
+                                                {% if contactMessage.isMember %}
+                                                    <span style="color: #16C669; font-weight: 600;">&#10003; Membre</span>
+                                                {% else %}
+                                                    <span style="color: #6B7280;">Visiteur</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Order Info (if applicable) -->
+                        {% if contactMessage.relatedOrder %}
+                        <h3 style="font-size: 14px; font-weight: 700; color: #1F2937; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px;">&#128230; Commande liée</h3>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; margin-bottom: 25px;">
+                            <tr>
+                                <td style="padding: 15px;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #1E40AF;">Commande</td>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #1E3A8A; font-weight: 700; text-align: right;">{{ contactMessage.relatedOrder.orderNumber }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #1E40AF;">Statut</td>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #1E3A8A; text-align: right;">{{ contactMessage.relatedOrder.status.label }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #1E40AF;">Montant</td>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #1E3A8A; font-weight: 700; text-align: right;">{{ contactMessage.relatedOrder.totalFormatted }}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        {% endif %}
+
+                        <!-- Product/Warranty Info (if applicable) -->
+                        {% if contactMessage.relatedOrderItem %}
+                        <h3 style="font-size: 14px; font-weight: 700; color: #1F2937; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px;">&#128737;&#65039; Produit concerné</h3>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: {% if contactMessage.isWarrantyValid %}#ECFDF5{% else %}#FEF2F2{% endif %}; border: 1px solid {% if contactMessage.isWarrantyValid %}#A7F3D0{% else %}#FECACA{% endif %}; border-radius: 8px; margin-bottom: 25px;">
+                            <tr>
+                                <td style="padding: 15px;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #6B7280;">Produit</td>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #1F2937; font-weight: 600; text-align: right;">{{ contactMessage.relatedOrderItem.productName }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 5px 0; font-size: 14px; color: #6B7280;">Garantie</td>
+                                            <td style="padding: 5px 0; font-size: 14px; text-align: right;">
+                                                {% if contactMessage.isWarrantyValid %}
+                                                    <span style="color: #059669; font-weight: 700;">&#10003; {{ contactMessage.warrantyStatusLabel }}</span>
+                                                {% else %}
+                                                    <span style="color: #DC2626; font-weight: 700;">&#10005; {{ contactMessage.warrantyStatusLabel }}</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        {% endif %}
+
+                        <!-- Message Content -->
+                        <h3 style="font-size: 14px; font-weight: 700; color: #1F2937; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px;">&#128172; Message</h3>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #FFFFFF; border: 2px solid #E5E7EB; border-radius: 8px; margin-bottom: 25px;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <p style="margin: 0; font-size: 14px; color: #374151; line-height: 1.7; white-space: pre-wrap;">{{ contactMessage.message }}</p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- CTA Button -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td align="center" style="padding: 10px 0;">
+                                    <a href="{{ viewUrl }}" style="display: inline-block; padding: 14px 30px; background: linear-gradient(135deg, #16C669 0%, #12A855 100%); color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 15px;">&#128172; Voir et répondre au ticket</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="background: #1F2937; padding: 20px 30px; text-align: center;">
+                        <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.7);">Notification automatique - Recyclum Admin</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

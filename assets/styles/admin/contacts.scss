@@ -1,0 +1,855 @@
+// ===========================================
+// ADMIN CONTACTS STYLES
+// ===========================================
+
+$primary: #16C669;
+$primary-dark: #12a857;
+$primary-light: #e8f9ef;
+$dark: #1a1a2e;
+$gray-50: #f9fafb;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #6c757d;
+$gray-600: #495057;
+$gray-800: #343a40;
+$danger: #ef4444;
+$warning: #f59e0b;
+$info: #3b82f6;
+$success: #10b981;
+
+// ===========================================
+// CONTACTS INDEX PAGE
+// ===========================================
+
+.admin-contacts-page {
+    .contacts-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 1.5rem;
+    }
+
+    .contacts-hero {
+        background: linear-gradient(135deg, $dark 0%, lighten($dark, 5%) 100%);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        color: white;
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .hero-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(white, 0.1);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            i {
+                font-size: 2rem;
+                color: $primary;
+            }
+        }
+
+        .hero-text {
+            h1 {
+                font-size: 1.75rem;
+                font-weight: 700;
+                margin: 0 0 0.25rem;
+            }
+
+            p {
+                color: rgba(white, 0.7);
+                margin: 0;
+            }
+        }
+    }
+
+    // Subject Filters
+    .subject-filters {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 0;
+        flex-wrap: wrap;
+
+        .filter-label-text {
+            font-weight: 500;
+            color: $gray-600;
+            margin-right: 0.5rem;
+        }
+
+        .subject-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            background: white;
+            border: 1px solid $gray-200;
+            border-radius: 50px;
+            font-size: 0.8125rem;
+            color: $gray-600;
+            text-decoration: none;
+            transition: all 0.2s;
+
+            i {
+                font-size: 0.875rem;
+            }
+
+            &:hover {
+                border-color: var(--subject-color, $primary);
+                color: var(--subject-color, $primary);
+            }
+
+            &.active {
+                background: var(--subject-color, $primary);
+                border-color: var(--subject-color, $primary);
+                color: white;
+            }
+        }
+    }
+
+    // Contacts Table
+    .contacts-table {
+        .message-row {
+            transition: background 0.2s;
+
+            &.unread {
+                background: rgba($primary, 0.03);
+                font-weight: 500;
+
+                .ticket-link {
+                    color: $primary;
+                }
+            }
+
+            &.priority {
+                border-left: 3px solid $danger;
+            }
+
+            &:hover {
+                background: $gray-100;
+            }
+        }
+
+        .ticket-cell {
+            .ticket-link {
+                color: $dark;
+                text-decoration: none;
+                font-family: monospace;
+
+                &:hover {
+                    color: $primary;
+                }
+            }
+
+            .priority-badge {
+                display: inline-flex;
+                align-items: center;
+                margin-left: 0.5rem;
+                color: $danger;
+                font-size: 0.875rem;
+            }
+        }
+
+        .subject-cell {
+            .subject-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.375rem;
+                padding: 0.25rem 0.625rem;
+                background: color-mix(in srgb, var(--subject-color) 15%, transparent);
+                color: var(--subject-color);
+                border-radius: 0.375rem;
+                font-size: 0.8125rem;
+                font-weight: 500;
+
+                i {
+                    font-size: 0.75rem;
+                }
+            }
+        }
+
+        .client-cell {
+            .client-info {
+                display: flex;
+                flex-direction: column;
+                gap: 0.125rem;
+            }
+
+            .client-name {
+                font-weight: 500;
+                color: $dark;
+            }
+
+            .client-email {
+                font-size: 0.8125rem;
+                color: $gray-500;
+            }
+
+            .member-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.25rem;
+                font-size: 0.75rem;
+                color: $primary;
+                margin-top: 0.125rem;
+            }
+        }
+
+        .order-cell {
+            .order-link {
+                color: $info;
+                text-decoration: none;
+                font-family: monospace;
+                font-size: 0.8125rem;
+
+                &:hover {
+                    color: darken($info, 10%);
+                }
+            }
+        }
+    }
+
+    // Contact Status Badges
+    .contact-status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.625rem;
+        border-radius: 0.375rem;
+        font-size: 0.8125rem;
+        font-weight: 500;
+
+        &.status-new {
+            background: rgba($danger, 0.1);
+            color: $danger;
+        }
+
+        &.status-read {
+            background: rgba($warning, 0.1);
+            color: darken($warning, 10%);
+        }
+
+        &.status-in_progress {
+            background: rgba($info, 0.1);
+            color: $info;
+        }
+
+        &.status-answered {
+            background: rgba($success, 0.1);
+            color: $success;
+        }
+
+        &.status-closed {
+            background: rgba($gray-500, 0.1);
+            color: $gray-500;
+        }
+    }
+
+    // Status Filters
+    .status-filters {
+        .status-filter {
+            &.status-new.active {
+                background: $danger;
+                border-color: $danger;
+            }
+
+            &.status-read.active {
+                background: $warning;
+                border-color: $warning;
+            }
+
+            &.status-in_progress.active {
+                background: $info;
+                border-color: $info;
+            }
+
+            &.status-answered.active {
+                background: $success;
+                border-color: $success;
+            }
+
+            &.status-closed.active {
+                background: $gray-500;
+                border-color: $gray-500;
+            }
+        }
+    }
+}
+
+// ===========================================
+// CONTACT SHOW PAGE
+// ===========================================
+
+.admin-contact-show-page {
+    .contact-show-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 1.5rem;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: $gray-600;
+        text-decoration: none;
+        font-size: 0.875rem;
+        margin-bottom: 1.5rem;
+        transition: color 0.2s;
+
+        &:hover {
+            color: $primary;
+        }
+    }
+
+    .contact-show-layout {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 1.5rem;
+
+        @media (max-width: 1024px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    // Message Header Card
+    .message-header-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        margin-bottom: 1.5rem;
+
+        .message-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .ticket-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .ticket-number {
+            font-family: monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: $dark;
+        }
+
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.25rem 0.625rem;
+            background: rgba($danger, 0.1);
+            color: $danger;
+            border-radius: 0.375rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+        }
+
+        .message-subject-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .message-date {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            color: $gray-500;
+            font-size: 0.875rem;
+        }
+    }
+
+    // Conversation Card
+    .conversation-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: $dark;
+            margin: 0 0 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid $gray-200;
+
+            i {
+                color: $primary;
+            }
+        }
+    }
+
+    // Conversation Thread
+    .conversation-thread {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .message-bubble {
+        padding: 1rem;
+        border-radius: 0.75rem;
+
+        &.message-client {
+            background: $gray-100;
+            border: 1px solid $gray-200;
+        }
+
+        &.message-admin {
+            background: $primary-light;
+            border: 1px solid rgba($primary, 0.2);
+        }
+
+        .message-author {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .author-avatar {
+            width: 36px;
+            height: 36px;
+            background: $gray-200;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: $gray-500;
+
+            &.admin {
+                background: $primary;
+                color: white;
+            }
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+
+            strong {
+                font-size: 0.875rem;
+                color: $dark;
+            }
+
+            .message-time {
+                font-size: 0.75rem;
+                color: $gray-500;
+            }
+        }
+
+        .message-content {
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            color: $gray-800;
+        }
+    }
+
+    // Reply Form
+    .reply-form-section {
+        border-top: 1px solid $gray-200;
+        padding-top: 1.5rem;
+    }
+
+    .reply-form {
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: $gray-800;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border-radius: 0.5rem;
+            border: 1px solid $gray-200;
+            padding: 0.75rem 1rem;
+            font-size: 0.9375rem;
+
+            &:focus {
+                border-color: $primary;
+                box-shadow: 0 0 0 3px rgba($primary, 0.15);
+            }
+        }
+
+        .reply-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .close-ticket-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: $gray-600;
+            cursor: pointer;
+
+            input {
+                accent-color: $primary;
+            }
+        }
+    }
+
+    .ticket-closed-notice {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: $gray-100;
+        border-radius: 0.5rem;
+        color: $gray-500;
+        font-size: 0.875rem;
+        border-top: 1px solid $gray-200;
+        margin-top: 1.5rem;
+    }
+
+    // Sidebar
+    .contact-sidebar-column {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .sidebar-card {
+        background: white;
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+        .sidebar-card-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: $dark;
+            margin: 0 0 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid $gray-200;
+
+            i {
+                color: $primary;
+            }
+        }
+
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 0.8125rem;
+            padding: 0.25rem 0;
+
+            .info-label {
+                color: $gray-500;
+            }
+
+            .info-value {
+                color: $dark;
+                font-weight: 500;
+                text-align: right;
+
+                a {
+                    color: $primary;
+                    text-decoration: none;
+
+                    &:hover {
+                        color: $primary-dark;
+                    }
+                }
+            }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+
+            &.badge-success {
+                background: rgba($success, 0.1);
+                color: $success;
+            }
+
+            &.badge-secondary {
+                background: rgba($gray-500, 0.1);
+                color: $gray-500;
+            }
+        }
+
+        &.order-card {
+            border-left: 3px solid $info;
+        }
+
+        &.warranty-card {
+            &.warranty-valid {
+                border-left: 3px solid $success;
+            }
+
+            &.warranty-expired {
+                border-left: 3px solid $danger;
+            }
+        }
+
+        .warranty-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+
+            &.valid {
+                background: rgba($success, 0.1);
+                color: $success;
+            }
+
+            &.expired {
+                background: rgba($danger, 0.1);
+                color: $danger;
+            }
+        }
+
+        .status-form,
+        .order-status-form,
+        .notes-form {
+            margin-top: 1rem;
+
+            .form-label {
+                font-size: 0.8125rem;
+                font-weight: 500;
+                color: $gray-600;
+                margin-bottom: 0.5rem;
+            }
+
+            .form-select,
+            .form-control {
+                border-radius: 0.375rem;
+                border: 1px solid $gray-200;
+                font-size: 0.875rem;
+
+                &:focus {
+                    border-color: $primary;
+                    box-shadow: 0 0 0 2px rgba($primary, 0.15);
+                }
+            }
+        }
+    }
+}
+
+// ===========================================
+// SHARED COMPONENTS
+// ===========================================
+
+.subject-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    background: color-mix(in srgb, var(--subject-color) 15%, transparent);
+    color: var(--subject-color);
+    border-radius: 0.375rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+
+    i {
+        font-size: 0.75rem;
+    }
+}
+
+// ===========================================
+// ATTACHMENTS - FILE DISPLAY
+// ===========================================
+
+.message-attachments {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+    .attachments-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: $gray-500;
+        margin-bottom: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+
+        i {
+            font-size: 0.875rem;
+        }
+    }
+
+    .attachments-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .attachment-item {
+        flex-shrink: 0;
+    }
+
+    .attachment-image {
+        display: block;
+        width: 100px;
+        height: 75px;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .attachment-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+
+            i {
+                font-size: 1.25rem;
+                color: white;
+            }
+        }
+
+        &:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+            .attachment-overlay {
+                opacity: 1;
+            }
+        }
+    }
+
+    .attachment-file {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background: $gray-50;
+        border: 1px solid $gray-200;
+        border-radius: 0.375rem;
+        text-decoration: none;
+        transition: all 0.2s;
+        max-width: 180px;
+
+        > i {
+            font-size: 1.125rem;
+            color: $primary;
+            flex-shrink: 0;
+
+            &.bi-file-pdf {
+                color: $danger;
+            }
+        }
+
+        .attachment-info {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .attachment-name {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: $dark;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .attachment-size {
+            font-size: 0.625rem;
+            color: $gray-500;
+        }
+
+        &:hover {
+            background: $gray-100;
+            border-color: $primary;
+        }
+    }
+}
+
+// Admin message attachments (darker style)
+.message-bubble.message-admin .message-attachments {
+    border-top-color: rgba(0, 0, 0, 0.15);
+
+    .attachments-label {
+        color: $gray-400;
+    }
+
+    .attachment-file {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+
+        > i {
+            color: lighten($primary, 30%);
+
+            &.bi-file-pdf {
+                color: lighten($danger, 30%);
+            }
+        }
+
+        .attachment-name {
+            color: white;
+        }
+
+        .attachment-size {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+    }
+}

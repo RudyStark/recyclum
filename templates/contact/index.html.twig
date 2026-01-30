@@ -1,0 +1,268 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact | Recyclum{% endblock %}
+{% block meta_description %}Contactez Recyclum pour toute question sur vos commandes, la garantie, les livraisons ou nos services. Notre équipe vous répond sous 24h.{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/contact.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="contact-page" data-controller="contact-form">
+
+        {# === HERO SECTION === #}
+        <section class="contact-hero">
+            <div class="container">
+                <div class="hero-badge">
+                    <i class="bi bi-headset"></i>
+                    <span>Service client</span>
+                </div>
+                <h1>Comment pouvons-nous vous aider ?</h1>
+                <p class="lead">
+                    Notre équipe est disponible 7j/7 pour répondre à vos questions.
+                    Nous vous répondrons sous 24h.
+                </p>
+            </div>
+        </section>
+
+        {# === FLASH MESSAGES === #}
+        <div class="container">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show mt-4" role="alert">
+                        <i class="bi bi-{{ label == 'error' ? 'exclamation-triangle' : 'check-circle' }}"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        {# === MAIN CONTENT === #}
+        <section class="contact-main">
+            <div class="container">
+                <div class="row g-4 g-lg-5">
+
+                    {# COLONNE FORMULAIRE #}
+                    <div class="col-lg-8">
+                        <div class="contact-form-card">
+                            <div class="card-header">
+                                <h2>
+                                    <i class="bi bi-envelope"></i>
+                                    Envoyez-nous un message
+                                </h2>
+                                <p>Tous les champs marqués d'un * sont obligatoires</p>
+                            </div>
+
+                            <form action="{{ path('contact_index') }}" method="POST" class="contact-form" data-contact-form-target="form">
+                                <input type="hidden" name="_token" value="{{ csrf_token('contact_form') }}">
+
+                                {# === ÉTAPE 1: SUJET === #}
+                                <div class="form-section">
+                                    <h3>
+                                        <span class="step-number">1</span>
+                                        Quel est le sujet de votre demande ? *
+                                    </h3>
+                                    <div class="subject-grid">
+                                        {% for subject in subjects %}
+                                            <label class="subject-option" data-contact-form-target="subjectOption">
+                                                <input type="radio"
+                                                       name="subject"
+                                                       value="{{ subject.value }}"
+                                                       data-requires-order="{{ subject.requiresOrder ? '1' : '0' }}"
+                                                       data-requires-product="{{ subject.requiresProduct ? '1' : '0' }}"
+                                                       data-action="change->contact-form#onSubjectChange"
+                                                       required>
+                                                <div class="subject-content">
+                                                    <div class="subject-icon" style="background-color: {{ subject.color }}20; color: {{ subject.color }}">
+                                                        <i class="bi {{ subject.icon }}"></i>
+                                                    </div>
+                                                    <span class="subject-label">{{ subject.label }}</span>
+                                                </div>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                {# === SECTION COMMANDE (CONDITIONNELLE) === #}
+                                {% if app.user %}
+                                    <div class="form-section order-section" data-contact-form-target="orderSection" style="display: none;">
+                                        <h3>
+                                            <span class="step-number">2</span>
+                                            Sélectionnez la commande concernée
+                                        </h3>
+                                        <div class="order-select-wrapper">
+                                            <select name="orderId"
+                                                    class="form-select"
+                                                    data-contact-form-target="orderSelect"
+                                                    data-action="change->contact-form#onOrderChange">
+                                                <option value="">-- Choisir une commande --</option>
+                                            </select>
+                                            <div class="select-icon"><i class="bi bi-chevron-down"></i></div>
+                                        </div>
+                                        <p class="form-hint">
+                                            <i class="bi bi-info-circle"></i>
+                                            Sélectionnez la commande pour nous aider à traiter votre demande plus rapidement.
+                                        </p>
+
+                                        {# Sélecteur de produit (pour garantie) #}
+                                        <div class="product-select-wrapper" data-contact-form-target="productSection" style="display: none;">
+                                            <label class="form-label">Produit concerné</label>
+                                            <select name="orderItemId"
+                                                    class="form-select"
+                                                    data-contact-form-target="productSelect">
+                                                <option value="">-- Choisir un produit --</option>
+                                            </select>
+                                            <div class="warranty-info" data-contact-form-target="warrantyInfo" style="display: none;">
+                                                <i class="bi bi-shield-check"></i>
+                                                <span data-contact-form-target="warrantyStatus"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {# === ÉTAPE 2/3: COORDONNÉES === #}
+                                <div class="form-section">
+                                    <h3>
+                                        <span class="step-number">{{ app.user ? '3' : '2' }}</span>
+                                        Vos coordonnées
+                                    </h3>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="firstName">Prénom *</label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   id="firstName"
+                                                   name="firstName"
+                                                   value="{{ app.user ? app.user.firstName : '' }}"
+                                                   placeholder="Votre prénom"
+                                                   required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="lastName">Nom *</label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   id="lastName"
+                                                   name="lastName"
+                                                   value="{{ app.user ? app.user.lastName : '' }}"
+                                                   placeholder="Votre nom"
+                                                   required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="email">Email *</label>
+                                            <input type="email"
+                                                   class="form-control"
+                                                   id="email"
+                                                   name="email"
+                                                   value="{{ app.user ? app.user.email : '' }}"
+                                                   placeholder="votre@email.fr"
+                                                   required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="phone">Téléphone</label>
+                                            <input type="tel"
+                                                   class="form-control"
+                                                   id="phone"
+                                                   name="phone"
+                                                   value="{{ app.user ? app.user.phone : '' }}"
+                                                   placeholder="06 12 34 56 78">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {# === ÉTAPE 3/4: MESSAGE === #}
+                                <div class="form-section">
+                                    <h3>
+                                        <span class="step-number">{{ app.user ? '4' : '3' }}</span>
+                                        Votre message *
+                                    </h3>
+                                    <textarea class="form-control"
+                                              id="message"
+                                              name="message"
+                                              rows="6"
+                                              placeholder="Décrivez votre demande en détail..."
+                                              minlength="10"
+                                              required></textarea>
+                                    <p class="form-hint">
+                                        <i class="bi bi-lightbulb"></i>
+                                        Plus votre message est détaillé, plus vite nous pourrons vous aider.
+                                    </p>
+                                </div>
+
+                                {# === BOUTON SUBMIT === #}
+                                <div class="form-submit">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="bi bi-send"></i>
+                                        Envoyer mon message
+                                    </button>
+                                    <p class="submit-hint">
+                                        En envoyant ce formulaire, vous acceptez notre
+                                        <a href="{{ path('app_privacy') }}">politique de confidentialité</a>.
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    {# COLONNE SIDEBAR #}
+                    <div class="col-lg-4">
+                        {# Carte Contact Rapide #}
+                        <div class="contact-sidebar-card">
+                            <div class="sidebar-icon">
+                                <i class="bi bi-telephone"></i>
+                            </div>
+                            <h3>Besoin d'une réponse rapide ?</h3>
+                            <p>Appelez-nous directement, nous sommes disponibles 7j/7</p>
+                            <a href="tel:+33143076363" class="btn btn-outline-primary btn-lg w-100">
+                                <i class="bi bi-telephone-fill"></i>
+                                01 43 07 63 63
+                            </a>
+                            <div class="hours-info">
+                                <i class="bi bi-clock"></i>
+                                Lun - Dim : 9h - 19h
+                            </div>
+                        </div>
+
+                        {# Carte Boutique #}
+                        <div class="contact-sidebar-card">
+                            <div class="sidebar-icon">
+                                <i class="bi bi-shop"></i>
+                            </div>
+                            <h3>Venez nous voir</h3>
+                            <p>Notre équipe vous accueille en boutique</p>
+                            <address>
+                                <strong>Recyclum</strong><br>
+                                146 Avenue Daumesnil<br>
+                                75012 Paris
+                            </address>
+                            <a href="{{ path('about') }}" class="btn btn-light btn-sm">
+                                <i class="bi bi-map"></i>
+                                Voir le plan d'accès
+                            </a>
+                        </div>
+
+                        {# Carte FAQ #}
+                        <div class="contact-sidebar-card faq-card">
+                            <div class="sidebar-icon">
+                                <i class="bi bi-question-circle"></i>
+                            </div>
+                            <h3>Consultez notre FAQ</h3>
+                            <p>Trouvez des réponses aux questions les plus fréquentes</p>
+                            <a href="{{ path('faq') }}" class="btn btn-light btn-sm">
+                                <i class="bi bi-arrow-right"></i>
+                                Voir la FAQ
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

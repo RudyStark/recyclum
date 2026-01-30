@@ -1,0 +1,312 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ticket {{ message.ticketNumber }} | Recyclum{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/contact.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="ticket-page">
+    <div class="container py-5">
+        {# Header #}
+        <div class="ticket-header">
+            <div class="ticket-header-content">
+                <div class="ticket-badge-large">
+                    <i class="bi bi-ticket-detailed"></i>
+                    <span>{{ message.ticketNumber }}</span>
+                </div>
+                <h1>Suivi de votre demande</h1>
+                <div class="ticket-meta">
+                    <span class="ticket-subject" style="--subject-color: {{ message.subject.color }}">
+                        <i class="bi {{ message.subject.icon }}"></i>
+                        {{ message.subject.label }}
+                    </span>
+                    <span class="ticket-status status-{{ message.status.value }}">
+                        {{ message.status.label }}
+                    </span>
+                    <span class="ticket-date">
+                        <i class="bi bi-clock"></i>
+                        Créé le {{ message.createdAt|date('d/m/Y à H:i') }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        {# Flash messages #}
+        {% for type, messages in app.flashes %}
+            {% for flashMessage in messages %}
+                <div class="alert alert-{{ type == 'error' ? 'danger' : type }} alert-dismissible fade show" role="alert">
+                    {{ flashMessage }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="ticket-layout">
+            {# Conversation #}
+            <div class="ticket-conversation">
+                <div class="conversation-card">
+                    <h2 class="conversation-title">
+                        <i class="bi bi-chat-left-text"></i>
+                        Conversation
+                    </h2>
+
+                    <div class="conversation-thread">
+                        {# Original message #}
+                        <div class="message-bubble message-client">
+                            <div class="message-author">
+                                <div class="author-avatar client">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                <div class="author-info">
+                                    <strong>{{ message.fullName }} (Vous)</strong>
+                                    <span class="message-time">{{ message.createdAt|date('d/m/Y à H:i') }}</span>
+                                </div>
+                            </div>
+                            <div class="message-content">
+                                {{ message.message|nl2br }}
+                            </div>
+                            {% if message.attachments|length > 0 %}
+                                <div class="message-attachments">
+                                    {% for attachment in message.attachments %}
+                                        <div class="attachment-item">
+                                            {% if attachment.isImage %}
+                                                <a href="{{ attachment.webPath }}" target="_blank" class="attachment-image">
+                                                    <img src="{{ attachment.webPath }}" alt="{{ attachment.originalFilename }}">
+                                                </a>
+                                            {% else %}
+                                                <a href="{{ attachment.webPath }}" target="_blank" class="attachment-file" download>
+                                                    <i class="bi {{ attachment.isPdf ? 'bi-file-pdf' : 'bi-file-earmark' }}"></i>
+                                                    <span class="attachment-name">{{ attachment.originalFilename }}</span>
+                                                    <span class="attachment-size">{{ attachment.humanFileSize }}</span>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {# Replies #}
+                        {% for reply in message.replies %}
+                            <div class="message-bubble {{ reply.isAdminReply ? 'message-admin' : 'message-client' }}">
+                                <div class="message-author">
+                                    <div class="author-avatar {{ reply.isAdminReply ? 'admin' : 'client' }}">
+                                        <i class="bi {{ reply.isAdminReply ? 'bi-headset' : 'bi-person' }}"></i>
+                                    </div>
+                                    <div class="author-info">
+                                        <strong>
+                                            {% if reply.isAdminReply %}
+                                                {{ reply.repliedBy ?: 'Équipe Recyclum' }}
+                                            {% else %}
+                                                {{ message.fullName }} (Vous)
+                                            {% endif %}
+                                        </strong>
+                                        <span class="message-time">{{ reply.createdAt|date('d/m/Y à H:i') }}</span>
+                                    </div>
+                                </div>
+                                <div class="message-content">
+                                    {{ reply.content|nl2br }}
+                                </div>
+                                {% if reply.attachments|length > 0 %}
+                                    <div class="message-attachments">
+                                        {% for attachment in reply.attachments %}
+                                            <div class="attachment-item">
+                                                {% if attachment.isImage %}
+                                                    <a href="{{ attachment.webPath }}" target="_blank" class="attachment-image">
+                                                        <img src="{{ attachment.webPath }}" alt="{{ attachment.originalFilename }}">
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{{ attachment.webPath }}" target="_blank" class="attachment-file" download>
+                                                        <i class="bi {{ attachment.isPdf ? 'bi-file-pdf' : 'bi-file-earmark' }}"></i>
+                                                        <span class="attachment-name">{{ attachment.originalFilename }}</span>
+                                                        <span class="attachment-size">{{ attachment.humanFileSize }}</span>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {# Reply form #}
+                    {% if not message.isClosed %}
+                        <div class="reply-section">
+                            <h3 class="reply-title">
+                                <i class="bi bi-reply"></i>
+                                Répondre
+                            </h3>
+                            <form action="{{ path('contact_ticket_reply', {token: token}) }}" method="POST" class="reply-form" enctype="multipart/form-data">
+                                <input type="hidden" name="_token" value="{{ csrf_token('ticket_reply_' ~ token) }}">
+
+                                <div class="form-group mb-3">
+                                    <textarea
+                                        name="content"
+                                        class="form-control"
+                                        rows="4"
+                                        placeholder="Tapez votre message..."
+                                        required
+                                        minlength="5"
+                                    ></textarea>
+                                </div>
+
+                                <div class="form-group mb-3" data-controller="attachment-upload">
+                                    <label class="form-label">
+                                        <i class="bi bi-paperclip me-1"></i>
+                                        Pièces jointes (optionnel)
+                                    </label>
+                                    <div class="attachment-upload-zone" data-attachment-upload-target="zone">
+                                        <input
+                                            type="file"
+                                            name="attachments[]"
+                                            class="attachment-input"
+                                            multiple
+                                            accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx,.txt"
+                                            data-attachment-upload-target="input"
+                                            data-action="change->attachment-upload#onChange"
+                                        >
+                                        <div class="upload-placeholder">
+                                            <i class="bi bi-cloud-upload"></i>
+                                            <span>Cliquez ou glissez vos fichiers ici</span>
+                                            <small>Images, PDF, documents (max 10 Mo par fichier, 5 fichiers max)</small>
+                                        </div>
+                                        <div class="upload-preview" data-attachment-upload-target="preview"></div>
+                                    </div>
+                                </div>
+
+                                <div class="reply-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-send"></i>
+                                        Envoyer ma réponse
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="ticket-closed-notice">
+                            <i class="bi bi-lock-fill"></i>
+                            <div>
+                                <strong>Ce ticket est fermé</strong>
+                                <p>Si vous avez une nouvelle question, n'hésitez pas à <a href="{{ path('contact_index') }}">nous recontacter</a>.</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Sidebar #}
+            <div class="ticket-sidebar">
+                {# Ticket Info #}
+                <div class="sidebar-card">
+                    <h3 class="sidebar-card-title">
+                        <i class="bi bi-info-circle"></i>
+                        Informations
+                    </h3>
+                    <div class="info-list">
+                        <div class="info-row">
+                            <span class="info-label">Numéro</span>
+                            <span class="info-value">{{ message.ticketNumber }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Statut</span>
+                            <span class="info-value">
+                                <span class="status-badge status-{{ message.status.value }}">
+                                    {{ message.status.label }}
+                                </span>
+                            </span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Créé le</span>
+                            <span class="info-value">{{ message.createdAt|date('d/m/Y') }}</span>
+                        </div>
+                        {% if message.replies|length > 0 %}
+                        <div class="info-row">
+                            <span class="info-label">Dernière réponse</span>
+                            <span class="info-value">{{ message.lastReply.createdAt|date('d/m/Y') }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# Order Info #}
+                {% if message.relatedOrder %}
+                <div class="sidebar-card">
+                    <h3 class="sidebar-card-title">
+                        <i class="bi bi-bag"></i>
+                        Commande liée
+                    </h3>
+                    <div class="info-list">
+                        <div class="info-row">
+                            <span class="info-label">Numéro</span>
+                            <span class="info-value">{{ message.relatedOrder.orderNumber }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Date</span>
+                            <span class="info-value">{{ message.relatedOrder.createdAt|date('d/m/Y') }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Statut</span>
+                            <span class="info-value">{{ message.relatedOrder.status.label }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# Product/Warranty Info #}
+                {% if message.relatedOrderItem %}
+                <div class="sidebar-card {{ message.isWarrantyValid ? 'warranty-valid' : 'warranty-expired' }}">
+                    <h3 class="sidebar-card-title">
+                        <i class="bi bi-shield-check"></i>
+                        Garantie
+                    </h3>
+                    <div class="info-list">
+                        <div class="info-row">
+                            <span class="info-label">Produit</span>
+                            <span class="info-value">{{ message.relatedOrderItem.productName }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Statut</span>
+                            <span class="info-value">
+                                {% if message.isWarrantyValid %}
+                                    <span class="warranty-badge valid">
+                                        <i class="bi bi-check-circle"></i>
+                                        Valide
+                                    </span>
+                                {% else %}
+                                    <span class="warranty-badge expired">
+                                        <i class="bi bi-x-circle"></i>
+                                        Expirée
+                                    </span>
+                                {% endif %}
+                            </span>
+                        </div>
+                        {% if message.warrantyExpirationDate %}
+                        <div class="info-row">
+                            <span class="info-label">Expire le</span>
+                            <span class="info-value">{{ message.warrantyExpirationDate|date('d/m/Y') }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {# Help #}
+                <div class="sidebar-card sidebar-card-help">
+                    <div class="help-icon">
+                        <i class="bi bi-question-circle"></i>
+                    </div>
+                    <h4>Besoin d'aide ?</h4>
+                    <p>Notre équipe répond généralement sous 24h.</p>
+                    <a href="{{ path('contact_index') }}" class="btn btn-outline-primary btn-sm">
+                        Nouveau message
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

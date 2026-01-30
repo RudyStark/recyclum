@@ -161,7 +161,7 @@
     a {
         color: #F59E0B;
         font-weight: 600;
-        text-decoration: underline;
+        text-decoration: none;
 
         &:hover {
             color: darken(#F59E0B, 10%);
@@ -810,7 +810,7 @@
             text-decoration: none;
 
             &:hover {
-                text-decoration: underline;
+                opacity: 0.8;
             }
         }
 

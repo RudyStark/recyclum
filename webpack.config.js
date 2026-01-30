@@ -11,6 +11,7 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('client', './assets/client.js')
     .addEntry('admin', './assets/admin.js')
+    .addStyleEntry('contact', './assets/styles/contact.scss')
 
     .enableStimulusBridge('./assets/controllers.json')
 
