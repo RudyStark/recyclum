@@ -11,7 +11,7 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('client', './assets/client.js')
     .addEntry('admin', './assets/admin.js')
-    .addStyleEntry('contact', './assets/styles/contact.scss')
+    // contact.scss supprimé - styles inclus dans app.scss via pages/_contact.scss
 
     .enableStimulusBridge('./assets/controllers.json')
 

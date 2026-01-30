@@ -1,0 +1,316 @@
+// ============================================
+// FORMS - Recyclum
+// ============================================
+
+// --------------------------------------------
+// INPUT BASE
+// --------------------------------------------
+.input-custom {
+  @include input-base;
+}
+
+.input-error {
+  @include input-base;
+  @include input-error;
+}
+
+// --------------------------------------------
+// FORM GROUP
+// --------------------------------------------
+.form-group-custom {
+  margin-bottom: $spacing-lg;
+
+  label {
+    display: block;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--text, $text);
+    margin-bottom: $spacing-sm;
+
+    .required {
+      color: $danger;
+      margin-left: 2px;
+    }
+  }
+
+  .form-hint {
+    font-size: $font-size-xs;
+    color: var(--text-muted, $text-muted);
+    margin-top: $spacing-xs;
+  }
+
+  .form-error {
+    font-size: $font-size-xs;
+    color: $danger;
+    margin-top: $spacing-xs;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+
+    i {
+      font-size: $font-size-sm;
+    }
+  }
+
+  &.has-error {
+    input, select, textarea {
+      @include input-error;
+    }
+  }
+}
+
+// --------------------------------------------
+// TEXTAREA
+// --------------------------------------------
+.textarea-custom {
+  @include input-base;
+  min-height: 120px;
+  resize: vertical;
+}
+
+// --------------------------------------------
+// SELECT
+// --------------------------------------------
+.select-custom {
+  @include input-base;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236C7783' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right $spacing-md center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: $spacing-2xl;
+  cursor: pointer;
+}
+
+// --------------------------------------------
+// CHECKBOX & RADIO
+// --------------------------------------------
+.checkbox-custom,
+.radio-custom {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-sm;
+  cursor: pointer;
+
+  input {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: $primary;
+    cursor: pointer;
+  }
+
+  .checkbox-label,
+  .radio-label {
+    font-size: $font-size-base;
+    color: var(--text, $text);
+    line-height: $line-height-base;
+    user-select: none;
+  }
+
+  &:hover .checkbox-label,
+  &:hover .radio-label {
+    color: $primary;
+  }
+}
+
+// Custom styled checkbox
+.checkbox-styled {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  cursor: pointer;
+
+  input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+
+    & + .checkbox-box {
+      @include flex-center;
+      width: 20px;
+      height: 20px;
+      background: var(--surface, $surface);
+      border: 2px solid var(--border, $border);
+      border-radius: $radius-sm;
+      transition: all $transition-fast;
+
+      i {
+        font-size: 12px;
+        color: white;
+        opacity: 0;
+        transform: scale(0);
+        transition: all $transition-fast;
+      }
+    }
+
+    &:checked + .checkbox-box {
+      background: $primary;
+      border-color: $primary;
+
+      i {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    &:focus + .checkbox-box {
+      box-shadow: 0 0 0 3px rgba($primary, 0.15);
+    }
+  }
+}
+
+// --------------------------------------------
+// SWITCH / TOGGLE
+// --------------------------------------------
+.switch-custom {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-sm;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+
+    & + .switch-track {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: var(--border, $border);
+      border-radius: $radius-pill;
+      transition: all $transition-base;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: $radius-circle;
+        box-shadow: $shadow-sm;
+        transition: all $transition-base;
+      }
+    }
+
+    &:checked + .switch-track {
+      background: $primary;
+
+      &::after {
+        left: calc(100% - 22px);
+      }
+    }
+
+    &:focus + .switch-track {
+      box-shadow: 0 0 0 3px rgba($primary, 0.15);
+    }
+  }
+
+  .switch-label {
+    font-size: $font-size-base;
+    color: var(--text, $text);
+  }
+}
+
+// --------------------------------------------
+// FILE INPUT
+// --------------------------------------------
+.file-input-custom {
+  position: relative;
+
+  input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  .file-input-label {
+    @include flex-center;
+    @include card-base;
+    padding: $spacing-xl;
+    border-style: dashed;
+    border-width: 2px;
+    text-align: center;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      border-color: $primary;
+      background: rgba($primary, 0.02);
+    }
+
+    i {
+      font-size: $font-size-2xl;
+      color: var(--text-muted, $text-muted);
+      margin-bottom: $spacing-sm;
+    }
+
+    span {
+      display: block;
+      font-size: $font-size-sm;
+      color: var(--text-muted, $text-muted);
+
+      strong {
+        color: $primary;
+      }
+    }
+  }
+
+  &.has-file .file-input-label {
+    border-color: $primary;
+    background: rgba($primary, 0.05);
+  }
+}
+
+// --------------------------------------------
+// SEARCH INPUT
+// --------------------------------------------
+.search-input {
+  position: relative;
+
+  input {
+    @include input-base;
+    padding-left: $spacing-2xl;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: $spacing-md;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted, $text-muted);
+    pointer-events: none;
+  }
+
+  .search-clear {
+    position: absolute;
+    right: $spacing-sm;
+    top: 50%;
+    transform: translateY(-50%);
+    @include flex-center;
+    width: 24px;
+    height: 24px;
+    background: var(--surface-2, $surface-2);
+    border: none;
+    border-radius: $radius-circle;
+    color: var(--text-muted, $text-muted);
+    cursor: pointer;
+    opacity: 0;
+    transition: all $transition-fast;
+
+    &:hover {
+      background: var(--surface-3, $surface-3);
+      color: var(--text, $text);
+    }
+  }
+
+  &.has-value .search-clear {
+    opacity: 1;
+  }
+}

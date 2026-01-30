@@ -172,6 +172,7 @@ class OrderService
      */
     public function belongsToUser(Order $order, User $user): bool
     {
-        return $order->getUser()->getId() === $user->getId();
+        $orderUser = $order->getUser();
+        return $orderUser !== null && $orderUser->getId() === $user->getId();
     }
 }

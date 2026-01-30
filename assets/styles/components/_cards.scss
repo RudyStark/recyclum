@@ -1,0 +1,252 @@
+// ============================================
+// CARDS - Recyclum
+// ============================================
+
+// --------------------------------------------
+// BASE CARD
+// --------------------------------------------
+.card-custom {
+  @include card-base;
+  padding: $spacing-xl;
+}
+
+.card-elevated {
+  @include card-elevated;
+  padding: $spacing-xl;
+}
+
+.card-interactive {
+  @include card-interactive;
+  padding: $spacing-xl;
+}
+
+.card-glass {
+  @include card-glass;
+  padding: $spacing-xl;
+}
+
+// --------------------------------------------
+// PRODUCT CARD
+// --------------------------------------------
+.product-card {
+  @include card-interactive;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .product-card-image {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: var(--surface-2, $surface-2);
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform $transition-normal;
+    }
+
+    .product-badges {
+      position: absolute;
+      top: $spacing-md;
+      left: $spacing-md;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xs;
+    }
+  }
+
+  &:hover .product-card-image img {
+    transform: scale(1.05);
+  }
+
+  .product-card-body {
+    padding: $spacing-base;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .product-card-title {
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: var(--text, $text);
+    margin-bottom: $spacing-sm;
+    @include text-clamp(2);
+  }
+
+  .product-card-brand {
+    font-size: $font-size-sm;
+    color: var(--text-muted, $text-muted);
+    margin-bottom: $spacing-sm;
+  }
+
+  .product-card-price {
+    margin-top: auto;
+
+    .price-current {
+      font-size: $font-size-xl;
+      font-weight: $font-weight-bold;
+      color: $primary;
+    }
+
+    .price-original {
+      font-size: $font-size-sm;
+      color: var(--text-muted, $text-muted);
+      text-decoration: line-through;
+      margin-left: $spacing-sm;
+    }
+  }
+}
+
+// --------------------------------------------
+// STAT CARD
+// --------------------------------------------
+.stat-card {
+  @include card-base;
+  padding: $spacing-xl;
+  text-align: center;
+
+  .stat-icon {
+    @include flex-center;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto $spacing-base;
+    background: rgba($primary, 0.1);
+    border-radius: $radius-lg;
+    color: $primary;
+
+    i {
+      font-size: $font-size-xl;
+    }
+  }
+
+  .stat-value {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: var(--text, $text);
+    line-height: 1.2;
+  }
+
+  .stat-label {
+    font-size: $font-size-sm;
+    color: var(--text-muted, $text-muted);
+    margin-top: $spacing-xs;
+  }
+
+  // Variants
+  &.stat-primary .stat-icon {
+    background: rgba($primary, 0.1);
+    color: $primary;
+  }
+
+  &.stat-danger .stat-icon {
+    background: rgba($danger, 0.1);
+    color: $danger;
+  }
+
+  &.stat-warning .stat-icon {
+    background: rgba($warning, 0.1);
+    color: $warning-dark;
+  }
+
+  &.stat-info .stat-icon {
+    background: rgba($info, 0.1);
+    color: $info;
+  }
+}
+
+// --------------------------------------------
+// FEATURE CARD
+// --------------------------------------------
+.feature-card {
+  @include card-base;
+  padding: $spacing-xl;
+  text-align: center;
+  transition: all $transition-normal;
+
+  &:hover {
+    border-color: rgba($primary, 0.3);
+    box-shadow: $shadow-lg;
+  }
+
+  .feature-icon {
+    @include flex-center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto $spacing-lg;
+    @include gradient-primary;
+    border-radius: $radius-xl;
+    color: white;
+    box-shadow: $shadow-primary;
+
+    i {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  .feature-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: var(--text, $text);
+    margin-bottom: $spacing-sm;
+  }
+
+  .feature-description {
+    font-size: $font-size-base;
+    color: var(--text-muted, $text-muted);
+    line-height: $line-height-relaxed;
+  }
+}
+
+// --------------------------------------------
+// INFO CARD (Sidebar)
+// --------------------------------------------
+.info-card {
+  @include card-base;
+  padding: $spacing-lg;
+
+  .info-card-header {
+    @include flex-start;
+    gap: $spacing-sm;
+    padding-bottom: $spacing-base;
+    margin-bottom: $spacing-base;
+    border-bottom: 1px solid var(--border, $border);
+    font-weight: $font-weight-semibold;
+    color: var(--text, $text);
+
+    i {
+      color: $primary;
+    }
+  }
+
+  .info-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  .info-row {
+    @include flex-between;
+    font-size: $font-size-sm;
+
+    .label {
+      color: var(--text-muted, $text-muted);
+    }
+
+    .value {
+      font-weight: $font-weight-medium;
+      color: var(--text, $text);
+
+      &.link {
+        color: $primary;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}
