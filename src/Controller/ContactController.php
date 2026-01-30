@@ -3,14 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\ContactMessage;
-use App\Entity\ContactReply;
 use App\Entity\User;
-use App\Enum\ContactStatus;
 use App\Enum\ContactSubject;
 use App\Repository\ContactMessageRepository;
 use App\Repository\OrderRepository;
 use App\Service\AttachmentService;
 use App\Service\EmailService;
+use App\Service\TicketService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,6 +27,7 @@ class ContactController extends AbstractController
         private OrderRepository $orderRepository,
         private EmailService $emailService,
         private AttachmentService $attachmentService,
+        private TicketService $ticketService,
     ) {
     }
 
@@ -313,55 +313,29 @@ class ContactController extends AbstractController
             return $this->redirectToRoute('contact_ticket_view', ['token' => $token]);
         }
 
-        // Vérifier que le ticket n'est pas fermé
-        if ($contactMessage->isClosed()) {
+        // Vérifier que le ticket peut recevoir des réponses
+        if (!$this->ticketService->canReply($contactMessage)) {
             $this->addFlash('error', 'Ce ticket est fermé. Vous ne pouvez plus y répondre.');
             return $this->redirectToRoute('contact_ticket_view', ['token' => $token]);
         }
 
-        $content = trim($request->request->get('content', ''));
-
-        if (empty($content)) {
-            $this->addFlash('error', 'Le message ne peut pas être vide.');
+        // Valider le contenu
+        $content = $request->request->get('content', '');
+        $validationError = $this->ticketService->validateReplyContent($content);
+        if ($validationError) {
+            $this->addFlash('error', $validationError);
             return $this->redirectToRoute('contact_ticket_view', ['token' => $token]);
         }
 
-        if (strlen($content) < 5) {
-            $this->addFlash('error', 'Le message doit contenir au moins 5 caractères.');
-            return $this->redirectToRoute('contact_ticket_view', ['token' => $token]);
-        }
+        // Créer la réponse via le service
+        $uploadedFiles = $request->files->get('attachments', []) ?? [];
+        $reply = $this->ticketService->addClientReply($contactMessage, $content, $uploadedFiles);
 
-        // Créer la réponse client
-        $reply = new ContactReply();
-        $reply->setContactMessage($contactMessage);
-        $reply->setContent($content);
-        $reply->setIsAdminReply(false);
-
-        $contactMessage->addReply($reply);
-
-        // Gérer les pièces jointes
-        $uploadedFiles = $request->files->get('attachments', []);
-        if (!empty($uploadedFiles)) {
-            $this->attachmentService->handleUploadsForReply($uploadedFiles, $reply);
-        }
-
-        // Remettre le ticket en attente si nécessaire
-        if ($contactMessage->getStatus() === ContactStatus::ANSWERED || $contactMessage->getStatus() === ContactStatus::READ) {
-            $contactMessage->setStatus(ContactStatus::IN_PROGRESS);
-        }
-
-        $this->em->persist($reply);
-        $this->em->flush();
-
-        // Notifier l'admin de la nouvelle réponse client
-        try {
-            $adminViewUrl = $this->generateUrl('admin_contact_show', [
-                'id' => $contactMessage->getId()
-            ], UrlGeneratorInterface::ABSOLUTE_URL);
-            $this->emailService->sendClientReplyNotificationToAdmin($contactMessage, $reply, $adminViewUrl);
-        } catch (\Exception $e) {
-            // Log l'erreur mais ne pas bloquer
-        }
+        // Notifier l'admin
+        $adminViewUrl = $this->generateUrl('admin_contact_show', [
+            'id' => $contactMessage->getId()
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
+        $this->ticketService->notifyAdminOfClientReply($contactMessage, $reply, $adminViewUrl);
 
         $this->addFlash('success', 'Votre réponse a été envoyée. Notre équipe vous répondra dans les plus brefs délais.');
 

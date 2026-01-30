@@ -1,0 +1,101 @@
+// ============================================
+// BUTTONS - Recyclum
+// ============================================
+
+// Primary button with gradient
+.btn-primary-gradient {
+  @include btn-primary;
+  @include btn-md;
+}
+
+.btn-primary-gradient-sm {
+  @include btn-primary;
+  @include btn-sm;
+}
+
+.btn-primary-gradient-lg {
+  @include btn-primary;
+  @include btn-lg;
+}
+
+// Secondary button
+.btn-secondary-custom {
+  @include btn-secondary;
+  @include btn-md;
+}
+
+// Outline button
+.btn-outline-custom {
+  @include btn-outline;
+  @include btn-md;
+}
+
+// Ghost button
+.btn-ghost-custom {
+  @include btn-ghost;
+  @include btn-md;
+}
+
+// Danger button
+.btn-danger-custom {
+  @include btn-danger;
+  @include btn-md;
+}
+
+// Icon button (square)
+.btn-icon {
+  @include btn-base;
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: $radius-md;
+  background: var(--surface-2, $surface-2);
+  color: var(--text, $text);
+  border: 1px solid var(--border, $border);
+
+  &:hover:not(:disabled) {
+    background: var(--surface-3, $surface-3);
+    border-color: $primary;
+    color: $primary;
+  }
+
+  &.btn-icon-sm {
+    width: 32px;
+    height: 32px;
+  }
+
+  &.btn-icon-lg {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+// CTA Button (Call to Action)
+.btn-cta {
+  @include btn-primary;
+  padding: $spacing-base $spacing-2xl;
+  font-size: $font-size-lg;
+  border-radius: $radius-lg;
+
+  svg, i {
+    transition: transform $transition-base;
+  }
+
+  &:hover svg,
+  &:hover i {
+    transform: translateX(4px);
+  }
+}
+
+// Link style button
+.btn-link-custom {
+  @include btn-base;
+  background: transparent;
+  color: $primary;
+  padding: 0;
+
+  &:hover:not(:disabled) {
+    opacity: 0.8;
+  }
+}

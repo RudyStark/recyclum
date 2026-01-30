@@ -1,0 +1,189 @@
+// ============================================
+// BADGES - Recyclum
+// ============================================
+
+// --------------------------------------------
+// ENERGY BADGES (A-G)
+// --------------------------------------------
+.energy-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 24px;
+  padding: 0 $spacing-sm;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  color: white;
+  border-radius: $radius-sm;
+  text-transform: uppercase;
+
+  &.energy-a,
+  &.energy-a-plus {
+    background: linear-gradient(135deg, $energy-a 0%, $energy-a-plus 100%);
+  }
+
+  &.energy-b {
+    background: linear-gradient(135deg, $energy-b 0%, lighten($energy-b, 10%) 100%);
+  }
+
+  &.energy-c {
+    background: linear-gradient(135deg, $energy-c 0%, lighten($energy-c, 10%) 100%);
+  }
+
+  &.energy-d {
+    background: linear-gradient(135deg, $energy-d 0%, lighten($energy-d, 10%) 100%);
+    color: $text;
+  }
+
+  &.energy-e {
+    background: linear-gradient(135deg, $energy-e 0%, lighten($energy-e, 10%) 100%);
+    color: $text;
+  }
+
+  &.energy-f {
+    background: linear-gradient(135deg, $energy-f 0%, lighten($energy-f, 10%) 100%);
+  }
+
+  &.energy-g {
+    background: linear-gradient(135deg, $energy-g 0%, lighten($energy-g, 10%) 100%);
+  }
+}
+
+// Compact version for lists
+.energy-badge-sm {
+  min-width: 28px;
+  height: 20px;
+  font-size: 10px;
+  padding: 0 $spacing-xs;
+}
+
+// --------------------------------------------
+// STATUS BADGES
+// --------------------------------------------
+.status-badge {
+  @include badge-base;
+  border-radius: $radius-pill;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: $radius-circle;
+    flex-shrink: 0;
+  }
+
+  // Status variants
+  &.status-new,
+  &.status-pending {
+    background: rgba($danger, 0.15);
+    color: $danger;
+    .status-dot { background: $danger; }
+  }
+
+  &.status-read,
+  &.status-processing {
+    background: rgba($warning, 0.15);
+    color: $warning-dark;
+    .status-dot { background: $warning; }
+  }
+
+  &.status-in-progress,
+  &.status-in_progress {
+    background: rgba($info, 0.15);
+    color: $info;
+    .status-dot {
+      background: $info;
+      animation: pulse 2s infinite;
+    }
+  }
+
+  &.status-answered,
+  &.status-completed,
+  &.status-success {
+    background: rgba($primary, 0.15);
+    color: $primary-dark;
+    .status-dot { background: $primary; }
+  }
+
+  &.status-closed,
+  &.status-cancelled {
+    background: rgba($text-muted, 0.15);
+    color: $text-muted;
+    .status-dot { background: $text-muted; }
+  }
+}
+
+// --------------------------------------------
+// GENERAL BADGES
+// --------------------------------------------
+.badge-primary {
+  @include badge-primary;
+}
+
+.badge-danger {
+  @include badge-danger;
+}
+
+.badge-warning {
+  @include badge-warning;
+}
+
+.badge-info {
+  @include badge-info;
+}
+
+// Verified badge
+.badge-verified {
+  @include badge-base;
+  background: rgba($primary, 0.1);
+  color: $primary-dark;
+  border: 1px solid rgba($primary, 0.2);
+
+  i {
+    font-size: $font-size-sm;
+  }
+}
+
+// Stock badge
+.badge-stock {
+  @include badge-base;
+
+  &.in-stock {
+    background: rgba($primary, 0.1);
+    color: $primary-dark;
+  }
+
+  &.low-stock {
+    background: rgba($warning, 0.1);
+    color: $warning-dark;
+  }
+
+  &.out-of-stock {
+    background: rgba($danger, 0.1);
+    color: $danger;
+  }
+}
+
+// Discount badge
+.badge-discount {
+  @include badge-base;
+  background: $danger;
+  color: white;
+  font-weight: $font-weight-bold;
+}
+
+// New badge
+.badge-new {
+  @include badge-base;
+  background: $primary;
+  color: white;
+}
+
+// Featured badge
+.badge-featured {
+  @include badge-base;
+  @include gradient-primary;
+  color: white;
+}
